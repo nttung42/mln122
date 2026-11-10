@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* 100% Pure Clean Editorial Light Mode */
+    --color-midnight-navy: #f8fafc;        /* Page background: Crisp Slate Paper */
+    --color-deep-surface: #ffffff;         /* Pure White card / dock */
+    --color-surface-elevated: #f1f5f9;     /* Elevated container / hover */
+    --color-electric-blue: #0284c7;        /* Primary: Sapphire Sky */
+    --color-electric-blue-glow: rgba(2, 132, 199, 0.12);
+    --color-warm-gold: #d97706;            /* Accent: Warm Amber Gold */
+    --color-warm-gold-glow: rgba(217, 119, 6, 0.12);
+    --color-growth-green: #16a34a;         /* Emerald Growth Green */
+    --color-growth-green-glow: rgba(22, 163, 74, 0.12);
+    --color-warning: #dc2626;              /* Crimson Warning Red */
+    --color-off-white: #0f172a;            /* Primary Text: Deep Slate 900 Ink */
+    --color-muted-gray: #64748b;           /* Secondary Text: Slate 500 */
+    --color-border-subtle: #e2e8f0;        /* Crisp Border */
+    --color-border-focus: #0284c7;
+    --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.06);
+
+    --font-heading: "Space Grotesk", system-ui, -apple-system, sans-serif;
+    --font-body: "Inter", system-ui, -apple-system, sans-serif;
+    --font-mono: "IBM Plex Mono", monospace;
+  }
+}
+
+@theme inline {
+  --color-midnight-navy: var(--color-midnight-navy);
+  --color-deep-surface: var(--color-deep-surface);
+  --color-surface-elevated: var(--color-surface-elevated);
+  --color-electric-blue: var(--color-electric-blue);
+  --color-warm-gold: var(--color-warm-gold);
+  --color-growth-green: var(--color-growth-green);
+  --color-warning: var(--color-warning);
+  --color-off-white: var(--color-off-white);
+  --color-muted-gray: var(--color-muted-gray);
+  --color-border-subtle: var(--color-border-subtle);
+
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+}
+
+/* Base resets & typography */
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-midnight-navy);
+  color: var(--color-off-white);
+  font-family: var(--font-body);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--color-midnight-navy);
+  color: var(--color-off-white);
+  overflow-x: hidden;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-midnight-navy);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-surface-elevated);
+  border-radius: 9999px;
+  border: 1px solid var(--color-border-subtle);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-electric-blue);
+}
+
+/* Floor Journey Character Walk Animations */
+@keyframes legWalkLeft {
+  from {
+    transform: rotate(-24deg);
+  }
+  to {
+    transform: rotate(24deg);
+  }
+}
+
+@keyframes legWalkRight {
+  from {
+    transform: rotate(24deg);
+  }
+  to {
+    transform: rotate(-24deg);
+  }
+}
