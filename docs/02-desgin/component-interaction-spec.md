@@ -15,7 +15,7 @@ Every interactive element (Buttons, Cards, Sliders, Tabs, Modals) must support 6
 2. **Hover:** Subtle elevation, background tint shift (e.g. `bg-surface-elevated`), or border glow (`border-electric-blue/40`). Cursor: `pointer`.
 3. **Focus-Visible:** Prominent focus ring (`ring-2 ring-electric-blue ring-offset-2 ring-offset-midnight-navy`) enabled on keyboard navigation.
 4. **Active/Pressed:** Scale down (`scale-[0.98]`) or inward shadow for tactile feedback.
-5. **Selected/Active Mode:** Border illuminated with Warm Gold (`#E7B85C`) or Electric Blue (`#398BCE`) with corresponding badge indicator.
+5. **Selected/Active Mode:** Border illuminated with Warm Gold (`#D97706`) or Electric Blue (`#0284C7`) with corresponding badge indicator.
 6. **Disabled:** Opacity 50%, `cursor-not-allowed`, no hover or click events triggered.
 
 ---

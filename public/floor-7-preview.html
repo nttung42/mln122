@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Value Shift • Tầng 7 Preview: 3 Hướng Thiết Kế</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=IBM+Plex+Mono:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* RESET & CORE VARIABLES */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --font-heading: 'Space Grotesk', system-ui, sans-serif;
+      --font-editorial: 'Newsreader', serif;
+      --font-body: 'Inter', system-ui, sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+      
+      --c-navy-950: #020617;
+      --c-navy-900: #0f172a;
+      --c-navy-800: #1e293b;
+      --c-slate-50: #f8fafc;
+      --c-slate-100: #f1f5f9;
+      --c-slate-200: #e2e8f0;
+      --c-slate-600: #475569;
+      --c-slate-400: #94a3b8;
+      
+      --c-blue: #0284c7;
+      --c-blue-light: #e0f2fe;
+      --c-green: #16a34a;
+      --c-green-light: #dcfce7;
+      --c-amber: #d97706;
+      --c-amber-light: #fef3c7;
+      --c-red: #dc2626;
+      --c-red-light: #fee2e2;
+      --c-purple: #7c3aed;
+      --c-purple-light: #f3e8ff;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: #0b0f19;
+      color: #f1f5f9;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* TOP GLOBAL CONTROLLER BAR */
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-logo {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #0284c7, #16a34a);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 14px;
+      color: white;
+      font-family: var(--font-mono);
+    }
+    .brand-text {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+    }
+    .badge-floor {
+      background: rgba(217, 119, 6, 0.2);
+      border: 1px solid rgba(217, 119, 6, 0.5);
+      color: #fbbf24;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    /* VIEW MODE SWITCHER */
+    .view-switcher {
+      display: flex;
+      background: #1e293b;
+      padding: 3px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      gap: 4px;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      padding: 8px 16px;
+      color: #94a3b8;
+      font-family: var(--font-heading);
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    .tab-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .tab-btn.active {
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.35);
+    }
+    .tab-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      opacity: 0.8;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    /* PREVIEW CONTAINER */
+    .preview-stage {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .concept-view {
+      display: none;
+      width: 100%;
+      min-height: calc(100vh - 61px);
+    }
+    .concept-view.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ======================================================== */
+    /* HƯỚNG 1: WHITE PAPER EDITORIAL (TẠP CHÍ CHÍNH SÁCH VĨ MÔ) */
+    /* ======================================================== */
+    .view-editorial {
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+    .ed-header-banner {
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 16px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .ed-doc-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #64748b;
+      font-weight: 600;
+    }
+    .ed-grid {
+      display: grid;
+      grid-template-columns: 460px 1fr;
+      flex: 1;
+      min-height: calc(100vh - 120px);
+    }
+    .ed-left-col {
+      background: #ffffff;
+      border-right: 1px solid #e2e8f0;
+      padding: 40px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .ed-title {
+      font-family: var(--font-editorial);
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.15;
+      color: #0f172a;
+      letter-spacing: -0.01em;
+    }
+    .ed-title span {
+      color: #d97706;
+      font-style: italic;
+    }
+    .ed-dilemma-box {
+      border-left: 3px solid #0f172a;
+      padding-left: 16px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #334155;
+    }
+    .ed-marx-quote {
+      background: #f1f5f9;
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #475569;
+      border: 1px solid #e2e8f0;
+    }
+    .ed-marx-quote strong {
+      color: #0f172a;
+      display: block;
+      margin-bottom: 4px;
+      font-family: var(--font-heading);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* 5 METRICS PANEL */
+    .metrics-board {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .metric-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .metric-row-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 600;
+      color: #334155;
+    }
+    .metric-bar-bg {
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+    .metric-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s;
+    }
+    .metric-delta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      margin-left: 6px;
+      padding: 1px 5px;
+      border-radius: 3px;
+      transition: all 0.3s;
+    }
+    .delta-up { background: #dcfce7; color: #15803d; }
+    .delta-down { background: #fee2e2; color: #b91c1c; }
+    .delta-neutral { background: #f1f5f9; color: #64748b; }
+
+    /* RIGHT COLUMN (OPTIONS) */
+    .ed-right-col {
+      padding: 40px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      background: #f8fafc;
+    }
+    .ed-options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .ed-option-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px 28px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      text-align: left;
+    }
+    .ed-option-card:hover {
+      border-color: #0284c7;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.08);
+    }
+    .ed-option-card.selected {
+      border-color: #0f172a;
+      box-shadow: 0 12px 30px -4px rgba(15, 23, 42, 0.12);
+      border-width: 2px;
+      background: #ffffff;
+    }
+    .ed-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .ed-card-num {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 13px;
+      color: #64748b;
+    }
+    .ed-card-title {
+      font-family: var(--font-heading);
+      font-size: 19px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .ed-card-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .ed-card-desc {
+      font-size: 14px;
+      color: #475569;
+      line-height: 1.6;
+    }
+    .ed-impact-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-top: 12px;
+      border-top: 1px dashed #e2e8f0;
+    }
+    .chip {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ======================================================== */
+    /* HƯỚNG 2: MACRO COMMAND CENTER HUD (PHÒNG CHỈ HUY 2040) */
+    /* ======================================================== */
+    .view-war-room {
+      background: #090d16;
+      color: #f1f5f9;
+      background-image: 
+        radial-gradient(ellipse at 80% 20%, rgba(2, 132, 199, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 20% 80%, rgba(22, 163, 74, 0.05) 0%, transparent 60%);
+    }
+    .hud-grid {
+      display: grid;
+      grid-template-columns: 500px 1fr;
+      flex: 1;
+      padding: 32px 40px;
+      gap: 32px;
+    }
+    .hud-left {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 14px;
+      padding: 32px;
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+    .hud-left::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #0284c7, #16a34a, #d97706);
+    }
+    .hud-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: #38bdf8;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hud-pulse {
+      width: 7px;
+      height: 7px;
+      background: #38bdf8;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #38bdf8;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.3); }
+    }
+    .hud-title {
+      font-family: var(--font-heading);
+      font-size: 26px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.25;
+    }
+    .hud-terminal-box {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.7;
+    }
+    .hud-terminal-box strong {
+      color: #38bdf8;
+    }
+    .hud-gauges {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .hud-gauge-item {
+      background: rgba(2, 6, 23, 0.5);
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .hud-gauge-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-family: var(--font-mono);
+    }
+    .hud-gauge-val {
+      font-weight: 700;
+      color: #38bdf8;
+    }
+    .hud-bar-track {
+      height: 6px;
+      background: #0f172a;
+      border-radius: 3px;
+      overflow: hidden;
+      border: 1px solid #1e293b;
+    }
+    .hud-bar-glow {
+      height: 100%;
+      transition: width 0.4s ease;
+      box-shadow: 0 0 10px currentColor;
+    }
+
+    /* RIGHT HUD PROTOCOLS */
+    .hud-right {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .hud-protocol-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 24px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+    }
+    .hud-protocol-card:hover {
+      border-color: #38bdf8;
+      background: rgba(30, 41, 59, 0.8);
+      transform: translateX(4px);
+    }
+    .hud-protocol-card.active-protocol {
+      border-color: #38bdf8;
+      background: rgba(2, 132, 199, 0.1);
+      box-shadow: 0 0 25px rgba(2, 132, 199, 0.2), inset 0 0 15px rgba(2, 132, 199, 0.05);
+    }
+    .hud-protocol-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .hud-protocol-code {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: #38bdf8;
+      letter-spacing: 0.1em;
+    }
+    .hud-protocol-title {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .hud-risk-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid currentColor;
+    }
+
+    /* ======================================================== */
+    /* HƯỚNG 3: 2D SPATIAL MUSEUM BOOTH (KHÔNG GIAN TRIỂN LÃM 2D) */
+    /* ======================================================== */
+    .view-museum {
+      background: #eef2f6;
+      color: #0f172a;
+      background-image: 
+        radial-gradient(circle at 50% 30%, #ffffff 0%, #e2e8f0 100%);
+      position: relative;
+    }
+    .museum-stage {
+      display: flex;
+      height: calc(100vh - 61px);
+      position: relative;
+      overflow: hidden;
+    }
+    .museum-lectern {
+      width: 440px;
+      background: rgba(255, 255, 255, 0.95);
+      border-right: 1px solid #cbd5e1;
+      padding: 32px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      z-index: 10;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.04);
+      backdrop-filter: blur(10px);
+    }
+    .bot-speech-card {
+      background: #ffffff;
+      border: 2px solid #0f172a;
+      border-radius: 12px;
+      padding: 16px;
+      position: relative;
+      box-shadow: 4px 4px 0px #0f172a;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .bot-avatar-icon {
+      width: 36px;
+      height: 36px;
+      background: #d97706;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 900;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .bot-bubble-text {
+      font-size: 13px;
+      line-height: 1.5;
+      color: #1e293b;
+      font-weight: 500;
+    }
+    .museum-options-area {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 60px;
+      gap: 28px;
+    }
+    .museum-pedestal {
+      flex: 1;
+      max-width: 340px;
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      border-radius: 16px;
+      padding: 24px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+    .museum-pedestal:hover {
+      transform: translateY(-8px);
+      border-color: #0284c7;
+      box-shadow: 0 20px 40px rgba(2, 132, 199, 0.15);
+    }
+    .museum-pedestal.active {
+      border-color: #d97706;
+      border-width: 2.5px;
+      transform: translateY(-12px);
+      box-shadow: 0 24px 48px rgba(217, 119, 6, 0.2), 0 0 0 4px rgba(217, 119, 6, 0.15);
+    }
+    .pedestal-door-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 4px;
+    }
+
+    /* ACTION BAR AT BOTTOM */
+    .confirm-action-bar {
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .btn-commit {
+      background: #0f172a;
+      color: #ffffff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+    .btn-commit:hover {
+      background: #0284c7;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="top-bar">
+    <div class="brand-title">
+      <div class="brand-logo">VS</div>
+      <div>
+        <div class="brand-text">THE VALUE SHIFT • TẦNG 7 PROTOTYPE</div>
+      </div>
+      <span class="badge-floor">PHÁN QUYẾT CHIẾN LƯỢC</span>
+    </div>
+
+    <!-- SWITCHER CHO 3 HƯỚNG THIẾT KẾ -->
+    <div class="view-switcher">
+      <button class="tab-btn active" onclick="switchConcept('editorial')">
+        <span>HƯỚNG 1</span>
+        <span class="tab-tag">White Paper Editorial</span>
+      </button>
+      <button class="tab-btn" onclick="switchConcept('war-room')">
+        <span>HƯỚNG 2</span>
+        <span class="tab-tag">Macro War Room HUD</span>
+      </button>
+      <button class="tab-btn" onclick="switchConcept('museum')">
+        <span>HƯỚNG 3</span>
+        <span class="tab-tag">2D Spatial Booth</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN PREVIEW STAGE -->
+  <main class="preview-stage">
+
+    <!-- ================================================================= -->
+    <!-- CONCEPT 1: WHITE PAPER EDITORIAL                                  -->
+    <!-- ================================================================= -->
+    <section id="view-editorial" class="concept-view view-editorial active">
+      <div class="ed-header-banner">
+        <span class="ed-doc-tag">HỒ SƠ BÁO CÁO CHIẾN LƯỢC 2040 • PHÂN BỔ DÒNG THẶNG DƯ (c + v + m)</span>
+        <div style="font-family: var(--font-mono); font-size: 12px; color: #64748b;">
+          ĐỒNG THỜI CẬP NHẬT 5 CHỈ SỐ VĨ MÔ
+        </div>
+      </div>
+
+      <div class="ed-grid">
+        <!-- CỘT TRÁI: CÂU HỎI & CHỈ SỐ -->
+        <div class="ed-left-col">
+          <div>
+            <div style="font-family: var(--font-mono); font-size: 11px; color: #d97706; font-weight: 700; margin-bottom: 6px;">
+              VẤN ĐỀ CHIẾN LƯỢC CHỐT HẠ #07
+            </div>
+            <h1 class="ed-title">Việt Nam định vị ở đâu trên <span>Đường Cong Nụ Cười 2040?</span></h1>
+          </div>
+
+          <div class="ed-dilemma-box">
+            Sau 30 năm dựa vào lợi thế lao động giản đơn giá rẻ ở đáy đường cong (với biên giá trị giữ lại chỉ 2-3%), chi phí nhân công tăng và làn sóng tự động hóa AI đang xóa sổ dần lợi thế cạnh tranh. Bạn phải chọn một nấc thang chiến lược để tái cấu trúc dòng thặng dư quốc gia.
+          </div>
+
+          <!-- BẢNG ĐIỀU HÀNH 5 CHỈ SỐ (LIVE REACTIVE) -->
+          <div class="metrics-board">
+            <div style="font-family: var(--font-heading); font-size: 13px; font-weight: 700; text-transform: uppercase; color: #0f172a; margin-bottom: 4px; display: flex; justify-content: space-between;">
+              <span>5 Chỉ Số Vĩ Mô Dự Kiến</span>
+              <span style="font-size: 11px; color: #64748b; font-weight: normal;">Baseline: Mốc 2026</span>
+            </div>
+
+            <!-- DVC -->
+            <div class="metric-row">
+              <div class="metric-row-header">
+                <span>1. Giá trị nội địa (DVC)</span>
+                <div>
+                  <span id="ed-val-dvc" style="font-family: var(--font-mono); font-weight: 700; color: #16a34a;">35</span>
+                  <span id="ed-delta-dvc" class="metric-delta delta-neutral">+0</span>
+                </div>
+              </div>
+              <div class="metric-bar-bg">
+                <div id="ed-bar-dvc" class="metric-bar-fill" style="width: 35%; background: #16a34a;"></div>
+              </div>
+            </div>
+
+            <!-- TC -->
+            <div class="metric-row">
+              <div class="metric-row-header">
+                <span>2. Tự chủ R&D / IP (TC)</span>
+                <div>
+                  <span id="ed-val-tc" style="font-family: var(--font-mono); font-weight: 700; color: #0284c7;">30</span>
+                  <span id="ed-delta-tc" class="metric-delta delta-neutral">+0</span>
+                </div>
+              </div>
+              <div class="metric-bar-bg">
+                <div id="ed-bar-tc" class="metric-bar-fill" style="width: 30%; background: #0284c7;"></div>
+              </div>
+            </div>
+
+            <!-- EW -->
+            <div class="metric-row">
+              <div class="metric-row-header">
+                <span>3. Việc làm & Phúc lợi (EW)</span>
+                <div>
+                  <span id="ed-val-ew" style="font-family: var(--font-mono); font-weight: 700; color: #d97706;">60</span>
+                  <span id="ed-delta-ew" class="metric-delta delta-neutral">+0</span>
+                </div>
+              </div>
+              <div class="metric-bar-bg">
+                <div id="ed-bar-ew" class="metric-bar-fill" style="width: 60%; background: #d97706;"></div>
+              </div>
+            </div>
+
+            <!-- AR -->
+            <div class="metric-row">
+              <div class="metric-row-header">
+                <span>4. Kháng cự đứt gãy (AR)</span>
+                <div>
+                  <span id="ed-val-ar" style="font-family: var(--font-mono); font-weight: 700; color: #7c3aed;">40</span>
+                  <span id="ed-delta-ar" class="metric-delta delta-neutral">+0</span>
+                </div>
+              </div>
+              <div class="metric-bar-bg">
+                <div id="ed-bar-ar" class="metric-bar-fill" style="width: 40%; background: #7c3aed;"></div>
+              </div>
+            </div>
+
+            <!-- SUS -->
+            <div class="metric-row">
+              <div class="metric-row-header">
+                <span>5. Bền vững ESG (SUS)</span>
+                <div>
+                  <span id="ed-val-sus" style="font-family: var(--font-mono); font-weight: 700; color: #059669;">50</span>
+                  <span id="ed-delta-sus" class="metric-delta delta-neutral">+0</span>
+                </div>
+              </div>
+              <div class="metric-bar-bg">
+                <div id="ed-bar-sus" class="metric-bar-fill" style="width: 50%; background: #059669;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- GHI CHÚ MÁC - LÊNIN -->
+          <div class="ed-marx-quote">
+            <strong>Luận giải Mác – Lênin</strong>
+            <span id="ed-marx-text">
+              Hãy chọn một phương án bên phải để quan sát sự chuyển dịch giữa Thặng dư tuyệt đối (kéo dài ngày lao động, nén lương v) và Thặng dư tương đối (rút ngắn thời gian tất yếu nhờ đổi mới tư bản bất biến c).
+            </span>
+          </div>
+        </div>
+
+        <!-- CỘT PHẢI: CÁC OPTION ĐỘNG -->
+        <div class="ed-right-col">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-family: var(--font-heading); font-size: 16px; font-weight: 700; color: #0f172a;">
+              3 HƯỚNG ĐIẾU HÀNH CHIẾN LƯỢC QUỐC GIA
+            </div>
+            <div style="font-family: var(--font-mono); font-size: 12px; color: #64748b;">
+              Click vào phương án để xem tác động chỉ số
+            </div>
+          </div>
+
+          <div class="ed-options-grid">
+            <!-- OPTION A -->
+            <div class="ed-option-card selected" id="opt-ed-A" onclick="selectOption('A')">
+              <div class="ed-card-header">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span class="ed-card-num">01 / A</span>
+                  <h3 class="ed-card-title">ĐẦU NGUỒN: Tự Chủ Chip IP & Fabless</h3>
+                </div>
+                <span class="ed-card-badge" style="background: #e0f2fe; color: #0369a1;">Công Nghệ Lõi</span>
+              </div>
+              <p class="ed-card-desc">
+                Dồn toàn bộ ngân sách nhà nước và ưu đãi thuế cho đào tạo 50.000 kỹ sư vi mạch (QĐ 1018), mua bản quyền kiến trúc và xây dựng các trung tâm thiết kế bán dẫn nội địa Make-in-Vietnam.
+              </p>
+              <div class="ed-impact-chips">
+                <span class="chip delta-up">▲ DVC +35 (Thu trọn thặng dư m)</span>
+                <span class="chip delta-up">▲ TC +45 (Đỉnh cao R&D)</span>
+                <span class="chip delta-down">▼ EW -15 (Áp lực việc làm phổ thông)</span>
+                <span class="chip delta-up">▲ AR +25 (Thoát bẫy phụ thuộc)</span>
+              </div>
+            </div>
+
+            <!-- OPTION B -->
+            <div class="ed-option-card" id="opt-ed-B" onclick="selectOption('B')">
+              <div class="ed-card-header">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span class="ed-card-num">02 / B</span>
+                  <h3 class="ed-card-title">ĐÁY NỤ CƯỜI: Siêu Tổ Hợp Tự Động Hóa</h3>
+                </div>
+                <span class="ed-card-badge" style="background: #fef3c7; color: #b45309;">Gia Công Quy Mô Khủng</span>
+              </div>
+              <p class="ed-card-desc">
+                Cung cấp ưu đãi thuế đất tối đa cho các đại tập đoàn FDI (Samsung, Foxconn, Luxshare), áp dụng robot hóa dây chuyền phòng sạch để tối ưu năng suất lắp ráp linh kiện toàn cầu.
+              </p>
+              <div class="ed-impact-chips">
+                <span class="chip delta-neutral">■ DVC +5 (Giá trị giữ lại vẫn mỏng)</span>
+                <span class="chip delta-down">▼ TC -5 (Phụ thuộc công nghệ ngoại)</span>
+                <span class="chip delta-up">▲ EW +25 (Hấp thụ hàng triệu lao động)</span>
+                <span class="chip delta-down">▼ AR -20 (Nguy cơ chuyển dịch nhà máy)</span>
+              </div>
+            </div>
+
+            <!-- OPTION C -->
+            <div class="ed-option-card" id="opt-ed-C" onclick="selectOption('C')">
+              <div class="ed-card-header">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span class="ed-card-num">03 / C</span>
+                  <h3 class="ed-card-title">CUỐI NGUỒN: Thương Hiệu Toàn Cầu & Chuỗi Bán Lẻ</h3>
+                </div>
+                <span class="ed-card-badge" style="background: #dcfce7; color: #15803d;">Làm Chủ Thị Trường</span>
+              </div>
+              <p class="ed-card-desc">
+                Thuê gia công linh kiện bên ngoài, tập trung tài chính làm chủ kênh phân phối quốc tế, thương hiệu thiết bị điện tử thông minh và nền tảng phần mềm người dùng cuối.
+              </p>
+              <div class="ed-impact-chips">
+                <span class="chip delta-up">▲ DVC +28 (Chiếm lĩnh biên thương mại 35%)</span>
+                <span class="chip delta-up">▲ TC +20 (Làm chủ phần mềm & AI)</span>
+                <span class="chip delta-up">▲ EW +15 (Việc làm dịch vụ giá trị cao)</span>
+                <span class="chip delta-up">▲ AR +15 (Tự chủ kênh đầu ra)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="confirm-action-bar">
+            <div style="font-size: 13px; color: #64748b;">
+              Đã định hình: <strong id="ed-chosen-title" style="color: #0f172a;">Chiến Lược Tự Chủ Chip IP (A)</strong>
+            </div>
+            <button class="btn-commit" onclick="alert('Đã chốt phương án và chuyển sang Báo cáo Tổng kết Hoàn thành!')">
+              <span>Xác Nhận & Xuất Phán Quyết</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ================================================================= -->
+    <!-- CONCEPT 2: MACRO COMMAND CENTER HUD (WAR ROOM)                    -->
+    <!-- ================================================================= -->
+    <section id="view-war-room" class="concept-view view-war-room">
+      <div class="hud-grid">
+        <!-- BÊN TRÁI: COMMAND GAUGES & CONTEXT -->
+        <div class="hud-left">
+          <div class="hud-tag">
+            <span class="hud-pulse"></span>
+            <span>NATIONAL ECONOMIC WAR ROOM • SECTOR 07</span>
+          </div>
+
+          <h2 class="hud-title">Tình Trạng Khẩn Cấp: Tái Cấu Trúc Thặng Dư Quốc Gia 2040</h2>
+
+          <div class="hud-terminal-box">
+            [SYS_ALERT]: Bẫy thu nhập trung bình đang siết chặt. Lao động giá rẻ không còn đủ sức cạnh tranh khi chi phí sinh hoạt tăng. Cần ban hành <strong>Nghị định Điều hành Chuỗi Giá Trị</strong> để tái phân bổ thặng dư kinh tế.
+          </div>
+
+          <!-- HUD GAUGES -->
+          <div class="hud-gauges">
+            <div style="font-family: var(--font-mono); font-size: 11px; color: #94a3b8; text-transform: uppercase;">
+              MA TRẬN CHỈ SỐ VĨ MÔ THỜI GIAN THỰC (REAL-TIME TELEMETRY)
+            </div>
+
+            <!-- GAUGE 1 -->
+            <div class="hud-gauge-item">
+              <div class="hud-gauge-header">
+                <span style="color: #94a3b8;">DVC // Tỷ lệ giữ lại thặng dư</span>
+                <span id="hud-val-dvc" class="hud-gauge-val">70 / 100</span>
+              </div>
+              <div class="hud-bar-track">
+                <div id="hud-bar-dvc" class="hud-bar-glow" style="width: 70%; background: #10b981; color: #10b981;"></div>
+              </div>
+            </div>
+
+            <!-- GAUGE 2 -->
+            <div class="hud-gauge-item">
+              <div class="hud-gauge-header">
+                <span style="color: #94a3b8;">TC // Năng lực công nghệ R&D</span>
+                <span id="hud-val-tc" class="hud-gauge-val">75 / 100</span>
+              </div>
+              <div class="hud-bar-track">
+                <div id="hud-bar-tc" class="hud-bar-glow" style="width: 75%; background: #38bdf8; color: #38bdf8;"></div>
+              </div>
+            </div>
+
+            <!-- GAUGE 3 -->
+            <div class="hud-gauge-item">
+              <div class="hud-gauge-header">
+                <span style="color: #94a3b8;">EW // Phúc lợi công nhân & việc làm</span>
+                <span id="hud-val-ew" class="hud-gauge-val">45 / 100</span>
+              </div>
+              <div class="hud-bar-track">
+                <div id="hud-bar-ew" class="hud-bar-glow" style="width: 45%; background: #f59e0b; color: #f59e0b;"></div>
+              </div>
+            </div>
+
+            <!-- GAUGE 4 -->
+            <div class="hud-gauge-item">
+              <div class="hud-gauge-header">
+                <span style="color: #94a3b8;">AR // Kháng chịu cú sốc địa chính trị</span>
+                <span id="hud-val-ar" class="hud-gauge-val">65 / 100</span>
+              </div>
+              <div class="hud-bar-track">
+                <div id="hud-bar-ar" class="hud-bar-glow" style="width: 65%; background: #a855f7; color: #a855f7;"></div>
+              </div>
+            </div>
+
+            <!-- GAUGE 5 -->
+            <div class="hud-gauge-item">
+              <div class="hud-gauge-header">
+                <span style="color: #94a3b8;">SUS // Tiêu chuẩn phát thải xanh</span>
+                <span id="hud-val-sus" class="hud-gauge-val">60 / 100</span>
+              </div>
+              <div class="hud-bar-track">
+                <div id="hud-bar-sus" class="hud-bar-glow" style="width: 60%; background: #14b8a6; color: #14b8a6;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="font-family: var(--font-mono); font-size: 11px; color: #64748b; line-height: 1.5;">
+            [CƠ CHẾ MÁC-LÊNIN]: Thặng dư tương đối tăng tỷ lệ thuận với hàm lượng chất xám trong tư bản bất biến (c) và làm giảm tỷ lệ thời gian lao động tất yếu.
+          </div>
+        </div>
+
+        <!-- BÊN PHẢI: PROTOCOLS -->
+        <div class="hud-right">
+          <div style="font-family: var(--font-mono); font-size: 13px; color: #38bdf8; letter-spacing: 0.05em;">
+            // KÍCH HOẠT 1 TRONG 3 GIAO THỨC PHẢN ỨNG VĨ MÔ
+          </div>
+
+          <!-- PROTOCOL ALPHA -->
+          <div class="hud-protocol-card active-protocol" id="opt-hud-A" onclick="selectOption('A')">
+            <div class="hud-protocol-header">
+              <span class="hud-protocol-code">GIAO THỨC ALPHA // QĐ-1018</span>
+              <span class="hud-risk-badge" style="color: #38bdf8; border-color: #38bdf8;">Đầu Nguồn R&D</span>
+            </div>
+            <h3 class="hud-protocol-title">Tập Trung Kiến Trúc Bán Dẫn & Thiết Kế Fabless</h3>
+            <p style="font-size: 13px; color: #94a3b8; line-height: 1.6;">
+              Tài trợ đặc biệt cho các kỳ lân bán dẫn trong nước, chấp nhận giảm quy mô gia công lắp ráp thô để chiếm lĩnh độc quyền bằng sáng chế và thuật toán AI.
+            </p>
+            <div style="display: flex; gap: 8px;">
+              <span class="chip delta-up">DVC +35</span>
+              <span class="chip delta-up">TC +45</span>
+              <span class="chip delta-down">EW -15</span>
+              <span class="chip delta-up">AR +25</span>
+            </div>
+          </div>
+
+          <!-- PROTOCOL BETA -->
+          <div class="hud-protocol-card" id="opt-hud-B" onclick="selectOption('B')">
+            <div class="hud-protocol-header">
+              <span class="hud-protocol-code">GIAO THỨC BETA // FDI-MAX</span>
+              <span class="hud-risk-badge" style="color: #f59e0b; border-color: #f59e0b;">Đáy Nụ Cười</span>
+            </div>
+            <h3 class="hud-protocol-title">Bảo Vệ Việc Làm: Đại Công Xưởng Tự Động Hóa</h3>
+            <p style="font-size: 13px; color: #94a3b8; line-height: 1.6;">
+              Hút trọn làn sóng dịch chuyển từ Trung Quốc, cam kết thuế 0% cho FDI để duy trì hàng triệu việc làm phòng sạch, tối ưu hóa công đoạn lắp ráp cuối cùng.
+            </p>
+            <div style="display: flex; gap: 8px;">
+              <span class="chip delta-neutral">DVC +5</span>
+              <span class="chip delta-down">TC -5</span>
+              <span class="chip delta-up">EW +25</span>
+              <span class="chip delta-down">AR -20</span>
+            </div>
+          </div>
+
+          <!-- PROTOCOL GAMMA -->
+          <div class="hud-protocol-card" id="opt-hud-C" onclick="selectOption('C')">
+            <div class="hud-protocol-header">
+              <span class="hud-protocol-code">GIAO THỨC GAMMA // BRAND-GLOBAL</span>
+              <span class="hud-risk-badge" style="color: #10b981; border-color: #10b981;">Cuối Nguồn Brand</span>
+            </div>
+            <h3 class="hud-protocol-title">Thâu Tóm Hệ Thống Phân Phối & Thương Hiệu Toàn Cầu</h3>
+            <p style="font-size: 13px; color: #94a3b8; line-height: 1.6;">
+              Xây dựng các tập đoàn thương mại Make-in-Vietnam nắm giữ kênh bán lẻ trực tiếp tới người tiêu dùng Mỹ/Âu, biến thặng dư thương mại thành dòng vốn tái đầu tư.
+            </p>
+            <div style="display: flex; gap: 8px;">
+              <span class="chip delta-up">DVC +28</span>
+              <span class="chip delta-up">TC +20</span>
+              <span class="chip delta-up">EW +15</span>
+              <span class="chip delta-up">AR +15</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ================================================================= -->
+    <!-- CONCEPT 3: 2D SPATIAL MUSEUM BOOTH                                -->
+    <!-- ================================================================= -->
+    <section id="view-museum" class="concept-view view-museum">
+      <div class="museum-stage">
+        <!-- BỤC THUYẾT MINH BÊN TRÁI VỚI BOT -->
+        <div class="museum-lectern">
+          <div style="font-family: var(--font-mono); font-size: 11px; color: #d97706; font-weight: 700; letter-spacing: 0.1em;">
+            TẦNG 07 • SÂN KHẤU DANH DỰ
+          </div>
+          <h2 style="font-family: var(--font-heading); font-size: 24px; font-weight: 700; color: #0f172a; line-height: 1.2;">
+            Cửa Đi Vào Tương Lai: Lựa Chọn Nấc Thang Giá Trị
+          </h2>
+
+          <!-- BUBBLE HỘI THOẠI CỦA BOT -->
+          <div class="bot-speech-card">
+            <div class="bot-avatar-icon">🤖</div>
+            <div class="bot-bubble-text" id="museum-bot-speech">
+              "Bạn đã đồng hành cùng tôi qua 6 tầng bóc tách chiếc điện thoại 1.000 USD! Giờ là lúc bạn quyết định vận mệnh thặng dư của Việt Nam năm 2040!"
+            </div>
+          </div>
+
+          <!-- MINI METRICS HUD -->
+          <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="font-size: 12px; font-weight: 700; color: #0f172a;">Tác động vĩ mô tương ứng:</div>
+            
+            <div style="display: flex; justify-content: space-between; font-size: 12px; font-family: var(--font-mono);">
+              <span>Giá trị nội địa (DVC):</span>
+              <strong id="mus-val-dvc" style="color: #16a34a;">70 / 100</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 12px; font-family: var(--font-mono);">
+              <span>Tự chủ công nghệ (TC):</span>
+              <strong id="mus-val-tc" style="color: #0284c7;">75 / 100</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 12px; font-family: var(--font-mono);">
+              <span>Phúc lợi việc làm (EW):</span>
+              <strong id="mus-val-ew" style="color: #d97706;">45 / 100</strong>
+            </div>
+          </div>
+
+          <div style="margin-top: auto; padding: 14px; background: #e2e8f0; border-radius: 8px; font-size: 12px; color: #475569;">
+            💡 <em>Mẹo:</em> Bước tới trước mỗi bục trưng bày hoặc bấm vào thẻ để mở khóa cánh cửa tương ứng.
+          </div>
+        </div>
+
+        <!-- 3 BỤC TRƯNG BÀY TƯƠNG TÁC (ISOMETRIC / CARDS) -->
+        <div class="museum-options-area">
+          <!-- BỤC 1 -->
+          <div class="museum-pedestal active" id="opt-mus-A" onclick="selectOption('A')">
+            <div class="pedestal-door-icon" style="background: #0284c7;">
+              💎
+            </div>
+            <div style="font-family: var(--font-mono); font-size: 11px; color: #0284c7; font-weight: 700;">
+              CỬA 01 • ĐẦU NGUỒN IP
+            </div>
+            <h3 style="font-family: var(--font-heading); font-size: 18px; font-weight: 700; color: #0f172a;">
+              Bản Quyền Chip 3nm & Trí Tuệ Nhân Tạo
+            </h3>
+            <p style="font-size: 13px; color: #64748b; line-height: 1.5;">
+              Chiếm lĩnh đỉnh nụ cười bên trái. Nắm giữ bằng sáng chế để thu 45% giá trị máy mà không chịu tổn hại môi trường.
+            </p>
+            <div style="padding-top: 10px; border-top: 1px dashed #cbd5e1; font-size: 12px; font-weight: 600; color: #16a34a;">
+              ▲ DVC: +35 | TC: +45
+            </div>
+          </div>
+
+          <!-- BỤC 2 -->
+          <div class="museum-pedestal" id="opt-mus-B" onclick="selectOption('B')">
+            <div class="pedestal-door-icon" style="background: #d97706;">
+              ⚙️
+            </div>
+            <div style="font-family: var(--font-mono); font-size: 11px; color: #d97706; font-weight: 700;">
+              CỬA 02 • ĐÁY NỤ CƯỜI
+            </div>
+            <h3 style="font-family: var(--font-heading); font-size: 18px; font-weight: 700; color: #0f172a;">
+              Mega-Factory Lắp Ráp Toàn Cầu
+            </h3>
+            <p style="font-size: 13px; color: #64748b; line-height: 1.5;">
+              Mở rộng sản lượng 500 triệu điện thoại/năm. Đảm bảo công ăn việc làm nhưng thặng dư giữ lại vẫn mỏng manh (2.8%).
+            </p>
+            <div style="padding-top: 10px; border-top: 1px dashed #cbd5e1; font-size: 12px; font-weight: 600; color: #d97706;">
+              ▲ EW: +25 | ▼ DVC: +5
+            </div>
+          </div>
+
+          <!-- BỤC 3 -->
+          <div class="museum-pedestal" id="opt-mus-C" onclick="selectOption('C')">
+            <div class="pedestal-door-icon" style="background: #16a34a;">
+              🌐
+            </div>
+            <div style="font-family: var(--font-mono); font-size: 11px; color: #16a34a; font-weight: 700;">
+              CỬA 03 • CUỐI NGUỒN
+            </div>
+            <h3 style="font-family: var(--font-heading); font-size: 18px; font-weight: 700; color: #0f172a;">
+              Thương Hiệu Toàn Cầu & Phân Phối
+            </h3>
+            <p style="font-size: 13px; color: #64748b; line-height: 1.5;">
+              Chiếm lĩnh đỉnh nụ cười bên phải. Nắm kênh phân phối và thương hiệu Make-in-Vietnam để thu 33% biên thặng dư.
+            </p>
+            <div style="padding-top: 10px; border-top: 1px dashed #cbd5e1; font-size: 12px; font-weight: 600; color: #16a34a;">
+              ▲ DVC: +28 | AR: +15
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // DỮ LIỆU ĐỘNG CỦA 3 LỰA CHỌN
+    const IMPACT_DATA = {
+      A: {
+        title: "Chiến Lược Tự Chủ Chip IP & Fabless (A)",
+        dvc: 70, tc: 75, ew: 45, ar: 65, sus: 60,
+        deltaDvc: "+35", deltaTc: "+45", deltaEw: "-15", deltaAr: "+25", deltaSus: "+10",
+        marx: "Tập trung vào lao động phức tạp và đổi mới tư bản bất biến (c). Giá trị mới do sức lao động kỹ sư tạo ra (v + m) có tỷ suất thặng dư tương đối cực lớn, giúp quốc gia thâu tóm thặng dư siêu ngạch từ chuỗi toàn cầu.",
+        botSpeech: '"Tuyệt vời! Chọn ĐẦU NGUỒN đồng nghĩa với việc đào tạo 50.000 kỹ sư vi mạch để làm chủ giá trị thặng dư tương đối!"'
+      },
+      B: {
+        title: "Chiến Lược Đại Công Xưởng Tự Động Hóa (B)",
+        dvc: 40, tc: 25, ew: 85, ar: 20, sus: 35,
+        deltaDvc: "+5", deltaTc: "-5", deltaEw: "+25", deltaAr: "-20", deltaSus: "-15",
+        marx: "Dựa chủ yếu vào thặng dư tuyệt đối và nén tiền công (v) ở đáy chuỗi. Lợi nhuận siêu ngạch bị hút ngược về các tập đoàn nắm giữ bản quyền công nghệ ở nước ngoài. Nguy cơ bị đào thải khi lương tối thiểu tăng.",
+        botSpeech: '"Phương án này giải quyết bài toán việc làm trước mắt, nhưng chúng ta vẫn ở lại đáy đường cong Oxy với biên thặng dư mỏng manh!"'
+      },
+      C: {
+        title: "Chiến Lược Thương Hiệu Toàn Cầu Make-in-Vietnam (C)",
+        dvc: 63, tc: 50, ew: 75, ar: 55, sus: 55,
+        deltaDvc: "+28", deltaTc: "+20", deltaEw: "+15", deltaAr: "+15", deltaSus: "+5",
+        marx: "Kiểm soát khâu lưu thông và thương hiệu giúp chuyển hóa giá trị thặng dư trực tiếp từ thị trường tiêu dùng cuối cùng (H - T'), tránh bị các tập đoàn phân phối nước ngoài bóc lột địa tô thương mại.",
+        botSpeech: '"Thương hiệu và chuỗi cung ứng độc lập giúp chúng ta làm chủ cả hai đầu của đường cong nụ cười!"'
+      }
+    };
+
+    let currentOption = 'A';
+
+    function switchConcept(conceptName) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.concept-view').forEach(view => view.classList.remove('active'));
+
+      if (conceptName === 'editorial') {
+        document.querySelectorAll('.tab-btn')[0].classList.add('active');
+        document.getElementById('view-editorial').classList.add('active');
+      } else if (conceptName === 'war-room') {
+        document.querySelectorAll('.tab-btn')[1].classList.add('active');
+        document.getElementById('view-war-room').classList.add('active');
+      } else {
+        document.querySelectorAll('.tab-btn')[2].classList.add('active');
+        document.getElementById('view-museum').classList.add('active');
+      }
+    }
+
+    function selectOption(key) {
+      currentOption = key;
+      const data = IMPACT_DATA[key];
+
+      // Update Option Selection Styles across all 3 concepts
+      ['A', 'B', 'C'].forEach(opt => {
+        const edCard = document.getElementById('opt-ed-' + opt);
+        if (edCard) edCard.classList.toggle('selected', opt === key);
+
+        const hudCard = document.getElementById('opt-hud-' + opt);
+        if (hudCard) hudCard.classList.toggle('active-protocol', opt === key);
+
+        const musCard = document.getElementById('opt-mus-' + opt);
+        if (musCard) musCard.classList.toggle('active', opt === key);
+      });
+
+      // Update Editorial view
+      document.getElementById('ed-val-dvc').textContent = data.dvc;
+      document.getElementById('ed-bar-dvc').style.width = data.dvc + '%';
+      document.getElementById('ed-delta-dvc').textContent = data.deltaDvc;
+      document.getElementById('ed-delta-dvc').className = 'metric-delta ' + (data.deltaDvc.startsWith('+') ? 'delta-up' : 'delta-down');
+
+      document.getElementById('ed-val-tc').textContent = data.tc;
+      document.getElementById('ed-bar-tc').style.width = data.tc + '%';
+      document.getElementById('ed-delta-tc').textContent = data.deltaTc;
+      document.getElementById('ed-delta-tc').className = 'metric-delta ' + (data.deltaTc.startsWith('+') ? 'delta-up' : 'delta-down');
+
+      document.getElementById('ed-val-ew').textContent = data.ew;
+      document.getElementById('ed-bar-ew').style.width = data.ew + '%';
+      document.getElementById('ed-delta-ew').textContent = data.deltaEw;
+      document.getElementById('ed-delta-ew').className = 'metric-delta ' + (data.deltaEw.startsWith('+') ? 'delta-up' : 'delta-down');
+
+      document.getElementById('ed-val-ar').textContent = data.ar;
+      document.getElementById('ed-bar-ar').style.width = data.ar + '%';
+      document.getElementById('ed-delta-ar').textContent = data.deltaAr;
+      document.getElementById('ed-delta-ar').className = 'metric-delta ' + (data.deltaAr.startsWith('+') ? 'delta-up' : 'delta-down');
+
+      document.getElementById('ed-val-sus').textContent = data.sus;
+      document.getElementById('ed-bar-sus').style.width = data.sus + '%';
+      document.getElementById('ed-delta-sus').textContent = data.deltaSus;
+      document.getElementById('ed-delta-sus').className = 'metric-delta ' + (data.deltaSus.startsWith('+') ? 'delta-up' : 'delta-down');
+
+      document.getElementById('ed-marx-text').textContent = data.marx;
+      document.getElementById('ed-chosen-title').textContent = data.title;
+
+      // Update War Room HUD
+      document.getElementById('hud-val-dvc').textContent = data.dvc + ' / 100';
+      document.getElementById('hud-bar-dvc').style.width = data.dvc + '%';
+
+      document.getElementById('hud-val-tc').textContent = data.tc + ' / 100';
+      document.getElementById('hud-bar-tc').style.width = data.tc + '%';
+
+      document.getElementById('hud-val-ew').textContent = data.ew + ' / 100';
+      document.getElementById('hud-bar-ew').style.width = data.ew + '%';
+
+      document.getElementById('hud-val-ar').textContent = data.ar + ' / 100';
+      document.getElementById('hud-bar-ar').style.width = data.ar + '%';
+
+      document.getElementById('hud-val-sus').textContent = data.sus + ' / 100';
+      document.getElementById('hud-bar-sus').style.width = data.sus + '%';
+
+      // Update Museum view
+      document.getElementById('mus-val-dvc').textContent = data.dvc + ' / 100';
+      document.getElementById('mus-val-tc').textContent = data.tc + ' / 100';
+      document.getElementById('mus-val-ew').textContent = data.ew + ' / 100';
+      document.getElementById('museum-bot-speech').textContent = data.botSpeech;
+    }
+
+    // Initialize with Option A
+    selectOption('A');
+  </script>
+</body>
+</html>

@@ -25,7 +25,7 @@
 - Tailwind CSS utility classes compile properly with CSS custom property design tokens.
 
 ### Gate 1: Design System & Shell (Phase 1)
-- Color tokens match the approved palette: Midnight Navy (`#0B1220`), Deep Surface (`#151F30`), Electric Blue (`#398BCE`), Warm Gold (`#E7B85C`), Growth Green (`#42B88A`), Warning (`#E47770`), Muted Gray (`#9BA9BA`), Off White (`#F2F4F7`).
+- Color tokens match the approved Clean Editorial Light palette: Page Background / Midnight Navy Token (`#F8FAFC`), Pure White Surface (`#FFFFFF`), Electric Blue (`#0284C7`), Warm Gold (`#D97706`), Growth Green (`#16A34A`), Warning (`#DC2626`), Muted Gray (`#64748B`), Primary Text Ink (`#0F172A`).
 - Typography adheres to: Headings (Space Grotesk), Body (Inter), Monospace/Numbers (IBM Plex Mono).
 - Global progress indicator updates synchronously as user scrolls or navigates sections.
 - Reduced-motion media query (`prefers-reduced-motion`) disables heavy GSAP/Framer transitions.

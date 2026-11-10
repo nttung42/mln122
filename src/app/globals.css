@@ -108,3 +108,165 @@ body {
     transform: rotate(-24deg);
   }
 }
+
+/* Open Wall Gallery Cable & Particle Animations */
+@keyframes cablePulse {
+  0% { stroke-dashoffset: 240; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.pulse-cable {
+  stroke-dasharray: 12 24;
+  animation: cablePulse 4s linear infinite;
+}
+
+.pulse-cable-fast {
+  stroke-dasharray: 8 16;
+  animation: cablePulse 2s linear infinite;
+}
+
+@keyframes conveyorTrack {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-120px); }
+}
+
+.animate-conveyor-belt {
+  animation: conveyorTrack 3.5s linear infinite;
+}
+
+/* Băng chuyền chạy từ PHẢI sang TRÁI (RTL) mượt mà */
+@keyframes conveyorRTL {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-conveyor-rtl {
+  animation: conveyorRTL 8s linear infinite;
+}
+
+@keyframes cogSpinCCW {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+.spin-cog-ccw {
+  animation: cogSpinCCW 2.5s linear infinite;
+  transform-origin: center;
+}
+
+@keyframes stampDrop {
+  0% { transform: scale(1.8) rotate(-15deg); opacity: 0; }
+  50% { transform: scale(0.9) rotate(-4deg); opacity: 1; }
+  100% { transform: scale(1) rotate(-6deg); opacity: 1; }
+}
+
+.stamp-assembled {
+  animation: stampDrop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Tia X-Ray ngang chạy lên xuống mượt mà */
+@keyframes scannerVertical {
+  0% {
+    top: 6px;
+    opacity: 0.5;
+  }
+  50% {
+    top: 142px;
+    opacity: 1;
+  }
+  100% {
+    top: 6px;
+    opacity: 0.5;
+  }
+}
+
+.scanner-beam {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 5%, #22D3EE 20%, #E0F2FE 50%, #22D3EE 80%, transparent 95%);
+  box-shadow: 0 0 14px #22D3EE, 0 0 28px rgba(6, 182, 212, 0.7);
+  animation: scannerVertical 2.6s ease-in-out infinite;
+}
+
+/* Nhịp thở nhấp nháy nhẹ nhàng cho 3 điểm trên đồ thị Trạm 3 */
+@keyframes gentlePulseDot {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.95;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.75;
+  }
+}
+
+.animate-gentle-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: gentlePulseDot 2.4s ease-in-out infinite;
+}
+
+@keyframes rippleHalo {
+  0% {
+    r: 10;
+    opacity: 0.8;
+  }
+  100% {
+    r: 26;
+    opacity: 0;
+  }
+}
+
+.animate-ripple-halo {
+  animation: rippleHalo 2.5s cubic-bezier(0.1, 0.7, 0.1, 1) infinite;
+}
+
+@keyframes floatParticleGold {
+  0% { transform: translateY(0) scale(1); opacity: 0.9; }
+  100% { transform: translateY(-36px) scale(0.3); opacity: 0; }
+}
+
+.gold-particle {
+  animation: floatParticleGold 1.6s ease-out infinite;
+}
+
+@keyframes artifactFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.hover-breath {
+  animation: artifactFloat 4s ease-in-out infinite;
+}
+
+/* Đường cong Smiling Curve động nhẹ nhàng tại Trạm 3 */
+@keyframes curveFlow {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-curve-flow {
+  animation: curveFlow 3s linear infinite;
+}
+
+@keyframes curveGlowPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 2px rgba(220, 38, 38, 0.3));
+    opacity: 0.95;
+  }
+  50% {
+    filter: drop-shadow(0 0 8px rgba(220, 38, 38, 0.65));
+    opacity: 1;
+  }
+}
+
+.animate-curve-glow {
+  animation: curveGlowPulse 3s ease-in-out infinite;
+}
+

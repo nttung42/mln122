@@ -351,17 +351,19 @@ Agent instructions:
 
 Implement the approved design tokens.
 
-Color palette:
+Color palette (Clean Editorial Light Mode):
 
 ```css
---color-midnight-navy: #0B1220;
---color-deep-surface: #151F30;
---color-electric-blue: #398BCE;
---color-warm-gold: #E7B85C;
---color-off-white: #F2F4F7;
---color-muted-gray: #9BA9BA;
---color-growth-green: #42B88A;
---color-warning: #E47770;
+--color-midnight-navy: #F8FAFC;        /* Page background: Crisp Slate Paper */
+--color-deep-surface: #FFFFFF;         /* Pure White card / dock */
+--color-surface-elevated: #F1F5F9;     /* Elevated container / hover */
+--color-electric-blue: #0284C7;        /* Primary: Sapphire Sky */
+--color-warm-gold: #D97706;            /* Accent: Warm Amber Gold */
+--color-growth-green: #16A34A;         /* Emerald Growth Green */
+--color-warning: #DC2626;              /* Crimson Warning Red */
+--color-off-white: #0F172A;            /* Primary Text: Deep Slate 900 Ink */
+--color-muted-gray: #64748B;           /* Secondary Text: Slate 500 */
+--color-border-subtle: #E2E8F0;        /* Crisp Border */
 ```
 
 Typography:

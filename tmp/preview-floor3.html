@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preview Tầng 03: Giải Mã Bản Chất Giá Trị &amp; Thặng Dư — The Value Shift</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['"Space Grotesk"', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+            mono: ['"IBM Plex Mono"', 'monospace'],
+          },
+          colors: {
+            paper: '#F8FAFC',
+            surface: '#FFFFFF',
+            elevated: '#F1F5F9',
+            electric: '#0284C7',
+            gold: '#D97706',
+            emerald: '#10B981',
+            crimson: '#DC2626',
+            ink: '#0F172A',
+            slateMuted: '#64748B',
+            subtle: '#E2E8F0',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @keyframes streamFlow {
+      0% { stroke-dashoffset: 240; }
+      100% { stroke-dashoffset: 0; }
+    }
+    .animate-stream-fast {
+      stroke-dasharray: 10 20;
+      animation: streamFlow 1.8s linear infinite;
+    }
+    .animate-stream-slow {
+      stroke-dasharray: 14 28;
+      animation: streamFlow 3.6s linear infinite;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.85; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.08); }
+    }
+    .pulse-aura {
+      animation: pulseGlow 2.4s ease-in-out infinite;
+      transform-origin: center;
+    }
+    @keyframes legL {
+      0%, 100% { transform: rotate(-22deg); }
+      50% { transform: rotate(22deg); }
+    }
+    @keyframes legR {
+      0%, 100% { transform: rotate(22deg); }
+      50% { transform: rotate(-22deg); }
+    }
+    .walking .leg-left {
+      animation: legL 0.22s infinite ease-in-out;
+      transform-origin: top center;
+    }
+    .walking .leg-right {
+      animation: legR 0.22s infinite ease-in-out;
+      transform-origin: top center;
+    }
+    @keyframes bounceJump {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-75px); }
+      100% { transform: translateY(0); }
+    }
+    .jumping {
+      animation: bounceJump 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+</head>
+<body class="bg-paper text-ink font-body h-screen flex flex-col overflow-hidden select-none">
+
+  <!-- ================= TOP HUD & CONTROL BAR ================= -->
+  <header class="h-14 border-b border-subtle bg-white/95 backdrop-blur-md px-6 flex items-center justify-between shrink-0 z-40 shadow-xs">
+    <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-electric animate-pulse"></span>
+        <span class="font-heading font-black text-sm tracking-tight text-ink">THE VALUE SHIFT</span>
+      </div>
+      <span class="w-px h-4 bg-subtle"></span>
+      <span class="px-2.5 py-0.5 rounded text-xs font-mono font-bold bg-gold/15 text-gold border border-gold/40">
+        TẦNG 03
+      </span>
+      <span class="font-heading font-bold text-sm text-ink hidden md:inline">
+        Giải Mã Bản Chất Giá Trị &amp; Thặng Dư (c + v + m)
+      </span>
+    </div>
+
+    <!-- Quick Floor Nav Indicator -->
+    <div class="hidden lg:flex items-center gap-1.5 bg-elevated p-1 rounded-lg border border-subtle">
+      <a href="preview-floor1.html" class="px-2 py-0.5 text-xs font-mono text-slateMuted rounded hover:text-ink cursor-pointer">TẦNG 01</a>
+      <a href="preview-floor2.html" class="px-2 py-0.5 text-xs font-mono text-slateMuted rounded hover:text-ink cursor-pointer">TẦNG 02</a>
+      <span class="px-2.5 py-0.5 text-xs font-mono font-bold bg-white text-gold border border-gold/40 rounded shadow-2xs">
+        TẦNG 03
+      </span>
+      <a href="preview-floor4.html" class="px-2 py-0.5 text-xs font-mono text-slateMuted rounded hover:text-ink cursor-pointer">TẦNG 04</a>
+      <a href="preview-floor5.html" class="px-2 py-0.5 text-xs font-mono text-slateMuted rounded hover:text-ink cursor-pointer">TẦNG 05</a>
+      <a href="preview-floor6.html" class="px-2 py-0.5 text-xs font-mono text-slateMuted rounded hover:text-ink cursor-pointer">TẦNG 06 (GAME)</a>
+    </div>
+
+    <!-- Controller Guide & Auto Walk -->
+    <div class="flex items-center gap-4 text-xs font-mono text-slateMuted">
+      <span class="hidden sm:inline">
+        PHÍM <kbd class="px-1.5 py-0.5 bg-elevated rounded border border-subtle text-ink font-semibold">←</kbd> <kbd class="px-1.5 py-0.5 bg-elevated rounded border border-subtle text-ink font-semibold">→</kbd> HOẶC <kbd class="px-1.5 py-0.5 bg-elevated rounded border border-subtle text-ink font-semibold">A / D</kbd> ĐỂ ĐI • <kbd class="px-1.5 py-0.5 bg-elevated rounded border border-subtle text-ink font-semibold">SPACE</kbd> NHẢY
+      </span>
+      <button id="btn-autowalk" onclick="toggleAutoWalk()" class="px-3 py-1 rounded border border-subtle bg-white text-gold hover:border-gold text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs">
+        <span id="autowalk-icon">▶</span>
+        <span id="autowalk-text">TỰ ĐỘNG BƯỚC</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ================= MAIN THEATER VIEWPORT ================= -->
+  <main id="theater-viewport" class="relative flex-1 overflow-hidden cursor-grab active:cursor-grabbing touch-none bg-slate-50">
+    
+    <!-- PARALLAX WATERMARK IN CHÌM NỀN XA -->
+    <div id="parallax-bg" class="absolute top-8 left-16 w-[4700px] flex items-center gap-36 opacity-[0.03] pointer-events-none select-none">
+      <span class="font-heading font-black text-9xl tracking-widest text-slate-900 whitespace-nowrap">
+        W = c + v + m • CONSTANT VS VARIABLE CAPITAL
+      </span>
+      <span class="font-heading font-black text-9xl tracking-widest text-slate-900 whitespace-nowrap">
+        SURPLUS VALUE RATE m' = m/v • RELATIVE VS ABSOLUTE SURPLUS
+      </span>
+    </div>
+
+    <!-- ================= MASTER OVERHEAD & INTER-STATION SVG PIPELINES ================= -->
+    <svg class="absolute inset-0 w-[4800px] h-full pointer-events-none z-10 overflow-visible" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="shadowF3Precise" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#0F172A" floodOpacity="0.12" />
+        </filter>
+        <linearGradient id="gradCeilingRailF3" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#0284C7" />
+          <stop offset="30%" stopColor="#0284C7" />
+          <stop offset="60%" stopColor="#D97706" />
+          <stop offset="85%" stopColor="#10B981" />
+          <stop offset="100%" stopColor="#0284C7" />
+        </linearGradient>
+        <linearGradient id="gradSurplusFlow" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#0284C7" />
+          <stop offset="50%" stopColor="#D97706" />
+          <stop offset="100%" stopColor="#F59E0B" />
+        </linearGradient>
+      </defs>
+
+      <!-- Ray trần chính -->
+      <line x1="50" y1="36" x2="4520" y2="36" stroke="#94A3B8" stroke-width="4" filter="url(#shadowF3Precise)" />
+      <line x1="50" y1="36" x2="4520" y2="36" stroke="url(#gradCeilingRailF3)" stroke-width="2.5" class="animate-stream-fast" />
+
+      <!-- Cáp thả trần -->
+      <line x1="190" y1="36" x2="190" y2="78" stroke="#0284C7" stroke-width="3" />
+      <circle cx="190" cy="78" r="4.5" fill="#0284C7" stroke="#FFFFFF" stroke-width="2" />
+
+      <line x1="820" y1="36" x2="820" y2="78" stroke="#0284C7" stroke-width="3" />
+      <circle cx="820" cy="78" r="5" fill="#0284C7" stroke="#FFFFFF" stroke-width="2" />
+
+      <line x1="1940" y1="36" x2="1940" y2="78" stroke="#D97706" stroke-width="3" />
+      <circle cx="1940" cy="78" r="5" fill="#D97706" stroke="#FFFFFF" stroke-width="2" />
+
+      <line x1="3140" y1="36" x2="3140" y2="78" stroke="#D97706" stroke-width="3" />
+      <circle cx="3140" cy="78" r="5" fill="#D97706" stroke="#FFFFFF" stroke-width="2" />
+
+      <line x1="4080" y1="36" x2="4080" y2="78" stroke="#10B981" stroke-width="3" />
+      <circle cx="4080" cy="78" r="5" fill="#10B981" stroke="#FFFFFF" stroke-width="2" />
+
+      <line x1="4460" y1="36" x2="4460" y2="78" stroke="#0284C7" stroke-width="3" />
+      <circle cx="4460" cy="78" r="5" fill="#0284C7" stroke="#FFFFFF" stroke-width="2" />
+
+      <!-- Đường dòng chảy liên trạm -->
+      <line x1="310" y1="220" x2="360" y2="220" stroke="#0284C7" stroke-width="4" stroke-linecap="round" />
+      <line x1="310" y1="220" x2="360" y2="220" stroke="#BAE6FD" stroke-width="2" class="animate-stream-fast" />
+
+      <line x1="808" y1="240" x2="832" y2="240" stroke="#0284C7" stroke-width="3.5" stroke-dasharray="4 4" />
+      <circle cx="820" cy="240" r="5" fill="#0284C7" stroke="#FFFFFF" stroke-width="2" class="pulse-aura" />
+
+      <!-- Cổng ra Trạm 1 sang Trạm 2 -->
+      <line x1="1280" y1="290" x2="1320" y2="290" stroke="#0284C7" stroke-width="5" stroke-linecap="round" />
+      <circle cx="1320" cy="290" r="7" fill="#0F172A" stroke="#0284C7" stroke-width="2.5" class="pulse-aura" />
+      <circle cx="1320" cy="290" r="3" fill="#38BDF8" />
+
+      <path d="M 1320 290 C 1345 290, 1355 175, 1380 175" stroke="#0284C7" stroke-width="4" fill="none" stroke-linecap="round" />
+      <path d="M 1320 290 C 1345 290, 1355 175, 1380 175" stroke="#BAE6FD" stroke-width="2" fill="none" class="animate-stream-fast" />
+
+      <line x1="1320" y1="290" x2="1380" y2="290" stroke="#0284C7" stroke-width="4.5" stroke-linecap="round" />
+      <line x1="1320" y1="290" x2="1380" y2="290" stroke="#38BDF8" stroke-width="2" class="animate-stream-fast" />
+
+      <path d="M 1320 290 C 1345 290, 1355 405, 1380 405" stroke="#D97706" stroke-width="4" fill="none" stroke-linecap="round" />
+      <path d="M 1320 290 C 1345 290, 1355 405, 1380 405" stroke="#FDE68A" stroke-width="2" fill="none" class="animate-stream-fast" />
+
+      <path d="M 1940 340 C 2050 375, 2210 375, 2320 340" stroke="#10B981" stroke-width="3.5" stroke-dasharray="6 6" fill="none" />
+
+      <path d="M 2500 290 L 2600 290" stroke="url(#gradSurplusFlow)" stroke-width="5" fill="none" stroke-linecap="round" filter="url(#shadowF3Precise)" />
+      <path d="M 2500 290 L 2600 290" stroke="#FFFFFF" stroke-width="2.5" fill="none" stroke-linecap="round" class="animate-stream-fast" />
+      <circle cx="2550" cy="290" r="6" fill="#D97706" stroke="#FFFFFF" stroke-width="2" class="pulse-aura" />
+
+      <line x1="3680" y1="290" x2="3730" y2="290" stroke="#94A3B8" stroke-width="5" stroke-linecap="round" />
+      <circle cx="3730" cy="290" r="7" fill="#0F172A" stroke="#D97706" stroke-width="2.5" class="pulse-aura" />
+
+      <path d="M 3730 290 C 3750 290, 3755 395, 3780 395" stroke="#DC2626" stroke-width="4" stroke-dasharray="5 5" fill="none" />
+
+      <path d="M 3730 290 C 3750 290, 3755 185, 3780 185" stroke="#10B981" stroke-width="5" fill="none" stroke-linecap="round" filter="url(#shadowF3Precise)" />
+      <path d="M 3730 290 C 3750 290, 3755 185, 3780 185" stroke="#A7F3D0" stroke-width="2.5" fill="none" class="animate-stream-fast" />
+
+      <line x1="4380" y1="290" x2="4460" y2="290" stroke="#10B981" stroke-width="5" stroke-linecap="round" />
+      <line x1="4380" y1="290" x2="4460" y2="290" stroke="#A7F3D0" stroke-width="2.5" class="animate-stream-fast" />
+      <circle cx="4420" cy="290" r="6" fill="#10B981" stroke="#FFFFFF" stroke-width="2" class="pulse-aura" />
+    </svg>
+
+    <!-- ================= HORIZONTAL WORLD TRACK ================= -->
+    <div id="world-track" style="width: 4800px; transform: translateX(0px);" class="absolute left-0 top-0 h-full transition-transform duration-75 ease-out will-change-transform">
+
+      <!-- ================= KM 0.0: CỔNG VÀO (X: 70 - 310) ================= -->
+      <div style="left: 70px; top: 95px;" class="absolute w-[240px] pointer-events-auto z-20">
+        <div class="p-5 rounded-3xl bg-white/95 border border-slate-200/80 shadow-md backdrop-blur-md">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-sky-500 animate-pulse"></span>
+            <span class="font-mono text-xs font-bold text-sky-600 uppercase tracking-wider">
+              CỬA VÀO TẦNG 03
+            </span>
+          </div>
+          <h2 class="font-heading font-black text-xl text-slate-900 leading-tight mb-2">
+            GIẢI MÃ BẢN CHẤT GIÁ TRỊ &amp; THẶNG DƯ
+          </h2>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Máy móc (c) chỉ bảo toàn giá trị cũ. Duy nhất <strong>Sức lao động sống (v)</strong> mới sáng tạo nên <strong>Giá trị mới &amp; Thặng dư (m)</strong>.
+          </p>
+          <div class="mt-4 pt-3 border-t border-slate-200/70 flex items-center justify-between text-[11px] font-mono text-slate-500">
+            <span>CÔNG THỨC GỐC</span>
+            <span class="text-sky-600 font-bold">W = c + v + m</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= TRẠM 01: BÓC TÁCH SMARTPHONE & HẠT NHÂN SỨC LAO ĐỘNG ================= -->
+      <div style="left: 360px; top: 42px;" class="absolute flex items-center gap-3 z-20 pointer-events-auto">
+        <span class="px-3 py-1 rounded-full text-xs font-mono font-black bg-sky-600 text-white flex items-center gap-1.5 shadow-xs">
+          <span>⚡ TRẠM 01</span>
+        </span>
+        <span class="font-heading font-black text-xl text-slate-900 tracking-tight">
+          BÓC TÁCH HÀNG HÓA &amp; SỨC LAO ĐỘNG
+        </span>
+        <span class="text-slate-300 font-mono">/</span>
+        <span class="text-xs font-mono font-bold text-slate-500">
+          Hai thuộc tính hàng hóa vs Hạt nhân tạo giá trị thặng dư
+        </span>
+      </div>
+
+      <!-- Sân khấu Trạm 1 (920px x 450px) -->
+      <div style="left: 360px; top: 85px;" class="absolute w-[920px] h-[450px] pointer-events-auto z-20 flex gap-6">
+        
+        <!-- Khối Trái: Smartphone $1.000 -->
+        <div class="w-[448px] bg-white/95 backdrop-blur-md rounded-3xl border border-slate-200 shadow-md p-5 flex flex-col justify-between group hover:border-sky-300 transition-all">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="px-2.5 py-0.5 rounded-full font-mono text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                HÀNG HÓA CÔNG NGHỆ
+              </span>
+              <span class="text-sm font-mono font-black text-slate-900">$1.000 USD</span>
+            </div>
+
+            <h3 class="font-heading font-black text-lg text-slate-900 mb-2">
+              CHIẾC SMARTPHONE &amp; 2 THUỘC TÍNH
+            </h3>
+
+            <!-- ẢNH THỰC TẾ BO GÓC: TEARDOWN -->
+            <div class="w-full h-[180px] rounded-2xl overflow-hidden relative border border-slate-200 shadow-inner bg-slate-950 mb-3 group">
+              <img
+                src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80"
+                alt="Smartphone teardown and hardware architecture"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent"></div>
+              <div class="absolute top-2.5 left-2.5">
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-sky-500 text-white uppercase tracking-wider shadow-xs">
+                  FLAGSHIP TEARDOWN
+                </span>
+              </div>
+              <div class="absolute bottom-2.5 left-3 right-3 text-white">
+                <div class="text-[11px] font-mono font-bold text-sky-300">VẬT PHẨM KẾT TINH</div>
+                <p class="text-[10px] text-slate-300">Khung viền Titanium, Màn OLED 120Hz, Chip xử lý 3nm.</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                <span class="font-bold text-sky-700 block text-[11px] mb-0.5">GIÁ TRỊ SỬ DỤNG</span>
+                <span class="text-[11px] text-slate-600">Nghe gọi, hiển thị 120Hz, xử lý tác vụ AI.</span>
+              </div>
+              <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                <span class="font-bold text-amber-700 block text-[11px] mb-0.5">GIÁ TRỊ (VALUE)</span>
+                <span class="text-[11px] text-slate-600">Hao phí lao động xã hội trừu tượng kết tinh.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-2.5 rounded-2xl bg-slate-100/80 border border-slate-200 text-xs text-slate-700 flex items-center justify-between">
+            <span class="font-medium">Tiêu dùng hàng hóa thông thường:</span>
+            <span class="font-mono text-xs font-bold text-slate-600">Hao mòn dần (&Delta;W &le; 0)</span>
+          </div>
+        </div>
+
+        <!-- Khối Phải: Hàng Hóa Sức Lao Động -->
+        <div class="w-[448px] bg-white/95 backdrop-blur-md rounded-3xl border border-slate-200 shadow-md p-5 flex flex-col justify-between group hover:border-amber-400 transition-all">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="px-2.5 py-0.5 rounded-full font-mono text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-300">
+                HÀNG HÓA ĐẶC BIỆT DUY NHẤT
+              </span>
+              <span class="text-sm font-mono font-black text-amber-700">CỘI NGUỒN THẶNG DƯ</span>
+            </div>
+
+            <h3 class="font-heading font-black text-lg text-slate-900 mb-2">
+              SỨC LAO ĐỘNG (LABOR POWER)
+            </h3>
+
+            <!-- ẢNH THỰC TẾ BO GÓC: KỸ THUẬT VIÊN PHÒNG SẠCH -->
+            <div class="w-full h-[180px] rounded-2xl overflow-hidden relative border border-slate-200 shadow-inner bg-slate-950 mb-3 group">
+              <img
+                src="https://images.unsplash.com/photo-1581092334651-ddf26d9a09d0?auto=format&fit=crop&w=800&q=80"
+                alt="Cleanroom worker operating precision electronics assembly"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent"></div>
+              <div class="absolute top-2.5 left-2.5">
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-amber-500 text-slate-950 uppercase tracking-wider shadow-xs">
+                  SỨC LAO ĐỘNG SỐNG
+                </span>
+              </div>
+              <div class="absolute bottom-2.5 left-3 right-3 text-white">
+                <div class="text-[11px] font-mono font-bold text-amber-300">CÔNG NHÂN PHÒNG SẠCH</div>
+                <p class="text-[10px] text-slate-300">Bán khả năng lao động, không bán kết quả lao động.</p>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-2xl bg-amber-50/50 border border-amber-200/70 flex items-center justify-between text-xs">
+              <div class="flex flex-col items-center">
+                <span class="font-mono text-base font-black text-sky-700">v : $50</span>
+                <span class="text-[10px] text-slate-500">Lương bù đắp</span>
+              </div>
+              <span class="text-amber-500 text-lg">→</span>
+              <div class="flex flex-col items-center">
+                <span class="font-mono text-xs font-black text-amber-700 flex items-center gap-1">
+                  ⚡ LAO ĐỘNG SỐNG
+                </span>
+                <span class="text-[10px] text-slate-500">Tiêu dùng trong ca</span>
+              </div>
+              <span class="text-amber-500 text-lg">→</span>
+              <div class="flex flex-col items-center">
+                <span class="font-mono text-base font-black text-emerald-600">v + m : $350</span>
+                <span class="text-[10px] text-emerald-600 font-bold">Giá trị mới tạo ra</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-2.5 rounded-2xl bg-amber-50 border border-amber-300 text-xs text-amber-900 flex items-center justify-between">
+            <span class="font-medium">Tiêu dùng sức lao động:</span>
+            <span class="font-mono text-xs font-bold text-amber-700">Sáng tạo thặng dư (&Delta;W &gt; 0) ✨</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= TRẠM 02: LÒ PHÂN RÃ BA PHA W = c + v + m ================= -->
+      <div style="left: 1380px; top: 42px;" class="absolute flex items-center gap-3 z-20 pointer-events-auto">
+        <span class="px-3 py-1 rounded-full text-xs font-mono font-black bg-amber-500 text-slate-950 flex items-center gap-1.5 shadow-xs">
+          <span>⚡ TRẠM 02</span>
+        </span>
+        <span class="font-heading font-black text-xl text-slate-900 tracking-tight">
+          LÒ PHÂN RÃ TƯ BẢN: W = c + v + m
+        </span>
+        <span class="text-slate-300 font-mono">/</span>
+        <span class="text-xs font-mono font-bold text-slate-500">
+          Máy móc c vô hồn vs Sức lao động sống v &amp; Thặng dư m
+        </span>
+      </div>
+
+      <!-- Sân khấu Trạm 2 (1120px x 450px) -->
+      <div style="left: 1380px; top: 85px;" class="absolute w-[1120px] h-[450px] pointer-events-auto z-20 flex flex-col justify-between">
+        
+        <div class="grid grid-cols-3 gap-5">
+          <!-- Khoang c -->
+          <div id="card-c" onclick="selectChamber('c')" class="bg-white/95 backdrop-blur-md rounded-3xl p-4 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:scale-[1.01] border border-slate-200 shadow-sm hover:border-slate-300">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="px-2 py-0.5 rounded-full font-mono text-[10px] font-bold bg-sky-50 text-sky-700 border border-sky-200">
+                  KHOANG 1 • TƯ BẢN BẤT BIẾN
+                </span>
+                <span class="font-mono text-sm font-black text-sky-700">$650 (65%)</span>
+              </div>
+
+              <h4 class="font-heading font-black text-lg text-slate-900 mb-1">
+                c : MÁY MÓC &amp; VẬT LIỆU
+              </h4>
+
+              <div class="w-full h-[125px] rounded-2xl overflow-hidden relative border border-slate-200 shadow-inner bg-slate-950 mb-2.5">
+                <img
+                  src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80"
+                  alt="Industrial robotic arm automated manufacturing"
+                  class="w-full h-full object-cover"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div>
+                <div class="absolute bottom-2 left-2.5 right-2.5 text-[10px] font-mono text-slate-200">
+                  CỖ MÁY VÔ HỒN • CHỈ CHUYỂN DỊCH KHẤU HAO
+                </div>
+              </div>
+
+              <p class="text-xs text-slate-600 leading-snug">
+                Robot dập, máy quang học EUV, nhà xưởng &amp; vật liệu chip thô.
+              </p>
+            </div>
+
+            <div class="mt-3 p-2 rounded-xl bg-sky-50 border border-sky-200 font-mono text-xs text-sky-900 flex items-center justify-between">
+              <span>BẢO TOÀN GIÁ TRỊ:</span>
+              <span class="font-black text-sky-700">&Delta;W_c = 0</span>
+            </div>
+          </div>
+
+          <!-- Khoang v -->
+          <div id="card-v" onclick="selectChamber('v')" class="bg-white/95 backdrop-blur-md rounded-3xl p-4 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:scale-[1.01] border-2 border-sky-600 shadow-lg ring-4 ring-sky-500/10">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="px-2 py-0.5 rounded-full font-mono text-[10px] font-bold bg-sky-100 text-sky-700 border border-sky-300">
+                  KHOANG 2 • TƯ BẢN KHẢ BIẾN
+                </span>
+                <span class="font-mono text-sm font-black text-sky-700">$50 (5%)</span>
+              </div>
+
+              <h4 class="font-heading font-black text-lg text-slate-900 mb-1">
+                v : SỨC LAO ĐỘNG SỐNG
+              </h4>
+
+              <div class="w-full h-[125px] rounded-2xl overflow-hidden relative border border-slate-200 shadow-inner bg-slate-950 mb-2.5">
+                <img
+                  src="https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=800&q=80"
+                  alt="Cleanroom engineers operating precision semiconductor line"
+                  class="w-full h-full object-cover"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div>
+                <div class="absolute bottom-2 left-2.5 right-2.5 text-[10px] font-mono text-sky-300">
+                  LAO ĐỘNG SỐNG • TÁI TẠO &amp; SINH GIÁ TRỊ MỚI
+                </div>
+              </div>
+
+              <p class="text-xs text-slate-600 leading-snug">
+                Tiền lương trả cho hơn 400.000 công nhân phòng sạch và kỹ sư vận hành.
+              </p>
+            </div>
+
+            <div class="mt-3 p-2 rounded-xl bg-sky-50 border border-sky-200 font-mono text-xs text-slate-800 flex items-center justify-between">
+              <span>BẢN CHẤT:</span>
+              <span class="font-black text-sky-600">TÁI TẠO &amp; SINH MỚI</span>
+            </div>
+          </div>
+
+          <!-- Khoang m -->
+          <div id="card-m" onclick="selectChamber('m')" class="bg-white/95 backdrop-blur-md rounded-3xl p-4 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:scale-[1.01] border border-slate-200 shadow-sm hover:border-amber-400">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="px-2 py-0.5 rounded-full font-mono text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-300">
+                  KHOANG 3 • THẶNG DƯ TƯ BẢN
+                </span>
+                <span class="font-mono text-sm font-black text-amber-700">$300 (30%)</span>
+              </div>
+
+              <h4 class="font-heading font-black text-lg text-slate-900 mb-1">
+                m : THẶNG DƯ TÍCH LŨY
+              </h4>
+
+              <div class="w-full h-[125px] rounded-2xl overflow-hidden relative border border-slate-200 shadow-inner bg-slate-950 mb-2.5">
+                <img
+                  src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80"
+                  alt="High-tech corporate skyscraper headquarters"
+                  class="w-full h-full object-cover"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div>
+                <div class="absolute bottom-2 left-2.5 right-2.5 text-[10px] font-mono text-amber-300">
+                  TẬP ĐOÀN ĐẦU ĐÀN HÚT TRỌN LỢI NHUẬN
+                </div>
+              </div>
+
+              <p class="text-xs text-slate-600 leading-snug">
+                Phần giá trị mới ngoài tiền lương do công nhân tạo ra, chảy về tập đoàn tư bản.
+              </p>
+            </div>
+
+            <div class="mt-3 p-2 rounded-xl bg-amber-50 border border-amber-200 font-mono text-xs text-amber-900 flex items-center justify-between">
+              <span>TỶ SUẤT THẶNG DƯ:</span>
+              <span class="font-black text-amber-700">m' = 600% (GẤP 6 LẦN LƯƠNG)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Master HUD Inspector -->
+        <div class="p-4 rounded-3xl bg-white text-slate-900 flex items-center justify-between border-2 border-slate-900 shadow-md">
+          <div class="flex items-center gap-4">
+            <div id="hud-icon" class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl font-mono font-black border-2 shrink-0 bg-sky-100 border-sky-600 text-sky-700">
+              V
+            </div>
+            <div>
+              <div id="hud-title" class="font-heading font-black text-base text-sky-700">
+                TƯ BẢN KHẢ BIẾN (v): SỨC LAO ĐỘNG SỐNG TẠO GIÁ TRỊ MỚI
+              </div>
+              <p id="hud-desc" class="text-xs text-slate-600 mt-0.5">
+                Tiền lương công nhân lắp ráp. Không giống máy móc, sức lao động sống biến đổi về lượng và sinh ra thặng dư.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 shrink-0 font-mono text-xs pl-4 border-l border-slate-300">
+            <div>
+              <span class="text-slate-500 block text-[10px] font-medium">CÔNG THỨC TOÀN BỘ</span>
+              <span class="font-bold text-slate-900 text-sm">W = 650c + 50v + 300m = $1.000</span>
+            </div>
+            <div class="px-3.5 py-2 rounded-2xl bg-emerald-100 text-emerald-700 border border-emerald-300 font-black text-sm">
+              v + m = $350 (GIÁ TRỊ MỚI)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= TRẠM 03: ĐẠI ĐỒNG HỒ CA LAO ĐỘNG (SIMULATOR) ================= -->
+      <div style="left: 2600px; top: 42px;" class="absolute flex items-center gap-3 z-20 pointer-events-auto">
+        <span class="px-3 py-1 rounded-full text-xs font-mono font-black bg-amber-500 text-slate-950 flex items-center gap-1.5 shadow-xs">
+          <span>⚡ TRẠM 03</span>
+        </span>
+        <span class="font-heading font-black text-xl text-slate-900 tracking-tight">
+          ĐẠI ĐỒNG HỒ CA LAO ĐỘNG (WORKING DAY SIMULATOR)
+        </span>
+        <span class="text-slate-300 font-mono">/</span>
+        <span class="text-xs font-mono font-bold text-slate-500">
+          Mô hình hóa tỷ suất thặng dư m' theo thời gian thực
+        </span>
+      </div>
+
+      <!-- Sân khấu Trạm 3 (1080px x 450px) -->
+      <div style="left: 2600px; top: 85px;" class="absolute w-[1080px] h-[450px] pointer-events-auto z-20 flex flex-col justify-between">
+        
+        <!-- Băng đo thời gian -->
+        <div class="p-4 rounded-3xl bg-white border-2 border-slate-900 text-slate-900 shadow-md space-y-2.5">
+          <div class="flex items-center justify-between text-xs font-mono">
+            <div class="flex items-center gap-4">
+              <span class="flex items-center gap-2 text-sky-700 font-bold">
+                <span class="w-3 h-3 rounded-full bg-sky-500"></span>
+                Thời gian Tất Yếu (v): <span id="lbl-sim-v" class="text-sm">4.0h</span>
+              </span>
+              <span class="text-slate-300">|</span>
+              <span class="flex items-center gap-2 text-amber-700 font-bold">
+                <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                Thời gian Thặng Dư (m): <span id="lbl-sim-m" class="text-sm">4.0h</span>
+              </span>
+            </div>
+
+            <!-- Preset Scenarios -->
+            <div class="flex items-center gap-2 bg-slate-100 p-1 rounded-2xl border border-slate-300">
+              <button id="btn-pre-abs" onclick="applyPreset('absolute')" class="px-3 py-1 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer text-rose-700 hover:bg-rose-100">
+                1. TĂNG CA (THẶNG DƯ TUYỆT ĐỐI)
+              </button>
+              <button id="btn-pre-rel" onclick="applyPreset('relative')" class="px-3 py-1 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer text-emerald-700 hover:bg-emerald-100">
+                2. CÔNG NGHỆ CAO (THẶNG DƯ TƯƠNG ĐỐI)
+              </button>
+              <button id="btn-pre-def" onclick="applyPreset('default')" class="px-2.5 py-1 rounded-xl font-mono text-xs text-slate-600 hover:text-slate-900 cursor-pointer font-medium">
+                MẶC ĐỊNH
+              </button>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="relative w-full h-12 bg-slate-100 rounded-2xl overflow-hidden flex border-2 border-slate-300 shadow-inner">
+            <div id="bar-v" class="h-full bg-gradient-to-r from-sky-600 to-sky-500 flex items-center justify-between px-4 transition-all duration-300 relative" style="width: 50%;">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+                <span class="font-mono text-xs font-black text-white tracking-wider">LƯƠNG CÔNG NHÂN (v)</span>
+              </div>
+              <span id="bar-v-pct" class="font-mono text-xs bg-white/25 px-2 py-0.5 rounded text-white font-bold">50%</span>
+            </div>
+
+            <div id="bar-m" class="h-full bg-gradient-to-r from-amber-500 to-amber-600 flex items-center justify-between px-4 transition-all duration-300 relative" style="width: 50%;">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+                <span class="font-mono text-xs font-black text-white tracking-wider">THẶNG DƯ BỊ CHIẾM (m)</span>
+              </div>
+              <span id="bar-m-pct" class="font-mono text-xs bg-white/25 px-2 py-0.5 rounded text-white font-bold">50%</span>
+            </div>
+          </div>
+
+          <div class="flex justify-between text-[11px] font-mono text-slate-500 px-1">
+            <span>0h (Bắt đầu ca)</span>
+            <span id="lbl-marker-v">4.0h (Hết giờ bù lương v)</span>
+            <span id="lbl-marker-t">8.0h (Kết thúc ca làm việc)</span>
+            <span class="text-rose-600 font-bold">14.0h (Giới hạn sinh học)</span>
+          </div>
+        </div>
+
+        <!-- Sliders & Gauge -->
+        <div class="grid grid-cols-12 gap-5 items-stretch">
+          <div class="col-span-7 bg-white/95 backdrop-blur-md rounded-3xl border border-slate-200 p-5 shadow-sm space-y-3.5 flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between text-xs font-mono mb-1">
+                <span class="font-bold text-slate-700">1. ĐỘ DÀI CA LÀM VIỆC (T):</span>
+                <span id="txt-slider-t" class="font-black text-slate-900 text-sm">8.0 Giờ</span>
+              </div>
+              <input id="range-t" type="range" min="6" max="14" step="0.5" value="8" oninput="onTInput(this.value)" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500" />
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs font-mono mb-1">
+                <span class="font-bold text-slate-700">2. THỜI GIAN TẤT YẾU BÙ LƯƠNG (v):</span>
+                <span id="txt-slider-v" class="font-black text-sky-600 text-sm">4.0 Giờ</span>
+              </div>
+              <input id="range-v" type="range" min="2" max="6" step="0.5" value="4" oninput="onVInput(this.value)" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-sky-500" />
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs font-mono mb-1">
+                <span class="font-bold text-slate-700">3. CẤU TẠO HỮU CƠ TƯ BẢN (c/v):</span>
+                <span id="txt-slider-c" class="font-black text-slate-700 text-sm">c/v = 3.0</span>
+              </div>
+              <input id="range-c" type="range" min="1" max="8" step="0.5" value="3" oninput="onCInput(this.value)" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-700" />
+            </div>
+          </div>
+
+          <!-- Gauge -->
+          <div class="col-span-5 bg-gradient-to-br from-white to-amber-50/60 backdrop-blur-md rounded-3xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+              <span class="font-mono text-xs font-bold text-amber-600 uppercase tracking-wider">
+                TỶ SUẤT THẶNG DƯ (m')
+              </span>
+              <span id="txt-mprime" class="font-heading font-black text-3xl text-amber-600">100%</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 my-2 font-mono text-xs">
+              <div class="p-2.5 rounded-2xl bg-white border border-slate-200">
+                <span class="text-[10px] text-slate-500 block">THỜI GIAN THẶNG DƯ</span>
+                <strong id="txt-surplus-m" class="text-slate-900 text-sm">4.0 Giờ / ca</strong>
+              </div>
+              <div class="p-2.5 rounded-2xl bg-white border border-slate-200">
+                <span class="text-[10px] text-slate-500 block">TỶ SUẤT LỢI NHUẬN (p')</span>
+                <strong id="txt-profit-p" class="text-emerald-600 text-sm">25.0%</strong>
+              </div>
+            </div>
+
+            <div id="sim-verdict" class="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-700 leading-tight">
+              💡 <strong>Trạng thái chuẩn:</strong> 4.0h hoàn vốn lương, 4.0h cống hiến thặng dư. Tỷ suất m' = 100%.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= TRẠM 04: NGÃ RẼ BỨT PHÁ CHO VIỆT NAM ================= -->
+      <div style="left: 3780px; top: 42px;" class="absolute flex items-center gap-3 z-20 pointer-events-auto">
+        <span class="px-3 py-1 rounded-full text-xs font-mono font-black bg-emerald-600 text-white flex items-center gap-1.5 shadow-xs">
+          <span>⚡ TRẠM 04</span>
+        </span>
+        <span class="font-heading font-black text-xl text-slate-900 tracking-tight">
+          NGÃ RẼ CHIẾN LƯỢC KINH TẾ VIỆT NAM
+        </span>
+        <span class="text-slate-300 font-mono">/</span>
+        <span class="text-xs font-mono font-bold text-slate-500">
+          Thoát bẫy thặng dư tuyệt đối
+        </span>
+      </div>
+
+      <!-- Sân khấu Trạm 4 (600px x 450px) -->
+      <div style="left: 3780px; top: 85px;" class="absolute w-[600px] h-[450px] pointer-events-auto z-20 flex flex-col justify-between">
+        <div class="space-y-3">
+          
+          <!-- Nhánh Dưới: Bẫy Tuyệt Đối -->
+          <div class="p-3.5 rounded-3xl bg-rose-50/80 border border-red-200 shadow-xs relative overflow-hidden group hover:border-red-400 transition-all">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="px-2.5 py-0.5 rounded-full font-mono text-[10px] font-bold bg-red-100 text-rose-700">
+                NHÁNH THẤP: CHẠM TRẦN
+              </span>
+              <span class="font-mono text-xs font-bold text-rose-700">BIÊN LÃI 2-3%</span>
+            </div>
+
+            <h4 class="font-heading font-black text-base text-slate-900 mb-1">
+              BẪY THẶNG DƯ TUYỆT ĐỐI (LƯƠNG RẺ &amp; TĂNG CA)
+            </h4>
+
+            <p class="text-xs text-slate-600 leading-relaxed mb-2">
+              Dựa vào lao động giá rẻ và tăng ca quá mức. Khi chi phí tăng, FDI sẽ dịch chuyển sang Ấn Độ hay Indonesia.
+            </p>
+
+            <div class="flex items-center gap-2 text-xs font-mono font-bold text-rose-700">
+              <span>⚠️ HẬU QUẢ: Mắc kẹt ở đáy nụ cười, giá trị giữ lại nội địa (DVA) teo tóp!</span>
+            </div>
+          </div>
+
+          <!-- Nhánh Trên: Bứt Phá Tương Đối -->
+          <div class="p-3.5 rounded-3xl bg-emerald-50/70 border-2 border-emerald-300 shadow-md relative overflow-hidden group hover:border-emerald-500 transition-all">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="px-2.5 py-0.5 rounded-full font-mono text-[10px] font-bold bg-emerald-100 text-emerald-700">
+                NHÁNH CAO: BỀN VỮNG
+              </span>
+              <span class="font-mono text-xs font-bold text-emerald-700">MỤC TIÊU DVA &gt; 40%</span>
+            </div>
+
+            <h4 class="font-heading font-black text-base text-slate-900 mb-1">
+              LÀM CHỦ THẶNG DƯ TƯƠNG ĐỐI (CÔNG NGHỆ CAO)
+            </h4>
+
+            <div class="w-full h-[95px] rounded-2xl overflow-hidden relative border border-emerald-200 shadow-inner bg-slate-950 mb-2">
+              <img
+                src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80"
+                alt="Semiconductor fabrication cleanroom and microchip wafer"
+                class="w-full h-full object-cover"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div>
+              <div class="absolute bottom-1.5 left-2.5 right-2.5 text-[10px] font-mono text-emerald-300">
+                50.000 KỸ SƯ BÁN DẪN 2030 (QĐ 1018/QĐ-TTg)
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-[11px] font-medium text-slate-700">
+              <div class="flex items-center gap-1.5">
+                <span class="text-emerald-600 font-bold">✓</span>
+                <span>Tự chủ linh kiện Tier 1-2</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="text-emerald-600 font-bold">✓</span>
+                <span>Sở hữu IP Make in Vietnam</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-white text-slate-900 border-2 border-slate-900 font-mono text-xs font-black tracking-wider uppercase flex items-center justify-center gap-2 shadow-sm">
+          <span>CỔNG TẦNG 04 Ở PHÍA TRƯỚC (X: 4460m) &rarr;</span>
+        </div>
+      </div>
+
+      <!-- ================= CỔNG AIRLOCK TẦNG 04 (X = 4460) ================= -->
+      <div style="left: 4460px; top: 120px;" class="absolute z-20 pointer-events-auto">
+        <div onclick="enterNextFloor()" class="cursor-pointer group flex flex-col items-center">
+          <div class="w-32 h-64 rounded-3xl bg-slate-900 border-4 border-sky-500 shadow-2xl flex flex-col items-center justify-between p-3 relative overflow-hidden group-hover:border-emerald-400 group-hover:shadow-emerald-500/30 transition-all duration-300">
+            <div class="w-full flex items-center justify-between text-[10px] font-mono text-sky-400 font-bold border-b border-sky-800 pb-1">
+              <span>AIRLOCK 04</span>
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl mb-1 group-hover:scale-110 transition-transform">🚀</div>
+              <div class="font-heading font-black text-sm text-white leading-tight">CỬA TẦNG 04</div>
+              <div class="text-[9px] font-mono text-slate-400 mt-1">DÒNG CHẢY TOÀN CẦU</div>
+            </div>
+            <button class="w-full py-1.5 rounded-xl bg-sky-500 hover:bg-emerald-500 text-slate-950 font-mono text-xs font-black uppercase tracking-wider transition-colors">
+              BƯỚC VÀO
+            </button>
+          </div>
+          <span class="mt-2 text-xs font-mono font-bold text-slate-500">GATE X: 4460m</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ================= FLOATING CHARACTER AVATAR ================= -->
+    <div id="robot-avatar" style="left: 260px; bottom: 85px;" class="absolute z-30 pointer-events-none transition-transform duration-75">
+      <!-- Thought Bubble -->
+      <div id="thought-bubble" class="absolute -top-16 -left-12 bg-white/95 text-slate-900 px-3 py-1.5 rounded-2xl shadow-lg border border-slate-200 text-xs font-medium whitespace-nowrap flex items-center gap-1.5 z-40">
+        <span class="text-amber-500 font-bold">💬</span>
+        <span id="thought-text">Sức lao động sống là hạt nhân duy nhất tạo ra thặng dư!</span>
+      </div>
+
+      <!-- Character SVG Graphic -->
+      <svg class="w-16 h-20 filter drop-shadow-md" viewBox="0 0 64 80">
+        <rect x="18" y="12" width="28" height="24" rx="8" fill="#0284C7" stroke="#0F172A" stroke-width="2" />
+        <rect x="22" y="18" width="20" height="10" rx="3" fill="#0F172A" />
+        <circle cx="28" cy="23" r="2.5" fill="#38BDF8" />
+        <circle cx="36" cy="23" r="2.5" fill="#38BDF8" />
+        <line x1="32" y1="4" x2="32" y2="12" stroke="#0F172A" stroke-width="2" />
+        <circle cx="32" cy="4" r="3" fill="#D97706" />
+        <rect x="14" y="38" width="36" height="26" rx="6" fill="#FFFFFF" stroke="#0F172A" stroke-width="2" />
+        <rect x="20" y="44" width="24" height="12" rx="3" fill="#F1F5F9" stroke="#E2E8F0" stroke-width="1" />
+        <text x="32" y="53" font-family="Space Grotesk" font-size="8" font-weight="bold" fill="#0284C7" text-anchor="middle">v+m</text>
+        <g class="leg-left">
+          <rect x="20" y="64" width="8" height="14" rx="3" fill="#0284C7" stroke="#0F172A" stroke-width="1.5" />
+        </g>
+        <g class="leg-right">
+          <rect x="36" y="64" width="8" height="14" rx="3" fill="#0284C7" stroke="#0F172A" stroke-width="1.5" />
+        </g>
+      </svg>
+    </div>
+
+    <!-- Ground Track Platform -->
+    <div class="absolute bottom-0 left-0 right-0 h-[85px] bg-white border-t-2 border-slate-200 z-10 flex items-center justify-between px-6 font-mono text-xs text-slate-500">
+      <div class="flex items-center gap-3">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+        <span>HÀNH TRÌNH TẦNG 03: GIẢI MÃ TƯ BẢN VÀ THẶNG DƯ</span>
+      </div>
+      <div class="flex items-center gap-6">
+        <span id="lbl-coord">X: 180m</span>
+        <div class="w-48 h-2 bg-slate-200 rounded-full overflow-hidden">
+          <div id="bar-progress" class="h-full bg-sky-500 transition-all duration-75" style="width: 5%;"></div>
+        </div>
+        <span id="txt-progress" class="font-bold text-slate-900">5%</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- ================= JAVASCRIPT LOGIC ================= -->
+  <script>
+    let charX = 180;
+    const MIN_X = 80;
+    const MAX_X = 4460;
+    const CAMERA_OFFSET_LEFT = 260;
+    let isJumping = false;
+    let autoWalkInterval = null;
+    let facingLeft = false;
+
+    // Simulator State
+    let simT = 8.0;
+    let simV = 4.0;
+    let simC = 3.0;
+
+    // DOM Elements
+    const worldTrack = document.getElementById('world-track');
+    const parallaxBg = document.getElementById('parallax-bg');
+    const robotAvatar = document.getElementById('robot-avatar');
+    const thoughtBubble = document.getElementById('thought-bubble');
+    const thoughtText = document.getElementById('thought-text');
+    const lblCoord = document.getElementById('lbl-coord');
+    const barProgress = document.getElementById('bar-progress');
+    const txtProgress = document.getElementById('txt-progress');
+
+    // Exhibits Proximity Check
+    const EXHIBITS = [
+      { x: 820, thought: "Sức lao động là hàng hóa kỳ diệu duy nhất có khả năng tạo ra giá trị mới lớn hơn chính nó!" },
+      { x: 1940, thought: "Máy móc tối tân đến đâu cũng chỉ chuyển giá trị cũ (ΔW = 0). Chỉ có sức lao động sống mới đẻ ra thặng dư (m)!" },
+      { x: 3140, thought: "Hãy thử kéo thanh trượt Simulator! Xem tỷ suất m' vọt tăng khi rút ngắn thời gian tất yếu bằng công nghệ!" },
+      { x: 4080, thought: "Việt Nam không thể mãi dựa vào thặng dư tuyệt đối (tăng ca, lương rẻ). Phải nhảy sang thặng dư tương đối bằng làm chủ công nghệ!" }
+    ];
+
+    function updateProximityThought() {
+      for (const ex of EXHIBITS) {
+        if (Math.abs(charX - ex.x) < 220) {
+          thoughtText.innerText = ex.thought;
+          return;
+        }
+      }
+      thoughtText.innerText = "Dùng phím mũi tên ← → để di chuyển và khám phá các trạm!";
+    }
+
+    function renderPosition() {
+      const viewportWidth = window.innerWidth;
+      const trackWidth = 4800;
+      const maxShift = Math.max(0, trackWidth - viewportWidth);
+      const rawShift = Math.max(0, charX - CAMERA_OFFSET_LEFT);
+      const worldShift = Math.min(maxShift, rawShift);
+      const screenCharX = Math.min(charX, CAMERA_OFFSET_LEFT);
+
+      robotAvatar.style.left = `${screenCharX}px`;
+      worldTrack.style.transform = `translateX(-${worldShift}px)`;
+      parallaxBg.style.transform = `translateX(-${worldShift * 0.18}px)`;
+
+      if (facingLeft) {
+        robotAvatar.style.transform = "scaleX(-1)";
+        thoughtBubble.style.transform = "scaleX(-1)";
+      } else {
+        robotAvatar.style.transform = "scaleX(1)";
+        thoughtBubble.style.transform = "scaleX(1)";
+      }
+
+      const pct = Math.round(((charX - MIN_X) / (MAX_X - MIN_X)) * 100);
+      txtProgress.innerText = `${pct}%`;
+      barProgress.style.width = `${pct}%`;
+      lblCoord.innerText = `X: ${charX}m`;
+
+      updateProximityThought();
+    }
+
+    function moveChar(delta) {
+      charX = Math.max(MIN_X, Math.min(MAX_X, charX + delta));
+      facingLeft = delta < 0;
+
+      robotAvatar.classList.add('walking');
+      clearTimeout(window.walkTimer);
+      window.walkTimer = setTimeout(() => {
+        robotAvatar.classList.remove('walking');
+      }, 200);
+
+      renderPosition();
+    }
+
+    function triggerJump() {
+      if (isJumping) return;
+      isJumping = true;
+      robotAvatar.classList.add('jumping');
+      thoughtText.innerText = "Hup! Quan sát toàn cảnh lò phản ứng giá trị thặng dư!";
+
+      setTimeout(() => {
+        robotAvatar.classList.remove('jumping');
+        isJumping = false;
+        updateProximityThought();
+      }, 450);
+    }
+
+    function toggleAutoWalk() {
+      const btn = document.getElementById('btn-autowalk');
+      const icon = document.getElementById('autowalk-icon');
+      const text = document.getElementById('autowalk-text');
+
+      if (autoWalkInterval) {
+        clearInterval(autoWalkInterval);
+        autoWalkInterval = null;
+        icon.innerText = "▶";
+        text.innerText = "TỰ ĐỘNG BƯỚC";
+        btn.classList.remove('bg-emerald-600', 'text-white', 'border-emerald-600');
+        robotAvatar.classList.remove('walking');
+      } else {
+        icon.innerText = "■";
+        text.innerText = "DỪNG LẠI";
+        btn.classList.add('bg-emerald-600', 'text-white', 'border-emerald-600');
+        robotAvatar.classList.add('walking');
+
+        autoWalkInterval = setInterval(() => {
+          if (charX >= MAX_X) {
+            toggleAutoWalk();
+            return;
+          }
+          moveChar(20);
+        }, 80);
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") {
+        moveChar(40);
+      } else if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") {
+        moveChar(-40);
+      } else if (e.key === "ArrowUp" || e.key === "w" || e.key === "W" || e.key === " ") {
+        e.preventDefault();
+        triggerJump();
+      } else if (e.key === "Enter") {
+        if (Math.abs(charX - MAX_X) < 180) {
+          enterNextFloor();
+        }
+      }
+    });
+
+    // Trạm 2 Chamber Selector
+    function selectChamber(type) {
+      const cardC = document.getElementById('card-c');
+      const cardV = document.getElementById('card-v');
+      const cardM = document.getElementById('card-m');
+
+      cardC.className = "bg-white/95 backdrop-blur-md rounded-3xl p-4 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:scale-[1.01] border border-slate-200 shadow-sm hover:border-slate-300";
+      cardV.className = "bg-white/95 backdrop-blur-md rounded-3xl p-4 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:scale-[1.01] border border-slate-200 shadow-sm hover:border-slate-300";
+      cardM.className = "bg-white/95 backdrop-blur-md rounded-3xl p-4 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:scale-[1.01] border border-slate-200 shadow-sm hover:border-amber-400";
+
+      const hudIcon = document.getElementById('hud-icon');
+      const hudTitle = document.getElementById('hud-title');
+      const hudDesc = document.getElementById('hud-desc');
+
+      if (type === 'c') {
+        cardC.className = "bg-white/95 backdrop-blur-md rounded-3xl p-4 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:scale-[1.01] border-2 border-sky-500 shadow-lg ring-4 ring-sky-500/10";
+        hudIcon.className = "w-12 h-12 rounded-2xl flex items-center justify-center text-xl font-mono font-black border-2 shrink-0 bg-sky-50 border-sky-500 text-sky-700";
+        hudIcon.innerText = "C";
+        hudTitle.className = "font-heading font-black text-base text-sky-700";
+        hudTitle.innerText = "TƯ BẢN BẤT BIẾN (c): CỖ MÁY CHỈ DỊCH CHUYỂN GIÁ TRỊ CŨ";
+        hudDesc.innerText = "Dù robot tối tân đến đâu, máy móc chỉ chuyển dần giá trị hao mòn vào sản phẩm mới (ΔW = 0).";
+      } else if (type === 'v') {
+        cardV.className = "bg-white/95 backdrop-blur-md rounded-3xl p-4 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:scale-[1.01] border-2 border-sky-600 shadow-lg ring-4 ring-sky-500/10";
+        hudIcon.className = "w-12 h-12 rounded-2xl flex items-center justify-center text-xl font-mono font-black border-2 shrink-0 bg-sky-100 border-sky-600 text-sky-700";
+        hudIcon.innerText = "V";
+        hudTitle.className = "font-heading font-black text-base text-sky-700";
+        hudTitle.innerText = "TƯ BẢN KHẢ BIẾN (v): SỨC LAO ĐỘNG SỐNG TẠO GIÁ TRỊ MỚI";
+        hudDesc.innerText = "Tiền lương công nhân lắp ráp. Không giống máy móc, sức lao động sống biến đổi về lượng và sinh ra thặng dư.";
+      } else {
+        cardM.className = "bg-white/95 backdrop-blur-md rounded-3xl p-4 flex flex-col justify-between cursor-pointer transition-all duration-300 hover:scale-[1.01] border-2 border-amber-500 shadow-lg ring-4 ring-amber-500/10";
+        hudIcon.className = "w-12 h-12 rounded-2xl flex items-center justify-center text-xl font-mono font-black border-2 shrink-0 bg-amber-50 border-amber-500 text-amber-700";
+        hudIcon.innerText = "M";
+        hudTitle.className = "font-heading font-black text-base text-amber-700";
+        hudTitle.innerText = "GIÁ TRỊ THẶNG DƯ (m): CỘI NGUỒN TẬP ĐOÀN TÍCH LŨY TƯ BẢN";
+        hudDesc.innerText = "Phần dôi ra ngoài lương bị tập đoàn tư bản chiếm hữu. Đây là động lực duy nhất của chuỗi giá trị toàn cầu.";
+      }
+    }
+
+    // Simulator Update Logic
+    function updateSimulatorUI() {
+      const surplusM = Math.max(0.5, +(simT - simV).toFixed(1));
+      const mPrime = Math.round((surplusM / simV) * 100);
+      const pPrime = ((surplusM / (simC * simV + simV)) * 100).toFixed(1);
+
+      const pctV = Math.round((simV / simT) * 100);
+      const pctM = 100 - pctV;
+
+      document.getElementById('lbl-sim-v').innerText = `${simV.toFixed(1)}h`;
+      document.getElementById('lbl-sim-m').innerText = `${surplusM.toFixed(1)}h`;
+
+      document.getElementById('bar-v').style.width = `${pctV}%`;
+      document.getElementById('bar-m').style.width = `${pctM}%`;
+      document.getElementById('bar-v-pct').innerText = `${pctV}%`;
+      document.getElementById('bar-m-pct').innerText = `${pctM}%`;
+
+      document.getElementById('lbl-marker-v').innerText = `${simV.toFixed(1)}h (Hết giờ bù lương v)`;
+      document.getElementById('lbl-marker-t').innerText = `${simT.toFixed(1)}h (Kết thúc ca làm việc)`;
+
+      document.getElementById('txt-slider-t').innerText = `${simT.toFixed(1)} Giờ`;
+      document.getElementById('txt-slider-v').innerText = `${simV.toFixed(1)} Giờ`;
+      document.getElementById('txt-slider-c').innerText = `c/v = ${simC.toFixed(1)}`;
+
+      document.getElementById('txt-mprime').innerText = `${mPrime}%`;
+      document.getElementById('txt-surplus-m').innerText = `${surplusM.toFixed(1)} Giờ / ca`;
+      document.getElementById('txt-profit-p').innerText = `${pPrime}%`;
+
+      const verdictEl = document.getElementById('sim-verdict');
+      if (mPrime > 200) {
+        verdictEl.innerHTML = `🔥 <strong>Bóc lột thặng dư cao (${mPrime}%):</strong> Mỗi 1h làm cho mình, công nhân làm ${(surplusM / simV).toFixed(1)}h không công cho chủ!`;
+      } else if (simT > 10) {
+        verdictEl.innerHTML = `⚠️ <strong>Cảnh báo tăng ca kiệt sức (${simT}h):</strong> Thặng dư tuyệt đối chạm giới hạn sinh lý và nguy cơ phản kháng!`;
+      } else if (simV <= 2.5) {
+        verdictEl.innerHTML = `🚀 <strong>Đột phá Thặng dư tương đối:</strong> Nhờ công nghệ cao, chỉ mất ${simV}h bù lương, thặng dư nở rộng tự nhiên!`;
+      } else {
+        verdictEl.innerHTML = `💡 <strong>Trạng thái chuẩn:</strong> ${simV}h hoàn vốn lương, ${surplusM.toFixed(1)}h cống hiến thặng dư. Tỷ suất m' = ${mPrime}%.`;
+      }
+    }
+
+    function onTInput(val) {
+      simT = parseFloat(val);
+      if (simT <= simV) {
+        simV = Math.max(1.5, simT - 0.5);
+        document.getElementById('range-v').value = simV;
+      }
+      updateSimulatorUI();
+    }
+
+    function onVInput(val) {
+      simV = parseFloat(val);
+      if (simV >= simT) {
+        simV = Math.max(1.5, simT - 0.5);
+        document.getElementById('range-v').value = simV;
+      }
+      updateSimulatorUI();
+    }
+
+    function onCInput(val) {
+      simC = parseFloat(val);
+      updateSimulatorUI();
+    }
+
+    function applyPreset(preset) {
+      if (preset === 'absolute') {
+        simT = 12;
+        simV = 4;
+        simC = 3;
+      } else if (preset === 'relative') {
+        simT = 8;
+        simV = 2;
+        simC = 5;
+      } else {
+        simT = 8;
+        simV = 4;
+        simC = 3;
+      }
+      document.getElementById('range-t').value = simT;
+      document.getElementById('range-v').value = simV;
+      document.getElementById('range-c').value = simC;
+      updateSimulatorUI();
+    }
+
+    function enterNextFloor() {
+      alert("✨ BƯỚC VÀO TẦNG 04: DÒNG CHẢY CHUỖI GIÁ TRỊ TOÀN CẦU\n\nKhám phá cách quyền lực thị trường phân chia lại thặng dư giữa các quốc gia!");
+    }
+
+    renderPosition();
+    updateSimulatorUI();
+  </script>
+</body>
+</html>

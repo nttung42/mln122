@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tầng 06: Bàn Cờ Chiến Lược Vietnam 2040 — The Value Shift</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['"Space Grotesk"', 'sans-serif'],
+            body: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            ground: '#F8FAFC',
+            surface: '#FFFFFF',
+            subtleSurface: '#F1F5F9',
+            ink: '#0F172A',
+            inkMuted: '#475569',
+            inkSubtle: '#94A3B8',
+            rule: '#E2E8F0',
+            accentAmber: '#B45309',
+            accentSky: '#0369A1',
+            accentEmerald: '#047857',
+            accentRed: '#B91C1C',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #F8FAFC;
+      color: #0F172A;
+      user-select: none;
+      overflow-x: hidden;
+    }
+
+    .tabular {
+      font-variant-numeric: tabular-nums;
+    }
+
+    @keyframes conduitFlow {
+      0% { stroke-dashoffset: 120; }
+      100% { stroke-dashoffset: 0; }
+    }
+    .conduit-flow {
+      stroke-dasharray: 8 16;
+      animation: conduitFlow 3s linear infinite;
+    }
+
+    @keyframes legL {
+      0%, 100% { transform: rotate(-20deg); }
+      50% { transform: rotate(20deg); }
+    }
+    @keyframes legR {
+      0%, 100% { transform: rotate(20deg); }
+      50% { transform: rotate(-20deg); }
+    }
+    .walking .leg-left {
+      animation: legL 0.22s infinite ease-in-out;
+      transform-origin: top center;
+    }
+    .walking .leg-right {
+      animation: legR 0.22s infinite ease-in-out;
+      transform-origin: top center;
+    }
+
+    @keyframes jumpArc {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-70px); }
+      100% { transform: translateY(0); }
+    }
+    .jumping {
+      animation: jumpArc 0.42s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+</head>
+<body class="bg-ground text-ink h-screen flex flex-col overflow-hidden select-none">
+
+  <!-- ================= TOP HUD & QUICK FLOOR NAVIGATION ================= -->
+  <header class="h-14 border-b border-rule bg-white px-6 flex items-center justify-between shrink-0 z-40">
+    <div class="flex items-center gap-4">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-accentAmber"></span>
+        <span class="font-heading font-bold text-sm tracking-tight text-ink">THE VALUE SHIFT</span>
+      </div>
+      <span class="text-rule">|</span>
+      <span class="text-xs font-semibold text-accentAmber">Tầng 06</span>
+      <span class="text-xs text-inkMuted hidden md:inline">Bàn cờ điều hành chiến lược Vietnam 2040</span>
+    </div>
+
+    <!-- Quick Floor Navigation -->
+    <div class="hidden lg:flex items-center gap-1 bg-subtleSurface p-1 rounded-md border border-rule text-xs">
+      <button onclick="window.location.href='/preview-floor1.html'" class="px-2.5 py-1 text-inkMuted hover:text-ink cursor-pointer">Tầng 01</button>
+      <button onclick="window.location.href='/preview-floor2.html'" class="px-2.5 py-1 text-inkMuted hover:text-ink cursor-pointer">Tầng 02</button>
+      <button class="px-2.5 py-1 text-inkSubtle cursor-not-allowed">Tầng 03</button>
+      <button onclick="window.location.href='/preview-floor4.html'" class="px-2.5 py-1 text-inkMuted hover:text-ink cursor-pointer">Tầng 04</button>
+      <button onclick="window.location.href='/preview-floor5.html'" class="px-2.5 py-1 text-inkMuted hover:text-ink cursor-pointer">Tầng 05</button>
+      <button class="px-2.5 py-1 font-bold bg-white text-ink border border-rule rounded shadow-xs">Tầng 06</button>
+      <button class="px-2.5 py-1 text-inkSubtle cursor-not-allowed">Tầng 07</button>
+    </div>
+
+    <!-- Controls -->
+    <div class="flex items-center gap-4 text-xs text-inkMuted">
+      <span class="hidden sm:inline">Phím <kbd class="px-1.5 py-0.5 bg-subtleSurface rounded border border-rule text-ink font-semibold">←</kbd> <kbd class="px-1.5 py-0.5 bg-subtleSurface rounded border border-rule text-ink font-semibold">→</kbd> hoặc <kbd class="px-1.5 py-0.5 bg-subtleSurface rounded border border-rule text-ink font-semibold">A / D</kbd> để bước</span>
+      <button id="btn-autowalk" onclick="toggleAutoWalk()" class="px-3 py-1 rounded border border-rule bg-white text-ink hover:bg-subtleSurface font-semibold text-xs cursor-pointer">
+        <span id="autowalk-text">Tự động bước</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ================= SUB-HEADER: MACROECONOMIC INDICATORS (0 - 100) ================= -->
+  <div class="h-16 bg-slate-900 border-b border-slate-800 text-white px-6 flex items-center justify-between shrink-0 z-30">
+    <div class="flex items-center gap-3">
+      <span class="text-xs font-bold uppercase tracking-wider text-amber-400 font-heading">Chỉ Số Vĩ Mô 2040</span>
+      <span class="hidden xl:inline text-xs text-slate-400 font-body">(Chuẩn hóa theo Chuỗi Giá Trị Toàn Cầu & Lý Luận Thặng Dư)</span>
+    </div>
+
+    <div class="flex items-center gap-6 overflow-x-auto py-1">
+      <!-- 1. DVC -->
+      <div class="flex items-center gap-2 min-w-[125px]" title="Tỷ lệ giá trị thặng dư (m) giữ lại trong nước">
+        <div class="text-right">
+          <div class="text-[10px] text-slate-400 uppercase font-semibold">1. Nội địa (DVC)</div>
+          <div class="text-sm font-bold text-emerald-400 tabular" id="hud-dvc-val">35 <span class="text-[10px] text-slate-500 font-normal">/100</span></div>
+        </div>
+        <div class="w-12 h-2 bg-slate-800 rounded overflow-hidden">
+          <div id="hud-dvc-bar" class="h-full bg-emerald-400 transition-all duration-300" style="width: 35%;"></div>
+        </div>
+      </div>
+
+      <!-- 2. TC -->
+      <div class="flex items-center gap-2 min-w-[125px]" title="Năng lực R&D và thiết kế công nghệ lõi">
+        <div class="text-right">
+          <div class="text-[10px] text-slate-400 uppercase font-semibold">2. Công nghệ (TC)</div>
+          <div class="text-sm font-bold text-sky-400 tabular" id="hud-tc-val">30 <span class="text-[10px] text-slate-500 font-normal">/100</span></div>
+        </div>
+        <div class="w-12 h-2 bg-slate-800 rounded overflow-hidden">
+          <div id="hud-tc-bar" class="h-full bg-sky-400 transition-all duration-300" style="width: 30%;"></div>
+        </div>
+      </div>
+
+      <!-- 3. EW -->
+      <div class="flex items-center gap-2 min-w-[125px]" title="Phúc lợi & việc làm thực tế của người lao động">
+        <div class="text-right">
+          <div class="text-[10px] text-slate-400 uppercase font-semibold">3. Việc làm (EW)</div>
+          <div class="text-sm font-bold text-amber-400 tabular" id="hud-ew-val">60 <span class="text-[10px] text-slate-500 font-normal">/100</span></div>
+        </div>
+        <div class="w-12 h-2 bg-slate-800 rounded overflow-hidden">
+          <div id="hud-ew-bar" class="h-full bg-amber-400 transition-all duration-300" style="width: 60%;"></div>
+        </div>
+      </div>
+
+      <!-- 4. AR -->
+      <div class="flex items-center gap-2 min-w-[125px]" title="Mức độ tự chủ và khả năng kháng chịu cú sốc">
+        <div class="text-right">
+          <div class="text-[10px] text-slate-400 uppercase font-semibold">4. Tự chủ (AR)</div>
+          <div class="text-sm font-bold text-indigo-400 tabular" id="hud-ar-val">40 <span class="text-[10px] text-slate-500 font-normal">/100</span></div>
+        </div>
+        <div class="w-12 h-2 bg-slate-800 rounded overflow-hidden">
+          <div id="hud-ar-bar" class="h-full bg-indigo-400 transition-all duration-300" style="width: 40%;"></div>
+        </div>
+      </div>
+
+      <!-- 5. SUS -->
+      <div class="flex items-center gap-2 min-w-[125px]" title="Bền vững môi trường và cân bằng kinh tế">
+        <div class="text-right">
+          <div class="text-[10px] text-slate-400 uppercase font-semibold">5. Bền vững (SUS)</div>
+          <div class="text-sm font-bold text-teal-400 tabular" id="hud-sus-val">50 <span class="text-[10px] text-slate-500 font-normal">/100</span></div>
+        </div>
+        <div class="w-12 h-2 bg-slate-800 rounded overflow-hidden">
+          <div id="hud-sus-bar" class="h-full bg-teal-400 transition-all duration-300" style="width: 50%;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Cross-Round Effect -->
+    <div id="hud-synergy-pill" class="hidden md:flex items-center gap-2 px-3 py-1 rounded bg-slate-800 text-xs text-slate-300 border border-slate-700">
+      <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+      <span id="hud-synergy-text" class="font-medium text-xs">Cân bằng tự nhiên</span>
+    </div>
+  </div>
+
+  <!-- ================= MAIN THEATER VIEWPORT ================= -->
+  <main id="theater-viewport" class="relative flex-1 overflow-hidden bg-ground">
+
+    <!-- OVERHEAD CONDUIT (Y = 32px) -->
+    <svg class="absolute inset-0 w-[5300px] h-full pointer-events-none z-10 overflow-visible" xmlns="http://www.w3.org/2000/svg">
+      <line x1="40" y1="32" x2="5100" y2="32" stroke="#CBD5E1" stroke-width="2" />
+      <line x1="40" y1="32" x2="5100" y2="32" stroke="#B45309" stroke-width="2" class="conduit-flow" />
+
+      <!-- Station drop markers -->
+      <line x1="140" y1="32" x2="140" y2="60" stroke="#B45309" stroke-width="2" />
+      <line x1="900" y1="32" x2="900" y2="60" stroke="#B45309" stroke-width="2" />
+      <line x1="2200" y1="32" x2="2200" y2="60" stroke="#0369A1" stroke-width="2" />
+      <line x1="3400" y1="32" x2="3400" y2="60" stroke="#047857" stroke-width="2" />
+      <line x1="4650" y1="32" x2="4650" y2="60" stroke="#B45309" stroke-width="2" />
+    </svg>
+
+    <!-- ================= HORIZONTAL WORLD TRACK ================= -->
+    <div id="world-track" style="width: 5300px; transform: translateX(0px);" class="absolute left-0 top-0 h-full transition-transform duration-75 ease-out will-change-transform">
+
+      <!-- ================= KM 0.0: BRIEFING LỚN TRÊN TƯỜNG (X = 140PX, RỘNG 600PX) ================= -->
+      <div style="left: 140px; top: 60px;" class="absolute w-[600px] pointer-events-auto z-20">
+        <div class="text-xs font-semibold text-accentAmber uppercase tracking-wider mb-2">
+          Khởi Đầu &bull; Năm Cột Mốc 2026 - 2040
+        </div>
+
+        <h1 class="text-4xl sm:text-5xl font-black font-heading text-ink tracking-tight leading-none mb-4">
+          BÀN CỜ ĐIỀU HÀNH<br />
+          <span class="text-accentAmber">VIETNAM 2040</span>
+        </h1>
+
+        <p class="text-sm text-inkMuted leading-relaxed max-w-lg mb-6">
+          Năm 2026, Việt Nam xuất khẩu đạt kỷ lục nhưng hơn <strong>71.7%</strong> thuộc về tập đoàn FDI. Phần thặng dư kinh tế (<span class="font-bold text-accentAmber">m</span>) thực tế giữ lại trong nước chỉ từ <strong>2 đến 3.5%</strong>.
+        </p>
+
+        <!-- Briefing Indicators -->
+        <div class="grid grid-cols-2 gap-4 max-w-lg mb-6">
+          <div class="p-4 rounded-xl bg-white border border-rule shadow-xs">
+            <span class="text-xs text-inkSubtle block">Tình thế năm 2026</span>
+            <div class="text-2xl font-black font-heading text-ink mt-0.5">71.7% FDI</div>
+            <span class="text-xs text-inkMuted">Chi phối xuất khẩu công nghệ</span>
+          </div>
+
+          <div class="p-4 rounded-xl bg-white border border-rule shadow-xs">
+            <span class="text-xs text-inkSubtle block">Mục tiêu năm 2040</span>
+            <div class="text-2xl font-black font-heading text-emerald-700 mt-0.5">&gt; 45% DVC</div>
+            <span class="text-xs text-inkMuted">Thặng dư tích lũy nội địa hóa</span>
+          </div>
+        </div>
+
+        <p class="text-xs text-inkMuted leading-snug">
+          Bước qua 3 trạm chiến lược phía trước để ra quyết định phân bổ dòng vốn, nâng tầm nguồn nhân lực và định vị quốc gia trên chuỗi giá trị toàn cầu.
+        </p>
+      </div>
+
+      <!-- ================= TRẠM 01: DÒNG THẶNG DƯ & ĐỘNG LỰC TĂNG TRƯỞNG (X = 880PX - 2050PX) ================= -->
+      <div style="left: 880px; top: 60px;" class="absolute w-[1080px] pointer-events-auto z-20">
+        <div class="flex items-center justify-between border-b border-rule pb-2 mb-4">
+          <div>
+            <span class="text-xs font-semibold text-accentAmber uppercase tracking-wider block">Trạm 01 &bull; Quyết định 1</span>
+            <h2 class="text-xl font-heading font-black text-ink">Mô Hình Động Lực Tăng Trưởng & Dòng Thặng Dư</h2>
+          </div>
+          <span class="text-xs text-inkMuted">Lý luận Mác: Tư bản bất biến (c) vs Thặng dư giữ lại (m)</span>
+        </div>
+
+        <div class="grid grid-cols-12 gap-6 items-start">
+          <!-- 3 Decision Selectors (Col 5) -->
+          <div class="col-span-5 space-y-2.5">
+            <!-- 1A -->
+            <button id="opt-FDI_FIRST" onclick="selectChoice(1, 'FDI_FIRST')" class="w-full p-3.5 rounded-xl border border-rule bg-white hover:border-slate-400 text-left transition-all cursor-pointer">
+              <div class="flex justify-between items-baseline mb-1">
+                <span class="text-xs font-bold font-heading text-ink">1A. Mở rộng ưu đãi FDI lắp ráp</span>
+                <span class="text-[11px] font-semibold text-accentAmber" id="flag-FDI_FIRST"></span>
+              </div>
+              <p class="text-xs text-inkMuted leading-snug">
+                Ưu đãi tối đa thuế và đất đai. Tạo việc làm nhanh nhưng thặng dư lớn chảy về công ty mẹ nước ngoài.
+              </p>
+            </button>
+
+            <!-- 1B -->
+            <button id="opt-DOMESTIC_LINKAGE" onclick="selectChoice(1, 'DOMESTIC_LINKAGE')" class="w-full p-3.5 rounded-xl border-2 border-emerald-600 bg-emerald-50/50 text-left transition-all cursor-pointer">
+              <div class="flex justify-between items-baseline mb-1">
+                <span class="text-xs font-bold font-heading text-emerald-950">1B. Phát triển hệ sinh thái nội địa</span>
+                <span class="text-[11px] font-semibold text-emerald-700" id="flag-DOMESTIC_LINKAGE">Đang chọn</span>
+              </div>
+              <p class="text-xs text-emerald-900 leading-snug">
+                Bắt buộc cam kết chuyển giao công nghệ, ươm tạo doanh nghiệp phụ trợ trong nước tham gia chuỗi cung ứng.
+              </p>
+            </button>
+
+            <!-- 1C -->
+            <button id="opt-TECH_FIRST" onclick="selectChoice(1, 'TECH_FIRST')" class="w-full p-3.5 rounded-xl border border-rule bg-white hover:border-slate-400 text-left transition-all cursor-pointer">
+              <div class="flex justify-between items-baseline mb-1">
+                <span class="text-xs font-bold font-heading text-ink">1C. Đột phá R&D và chip tự chủ</span>
+                <span class="text-[11px] font-semibold text-accentSky" id="flag-TECH_FIRST"></span>
+              </div>
+              <p class="text-xs text-inkMuted leading-snug">
+                Dồn ngân sách quốc gia thành lập viện nghiên cứu và phòng lab vi mạch, chấp nhận rủi ro hoàn vốn dài hạn.
+              </p>
+            </button>
+          </div>
+
+          <!-- Interactive Visualization: Surplus Flow Split (Col 7) -->
+          <div class="col-span-7 p-5 rounded-2xl bg-white border border-rule shadow-xs">
+            <div class="text-xs font-semibold text-ink uppercase tracking-wider mb-2">
+              Mô Phỏng Phân Bổ 100 Đơn Vị Giá Trị Sản Xuất
+            </div>
+
+            <!-- Dynamic Split Bar -->
+            <div class="w-full h-8 rounded-lg overflow-hidden flex border border-rule mb-3" id="t1-flow-bar">
+              <div id="t1-bar-foreign" style="width: 45%;" class="h-full bg-slate-800 flex items-center justify-center text-[11px] font-bold text-white transition-all duration-500">
+                45% Chuyển ngoại (m)
+              </div>
+              <div id="t1-bar-wages" style="width: 25%;" class="h-full bg-amber-600 flex items-center justify-center text-[11px] font-bold text-white transition-all duration-500">
+                25% Tiền công (v)
+              </div>
+              <div id="t1-bar-domestic" style="width: 30%;" class="h-full bg-emerald-600 flex items-center justify-center text-[11px] font-bold text-white transition-all duration-500">
+                30% Nội địa giữ lại
+              </div>
+            </div>
+
+            <!-- Explanation Box -->
+            <div class="p-3.5 rounded-xl bg-subtleSurface border border-rule text-xs leading-relaxed" id="t1-rationale">
+              <strong>Luận giải chính sách:</strong> Lựa chọn 1B giúp từng bước chuyển giao quyền sở hữu tư liệu sản xuất sang tay các doanh nghiệp công nghiệp phụ trợ trong nước, tạo nền tảng vững chắc để giữ lại giá trị thặng dư thay vì xuất khẩu hộ.
+            </div>
+
+            <div class="mt-3 flex items-center justify-between text-xs text-inkSubtle border-t border-rule pt-2">
+              <span>Chỉ số tác động: <strong class="text-emerald-700" id="t1-impact-dvc">+20 DVC</strong>, <strong class="text-indigo-700" id="t1-impact-ar">+15 AR</strong></span>
+              <span class="text-inkMuted">Nhấn để xem biến động vĩ mô</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= TRẠM 02: HÀNG HÓA SỨC LAO ĐỘNG & TỰ ĐỘNG HÓA (X = 2120PX - 3250PX) ================= -->
+      <div style="left: 2120px; top: 60px;" class="absolute w-[1080px] pointer-events-auto z-20">
+        <div class="flex items-center justify-between border-b border-rule pb-2 mb-4">
+          <div>
+            <span class="text-xs font-semibold text-accentSky uppercase tracking-wider block">Trạm 02 &bull; Quyết định 2</span>
+            <h2 class="text-xl font-heading font-black text-ink">Chuyển Đổi Sức Lao Động & Cấu Tạo Tư Bản (c/v)</h2>
+          </div>
+          <span class="text-xs text-inkMuted">Lý luận Mác: Lao động giản đơn vs Lao động phức tạp</span>
+        </div>
+
+        <div class="grid grid-cols-12 gap-6 items-start">
+          <!-- 3 Decision Selectors (Col 5) -->
+          <div class="space-y-2.5 col-span-5">
+            <!-- 2A -->
+            <button id="opt-COST_ADVANTAGE" onclick="selectChoice(2, 'COST_ADVANTAGE')" class="w-full p-3.5 rounded-xl border border-rule bg-white hover:border-slate-400 text-left transition-all cursor-pointer">
+              <div class="flex justify-between items-baseline mb-1">
+                <span class="text-xs font-bold font-heading text-ink">2A. Duy trì nhân công giá rẻ</span>
+                <span class="text-[11px] font-semibold text-accentRed" id="flag-COST_ADVANTAGE"></span>
+              </div>
+              <p class="text-xs text-inkMuted leading-snug">
+                Giữ lương tối thiểu tăng chậm để cạnh tranh thu hút đơn hàng may mặc và lắp ráp cơ bản.
+              </p>
+            </button>
+
+            <!-- 2B -->
+            <button id="opt-HUMAN_CAPITAL" onclick="selectChoice(2, 'HUMAN_CAPITAL')" class="w-full p-3.5 rounded-xl border-2 border-emerald-600 bg-emerald-50/50 text-left transition-all cursor-pointer">
+              <div class="flex justify-between items-baseline mb-1">
+                <span class="text-xs font-bold font-heading text-emerald-950">2B. Đào tạo 50.000 kỹ sư bán dẫn</span>
+                <span class="text-[11px] font-semibold text-emerald-700" id="flag-HUMAN_CAPITAL">Đang chọn</span>
+              </div>
+              <p class="text-xs text-emerald-900 leading-snug">
+                Quyết định 1018/QĐ-TTg: Đầu tư đại học số, STEM và nâng cấp sức lao động thành lao động phức tạp.
+              </p>
+            </button>
+
+            <!-- 2C -->
+            <button id="opt-AUTOMATION_FIRST" onclick="selectChoice(2, 'AUTOMATION_FIRST')" class="w-full p-3.5 rounded-xl border border-rule bg-white hover:border-slate-400 text-left transition-all cursor-pointer">
+              <div class="flex justify-between items-baseline mb-1">
+                <span class="text-xs font-bold font-heading text-ink">2C. Robot hóa dây chuyền sản xuất</span>
+                <span class="text-[11px] font-semibold text-indigo-700" id="flag-AUTOMATION_FIRST"></span>
+              </div>
+              <p class="text-xs text-inkMuted leading-snug">
+                Trợ cấp tự động hóa tối đa. Năng suất tăng vọt nhưng tạo sức ép thất nghiệp lên lao động phổ thông.
+              </p>
+            </button>
+          </div>
+
+          <!-- Interactive Visualization: Productivity vs Employment Matrix (Col 7) -->
+          <div class="col-span-7 p-5 rounded-2xl bg-white border border-rule shadow-xs">
+            <div class="text-xs font-semibold text-ink uppercase tracking-wider mb-2">
+              So Sánh Năng Suất Lao Động & Phúc Lợi Việc Làm
+            </div>
+
+            <!-- Comparative Bars -->
+            <div class="space-y-3 mb-4">
+              <div>
+                <div class="flex justify-between text-xs text-inkMuted mb-1">
+                  <span>Giá trị tạo ra mỗi giờ lao động (Lao động phức tạp)</span>
+                  <span class="font-bold text-ink" id="t2-val-prod">Cao (+20)</span>
+                </div>
+                <div class="w-full h-2.5 bg-subtleSurface rounded overflow-hidden">
+                  <div id="t2-bar-prod" class="h-full bg-emerald-600 rounded transition-all duration-300" style="width: 80%;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs text-inkMuted mb-1">
+                  <span>Thu nhập thực tế và an sinh xã hội của công nhân</span>
+                  <span class="font-bold text-ink" id="t2-val-wage">Tăng bền vững (+20)</span>
+                </div>
+                <div class="w-full h-2.5 bg-subtleSurface rounded overflow-hidden">
+                  <div id="t2-bar-wage" class="h-full bg-amber-600 rounded transition-all duration-300" style="width: 75%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Explanation Box -->
+            <div class="p-3.5 rounded-xl bg-subtleSurface border border-rule text-xs leading-relaxed" id="t2-rationale">
+              <strong>Luận giải Mác – Lênin:</strong> Một giờ của lao động phức tạp (kỹ sư thiết kế bán dẫn) tương đương và kết tinh lượng giá trị gấp nhiều lần lao động giản đơn. Nâng cao giá trị hàng hóa sức lao động là con đường bền vững nhất để nâng cao mức sống toàn dân.
+            </div>
+
+            <div class="mt-3 flex items-center justify-between text-xs text-inkSubtle border-t border-rule pt-2">
+              <span>Chỉ số tác động: <strong class="text-emerald-700" id="t2-impact-ew">+20 EW</strong>, <strong class="text-sky-700" id="t2-impact-tc">+20 TC</strong></span>
+              <span class="text-inkMuted">Cấu tạo tư bản c/v được tối ưu</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= TRẠM 03: ĐƯỜNG CONG NỤ CƯỜI (SMILE CURVE) (X = 3360PX - 4520PX) ================= -->
+      <div style="left: 3360px; top: 60px;" class="absolute w-[1120px] pointer-events-auto z-20">
+        <div class="flex items-center justify-between border-b border-rule pb-2 mb-4">
+          <div>
+            <span class="text-xs font-semibold text-accentEmerald uppercase tracking-wider block">Trạm 03 &bull; Quyết định 3</span>
+            <h2 class="text-xl font-heading font-black text-ink">Chiếm Lĩnh Vị Thế Trên Đường Cong Nụ Cười (Smile Curve)</h2>
+          </div>
+          <span class="text-xs text-inkMuted">Phân chia giá trị thặng dư trong phân công lao động quốc tế</span>
+        </div>
+
+        <div class="grid grid-cols-12 gap-6 items-start">
+          <!-- 3 Decision Selectors (Col 4) -->
+          <div class="space-y-2.5 col-span-4">
+            <!-- 3A -->
+            <button id="opt-SCALE_MANUFACTURING" onclick="selectChoice(3, 'SCALE_MANUFACTURING')" class="w-full p-3.5 rounded-xl border border-rule bg-white hover:border-slate-400 text-left transition-all cursor-pointer">
+              <div class="flex justify-between items-baseline mb-1">
+                <span class="text-xs font-bold font-heading text-ink">3A. Mở rộng đại công xưởng</span>
+                <span class="text-[11px] font-semibold text-accentAmber" id="flag-SCALE_MANUFACTURING"></span>
+              </div>
+              <p class="text-xs text-inkMuted leading-snug">
+                Đáy nụ cười: Tối đa hóa sản lượng gia công lắp ráp, chấp nhận biên lợi nhuận mỏng 2–3%.
+              </p>
+            </button>
+
+            <!-- 3B -->
+            <button id="opt-OWN_TECHNOLOGY" onclick="selectChoice(3, 'OWN_TECHNOLOGY')" class="w-full p-3.5 rounded-xl border border-rule bg-white hover:border-slate-400 text-left transition-all cursor-pointer">
+              <div class="flex justify-between items-baseline mb-1">
+                <span class="text-xs font-bold font-heading text-ink">3B. Làm chủ chip IP & Fabless</span>
+                <span class="text-[11px] font-semibold text-accentSky" id="flag-OWN_TECHNOLOGY"></span>
+              </div>
+              <p class="text-xs text-inkMuted leading-snug">
+                Đầu nguồn: Nắm bằng sáng chế, thiết kế kiến trúc vi mạch và bản quyền thuật toán.
+              </p>
+            </button>
+
+            <!-- 3C -->
+            <button id="opt-BUILD_BRANDS" onclick="selectChoice(3, 'BUILD_BRANDS')" class="w-full p-3.5 rounded-xl border-2 border-emerald-600 bg-emerald-50/50 text-left transition-all cursor-pointer">
+              <div class="flex justify-between items-baseline mb-1">
+                <span class="text-xs font-bold font-heading text-emerald-950">3C. Xây dựng thương hiệu quốc tế</span>
+                <span class="text-[11px] font-semibold text-emerald-700" id="flag-BUILD_BRANDS">Đang chọn</span>
+              </div>
+              <p class="text-xs text-emerald-900 leading-snug">
+                Cuối nguồn: Sở hữu thương hiệu Make-in-Vietnam và hệ thống phân phối tới người tiêu dùng toàn cầu.
+              </p>
+            </button>
+          </div>
+
+          <!-- SVG Smile Curve Interactive Canvas (Col 8) -->
+          <div class="col-span-8 p-5 rounded-2xl bg-white border border-rule shadow-xs">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-semibold text-ink uppercase tracking-wider">
+                Vị Thế Việt Nam 2040 Trên Đường Cong Nụ Cười
+              </span>
+              <span class="text-xs font-bold text-emerald-700" id="smile-curve-badge">
+                Vị trí: Cuối nguồn (Thương hiệu & Phân phối)
+              </span>
+            </div>
+
+            <!-- Real SVG Curve -->
+            <div class="w-full h-40 bg-subtleSurface rounded-xl relative overflow-hidden flex items-center justify-center p-2 mb-3">
+              <svg class="w-full h-full" viewBox="0 0 600 130">
+                <!-- Grid Lines -->
+                <line x1="50" y1="110" x2="550" y2="110" stroke="#CBD5E1" stroke-width="1.5" />
+                <line x1="50" y1="20" x2="50" y2="110" stroke="#CBD5E1" stroke-width="1.5" />
+
+                <!-- Left Zone Label -->
+                <text x="60" y="32" font-family="'Space Grotesk'" font-size="10" font-weight="bold" fill="#0369A1">ĐẦU NGUỒN (R&D / IP)</text>
+                <text x="60" y="46" font-size="9" fill="#64748B">Biên lợi nhuận ~45%</text>
+
+                <!-- Center Zone Label -->
+                <text x="300" y="125" text-anchor="middle" font-family="'Space Grotesk'" font-size="10" font-weight="bold" fill="#B45309">ĐÁY NỤ CƯỜI (LẮP RÁP)</text>
+                <text x="300" y="102" text-anchor="middle" font-size="9" fill="#94A3B8">Biên công 2-3%</text>
+
+                <!-- Right Zone Label -->
+                <text x="540" y="32" text-anchor="end" font-family="'Space Grotesk'" font-size="10" font-weight="bold" fill="#047857">CUỐI NGUỒN (THƯƠNG HIỆU)</text>
+                <text x="540" y="46" text-anchor="end" font-size="9" fill="#64748B">Biên thương mại ~35%</text>
+
+                <!-- Parabolic Curve -->
+                <path d="M 60 40 Q 300 120 540 40" fill="none" stroke="#94A3B8" stroke-width="3" stroke-linecap="round" />
+
+                <!-- Active Dot positioned dynamically -->
+                <circle id="smile-dot" cx="540" cy="40" r="7" fill="#047857" stroke="#FFFFFF" stroke-width="2.5" class="transition-all duration-500" />
+              </svg>
+            </div>
+
+            <!-- Explanation Box -->
+            <div class="p-3.5 rounded-xl bg-subtleSurface border border-rule text-xs leading-relaxed" id="t3-rationale">
+              <strong>Phân chia thặng dư GVC:</strong> Kiểm soát khâu phân phối và thương hiệu giúp chuyển hóa giá trị thặng dư trực tiếp từ thị trường tiêu dùng, thoát khỏi vị thế bị ép giá ở khâu gia công lắp ráp trung gian.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= KM 4.6: BÁO CÁO PHÁN QUYẾT CHIẾN LƯỢC 2040 (X = 4600PX - 5150PX) ================= -->
+      <div style="left: 4600px; top: 60px;" class="absolute w-[520px] pointer-events-auto z-20">
+        <div class="text-xs font-semibold text-accentAmber uppercase tracking-wider mb-2">
+          Kết Luận &bull; Hồ Sơ Chiến Lược Việt Nam 2040
+        </div>
+
+        <div class="p-6 rounded-2xl bg-slate-900 text-white shadow-xl border border-slate-800">
+          <div class="flex justify-between items-baseline mb-2">
+            <span class="text-xs text-amber-400 font-bold uppercase tracking-wider">Mô Hình Đạt Được</span>
+            <span class="text-xs text-slate-400">Đã chốt 3 quyết định</span>
+          </div>
+
+          <h3 class="text-2xl font-black font-heading text-white leading-tight mb-1" id="res-title">
+            Nhà Kiến Tạo Hệ Sinh Thái Bền Vững
+          </h3>
+          <p class="text-xs text-slate-300 italic mb-4" id="res-tagline">
+            "Hài hòa giữa tăng trưởng nội lực, phúc lợi lao động và bảo vệ môi trường"
+          </p>
+
+          <p class="text-xs text-slate-300 leading-relaxed mb-5" id="res-summary">
+            Bạn đã xây dựng một nền kinh tế cân bằng, trong đó doanh nghiệp nội địa liên kết chặt chẽ với FDI, phúc lợi người lao động được nâng cao và tiêu chuẩn xanh trở thành lợi thế cạnh tranh dài hạn.
+          </p>
+
+          <div class="grid grid-cols-2 gap-3 pt-4 border-t border-slate-800 mb-5">
+            <div>
+              <span class="text-[11px] text-slate-400 block">Giá trị nội địa (DVC)</span>
+              <span class="text-xl font-bold font-heading text-emerald-400 tabular" id="res-metric-dvc">65 / 100</span>
+            </div>
+            <div>
+              <span class="text-[11px] text-slate-400 block">Tự chủ kinh tế (AR)</span>
+              <span class="text-xl font-bold font-heading text-indigo-400 tabular" id="res-metric-ar">65 / 100</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button onclick="openModal()" class="flex-1 py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-colors cursor-pointer text-center">
+              Xem Toàn Văn Phán Quyết
+            </button>
+            <button onclick="resetChoices()" class="py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition-colors cursor-pointer border border-slate-700">
+              Đặt lại
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= CỔNG AIRLOCK LÊN TẦNG 07 (X = 5160PX) ================= -->
+      <div id="door-portal-zone" style="left: 5160px; top: 90px;" class="absolute w-[80px] h-[310px] z-20 flex flex-col items-center justify-end pointer-events-auto">
+        <div id="door-frame" onclick="openModal()" class="w-full h-[250px] rounded-t-3xl border-4 border-slate-700 bg-slate-950 relative overflow-hidden flex flex-col items-center justify-center transition-colors duration-500 shadow-xl cursor-pointer group hover:border-emerald-500">
+          <div class="z-10 text-center px-1">
+            <span class="text-[8px] font-bold text-amber-400 uppercase tracking-wider block mb-1">Cửa Lên</span>
+            <div class="text-xs font-black font-heading text-white">TẦNG 07</div>
+            <div class="text-[8px] text-slate-400 mt-1">Báo Cáo Hoàn Chỉnh</div>
+          </div>
+        </div>
+        <span class="mt-2 text-[9px] font-bold text-slate-400">TẦNG 07</span>
+      </div>
+
+      <!-- ================= CHARACTER BOT ================= -->
+      <div id="robot-avatar" style="left: 150px; bottom: 85px;" class="absolute z-30 transition-transform duration-75 ease-out will-change-transform flex flex-col items-center">
+        
+        <div id="thought-bubble" class="mb-2 max-w-[320px] p-3 rounded-xl bg-white border border-rule shadow-md text-xs leading-snug transition-all duration-200 relative">
+          <span id="thought-text" class="text-ink font-medium">
+            Chào mừng bạn đến Tầng 06: Bàn cờ chiến lược Vietnam 2040. Hãy bước sang phải để đưa ra quyết định tại từng trạm.
+          </span>
+          <div class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-r border-b border-rule rotate-45"></div>
+        </div>
+
+        <div id="bot-body-container" class="relative w-10 h-14 flex flex-col items-center">
+          <div class="w-7 h-6 rounded-md bg-slate-800 flex items-center justify-center relative shadow-sm">
+            <div id="bot-visor" class="w-5 h-2 rounded bg-amber-500 transition-colors"></div>
+          </div>
+          <div class="w-8 h-6 rounded bg-slate-700 mt-0.5 flex items-center justify-center">
+            <span class="text-[8px] font-bold text-slate-300 font-heading">VN-06</span>
+          </div>
+          <div class="flex gap-2 mt-0.5">
+            <div class="leg-left w-2 h-3.5 rounded-full bg-slate-800"></div>
+            <div class="leg-right w-2 h-3.5 rounded-full bg-slate-800"></div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ================= BOTTOM CONTROL DOCK & PROGRESS HUD ================= -->
+  <footer class="h-16 border-t border-rule bg-white px-6 flex items-center justify-between shrink-0 z-40">
+    <div class="flex items-center gap-2">
+      <button onclick="moveChar(-140)" class="px-3.5 py-2 rounded-lg bg-subtleSurface border border-rule text-ink text-xs font-semibold hover:bg-slate-200 transition-colors cursor-pointer">
+        ← Lùi lại (A)
+      </button>
+
+      <button onclick="triggerJump()" class="px-4 py-2 rounded-lg bg-amber-50 border border-amber-300 text-accentAmber text-xs font-bold hover:bg-amber-100 transition-colors cursor-pointer">
+        Nhảy quan sát (Space)
+      </button>
+
+      <button onclick="moveChar(140)" class="px-3.5 py-2 rounded-lg bg-subtleSurface border border-rule text-ink text-xs font-semibold hover:bg-slate-200 transition-colors cursor-pointer">
+        Tiến bước (D) →
+      </button>
+    </div>
+
+    <div class="hidden sm:flex flex-1 max-w-md mx-8 flex-col gap-1.5">
+      <div class="flex justify-between text-xs text-inkMuted font-medium">
+        <span>Tiến độ hành lang Tầng 06</span>
+        <span id="txt-progress" class="text-ink font-bold tabular">3%</span>
+      </div>
+      <div class="w-full h-1.5 bg-subtleSurface rounded-full overflow-hidden border border-rule">
+        <div id="bar-progress" class="h-full bg-accentAmber rounded-full transition-all duration-150" style="width: 3%;"></div>
+      </div>
+    </div>
+
+    <div class="text-xs text-inkMuted flex items-center gap-4">
+      <span class="hidden md:inline tabular">Tọa độ: <strong id="lbl-coord" class="text-ink font-bold">150m</strong></span>
+      <span class="px-2.5 py-1 rounded bg-subtleSurface text-ink font-semibold border border-rule">
+        Mô phỏng 2040
+      </span>
+    </div>
+  </footer>
+
+  <!-- ================= MODAL: BÁO CÁO TOÀN VĂN ================= -->
+  <div id="verdict-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-3xl max-h-[85vh] bg-white rounded-2xl shadow-2xl border border-rule overflow-hidden flex flex-col">
+      <div class="p-6 bg-slate-900 text-white flex items-center justify-between">
+        <div>
+          <span class="text-xs font-semibold text-amber-400 uppercase tracking-wider block">Báo Cáo Phán Quyết Chiến Lược</span>
+          <h2 id="modal-title" class="text-2xl font-black font-heading text-white mt-1">Nhà Kiến Tạo Hệ Sinh Thái Bền Vững</h2>
+          <p id="modal-tagline" class="text-xs text-slate-300 italic mt-0.5">"Hài hòa giữa tăng trưởng nội lực, phúc lợi lao động và bảo vệ môi trường"</p>
+        </div>
+        <button onclick="closeModal()" class="w-8 h-8 rounded-lg bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center text-sm cursor-pointer font-bold">✕</button>
+      </div>
+
+      <div class="p-6 overflow-y-auto space-y-5 text-xs text-ink leading-relaxed">
+        <!-- 5 Metrics -->
+        <div class="p-4 rounded-xl bg-subtleSurface border border-rule">
+          <span class="text-xs font-bold text-ink uppercase tracking-wider block mb-3">5 Chỉ Số Kinh Tế Đạt Được Năm 2040:</span>
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+            <div class="p-3 rounded-lg bg-white border border-rule">
+              <span class="text-[10px] text-inkSubtle block">1. Nội địa (DVC)</span>
+              <div id="modal-dvc" class="text-base font-bold text-emerald-700 mt-1 tabular">65 / 100</div>
+              <span class="text-[10px] text-inkMuted">Mốc 2026: 35</span>
+            </div>
+            <div class="p-3 rounded-lg bg-white border border-rule">
+              <span class="text-[10px] text-inkSubtle block">2. Công nghệ (TC)</span>
+              <div id="modal-tc" class="text-base font-bold text-sky-700 mt-1 tabular">65 / 100</div>
+              <span class="text-[10px] text-inkMuted">Mốc 2026: 30</span>
+            </div>
+            <div class="p-3 rounded-lg bg-white border border-rule">
+              <span class="text-[10px] text-inkSubtle block">3. Việc làm (EW)</span>
+              <div id="modal-ew" class="text-base font-bold text-amber-700 mt-1 tabular">90 / 100</div>
+              <span class="text-[10px] text-inkMuted">Mốc 2026: 60</span>
+            </div>
+            <div class="p-3 rounded-lg bg-white border border-rule">
+              <span class="text-[10px] text-inkSubtle block">4. Tự chủ (AR)</span>
+              <div id="modal-ar" class="text-base font-bold text-indigo-700 mt-1 tabular">65 / 100</div>
+              <span class="text-[10px] text-inkMuted">Mốc 2026: 40</span>
+            </div>
+            <div class="p-3 rounded-lg bg-white border border-rule">
+              <span class="text-[10px] text-inkSubtle block">5. Bền vững (SUS)</span>
+              <div id="modal-sus" class="text-base font-bold text-teal-700 mt-1 tabular">65 / 100</div>
+              <span class="text-[10px] text-inkMuted">Mốc 2026: 50</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Strengths & Trade-offs -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200">
+            <span class="font-bold text-emerald-900 block mb-2">Thành tựu cốt lõi:</span>
+            <ul id="modal-strengths" class="space-y-1.5 text-emerald-950 list-disc list-inside">
+              <li>Hệ sinh thái nhà cung cấp nội địa bền vững, giảm phụ thuộc linh kiện nhập khẩu.</li>
+              <li>Môi trường làm việc lành mạnh, thu nhập thực tế của người lao động tăng ổn định.</li>
+            </ul>
+          </div>
+
+          <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-200">
+            <span class="font-bold text-amber-900 block mb-2">Đánh đổi chính sách chấp nhận:</span>
+            <ul id="modal-vulnerabilities" class="space-y-1.5 text-amber-950 list-disc list-inside">
+              <li>Từ chối các dự án FDI gây ô nhiễm hoặc thâm dụng lao động giá rẻ.</li>
+              <li>Chia sẻ lợi nhuận ngắn hạn để đầu tư phát triển nguồn nhân lực và môi trường.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Marxist Reflection -->
+        <div class="p-4 rounded-xl bg-slate-50 border border-rule">
+          <span class="font-bold text-ink block mb-1">Luận giải Kinh tế chính trị Mác – Lênin:</span>
+          <p id="modal-academic" class="text-inkMuted">
+            Mô hình thể hiện rõ vai trò kiến tạo của Nhà nước trong kinh tế thị trường định hướng XHCN: phát triển lực lượng sản xuất gắn liền với quan hệ sản xuất tiến bộ và an sinh xã hội.
+          </p>
+        </div>
+      </div>
+
+      <div class="p-4 bg-subtleSurface border-t border-rule flex justify-end">
+        <button onclick="closeModal()" class="px-5 py-2 rounded-xl bg-slate-900 text-white font-semibold text-xs hover:bg-slate-800 transition-colors cursor-pointer">
+          Đóng báo cáo
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= JAVASCRIPT SIMULATION LOGIC ================= -->
+  <script>
+    const MIN_X = 60;
+    const MAX_X = 5160;
+    const CAMERA_OFFSET_LEFT = 280;
+
+    let charX = 150;
+    let isWalking = false;
+    let isJumping = false;
+    let facingLeft = false;
+    let autoWalkInterval = null;
+
+    const BASELINE_METRICS = {
+      domesticValueCapture: 35,
+      techCapability: 30,
+      employmentIncome: 60,
+      economicAutonomy: 40,
+      sustainability: 50,
+    };
+
+    // User's choices across 3 stations (Default: Balanced strategy 1B, 2B, 3C)
+    let selectedChoices = {
+      1: "DOMESTIC_LINKAGE",
+      2: "HUMAN_CAPITAL",
+      3: "BUILD_BRANDS",
+    };
+
+    const IMPACTS = {
+      FDI_FIRST: { domesticValueCapture: 5, techCapability: 10, employmentIncome: 15, economicAutonomy: -15, sustainability: -5 },
+      DOMESTIC_LINKAGE: { domesticValueCapture: 20, techCapability: 15, employmentIncome: 10, economicAutonomy: 15, sustainability: 5 },
+      TECH_FIRST: { domesticValueCapture: 15, techCapability: 25, employmentIncome: -5, economicAutonomy: 20, sustainability: 0 },
+      COST_ADVANTAGE: { domesticValueCapture: -5, techCapability: -10, employmentIncome: -10, economicAutonomy: -10, sustainability: -10 },
+      HUMAN_CAPITAL: { domesticValueCapture: 15, techCapability: 20, employmentIncome: 20, economicAutonomy: 10, sustainability: 10 },
+      AUTOMATION_FIRST: { domesticValueCapture: 10, techCapability: 20, employmentIncome: -15, economicAutonomy: 5, sustainability: 5 },
+      SCALE_MANUFACTURING: { domesticValueCapture: 5, techCapability: 5, employmentIncome: 10, economicAutonomy: -10, sustainability: -15 },
+      OWN_TECHNOLOGY: { domesticValueCapture: 25, techCapability: 25, employmentIncome: 5, economicAutonomy: 25, sustainability: 10 },
+      BUILD_BRANDS: { domesticValueCapture: 20, techCapability: 10, employmentIncome: 15, economicAutonomy: 15, sustainability: 5 },
+    };
+
+    // DOM Elements
+    const robotAvatar = document.getElementById('robot-avatar');
+    const thoughtBubble = document.getElementById('thought-bubble');
+    const thoughtText = document.getElementById('thought-text');
+    const worldTrack = document.getElementById('world-track');
+    const botVisor = document.getElementById('bot-visor');
+    const txtProgress = document.getElementById('txt-progress');
+    const barProgress = document.getElementById('bar-progress');
+    const lblCoord = document.getElementById('lbl-coord');
+
+    function clamp(val) {
+      return Math.max(0, Math.min(100, Math.round(val)));
+    }
+
+    function calculateMetrics() {
+      let m = { ...BASELINE_METRICS };
+      const r1 = selectedChoices[1];
+      const r2 = selectedChoices[2];
+      const r3 = selectedChoices[3];
+
+      [r1, r2, r3].forEach(id => {
+        if (!id || !IMPACTS[id]) return;
+        const imp = IMPACTS[id];
+        m.domesticValueCapture += imp.domesticValueCapture || 0;
+        m.techCapability += imp.techCapability || 0;
+        m.employmentIncome += imp.employmentIncome || 0;
+        m.economicAutonomy += imp.economicAutonomy || 0;
+        m.sustainability += imp.sustainability || 0;
+      });
+
+      // Synergies & Frictions
+      let synergyText = "Cân bằng chính sách";
+      let isSynergy = false;
+
+      if (r1 === "TECH_FIRST" && r2 === "HUMAN_CAPITAL") {
+        m.techCapability += 10;
+        m.domesticValueCapture += 10;
+        synergyText = "Cộng hưởng R&D + 50.000 Kỹ sư (+10 TC, +10 DVC)";
+        isSynergy = true;
+      }
+
+      if (r1 === "FDI_FIRST" && r2 === "AUTOMATION_FIRST") {
+        m.employmentIncome -= 10;
+        m.economicAutonomy -= 10;
+        synergyText = "Xung đột FDI + Tự động hóa (-10 EW, -10 AR)";
+        isSynergy = true;
+      }
+
+      if (r1 === "DOMESTIC_LINKAGE" && (r3 === "OWN_TECHNOLOGY" || r3 === "BUILD_BRANDS")) {
+        m.domesticValueCapture += 10;
+        m.economicAutonomy += 10;
+        synergyText = "Cộng hưởng Liên kết nội địa + Làm chủ nụ cười (+10 DVC, +10 AR)";
+        isSynergy = true;
+      }
+
+      const pill = document.getElementById('hud-synergy-pill');
+      const pillText = document.getElementById('hud-synergy-text');
+      if (pill && pillText) {
+        pillText.innerText = synergyText;
+      }
+
+      return {
+        domesticValueCapture: clamp(m.domesticValueCapture),
+        techCapability: clamp(m.techCapability),
+        employmentIncome: clamp(m.employmentIncome),
+        economicAutonomy: clamp(m.economicAutonomy),
+        sustainability: clamp(m.sustainability),
+      };
+    }
+
+    function evaluateArchetype(metrics) {
+      if (metrics.techCapability >= 70 && metrics.domesticValueCapture >= 65) {
+        return {
+          id: "TECH_SOVEREIGN",
+          title: "Chủ Thể Công Nghệ & Tự Chủ Chiến Lược",
+          tagline: "Vượt bẫy gia công bằng tự chủ công nghệ lõi và lao động phức tạp",
+          summary: "Bạn đã đưa Việt Nam trở thành quốc gia làm chủ công nghệ cao với năng lực thiết kế vi mạch, bằng sáng chế và tỷ lệ giá trị thặng dư nội địa vượt trội. Nền kinh tế dịch chuyển thành công lên đỉnh nguồn của Đường cong nụ cười.",
+          strengths: [
+            "Sở hữu năng lực R&D và thiết kế công nghệ lõi đạt chuẩn quốc tế",
+            "Tỷ lệ giá trị thặng dư (m) giữ lại trong nước tăng vọt",
+            "Khả năng chống chịu cao trước các lệnh trừng phạt hoặc đứt gãy công nghệ",
+          ],
+          vulnerabilities: [
+            "Đòi hỏi nguồn vốn đầu tư công và R&D liên tục để duy trì vị thế",
+            "Chênh lệch thu nhập giữa kỹ sư công nghệ cao và lao động phổ thông cần chính sách tái phân phối",
+          ],
+          academic: "Chiến lược này phản ánh quy luật nâng cao Cấu tạo hữu cơ của tư bản (c/v) có định hướng: biến sức lao động thành lao động phức tạp để thu hoạch giá trị thặng dư siêu ngạch từ độc quyền công nghệ.",
+        };
+      }
+
+      if (metrics.sustainability >= 60 && metrics.economicAutonomy >= 60) {
+        return {
+          id: "BALANCED_MODERNIZER",
+          title: "Nhà Kiến Tạo Hệ Sinh Thái Bền Vững",
+          tagline: "Hài hòa giữa tăng trưởng nội lực, phúc lợi lao động và bảo vệ môi trường",
+          summary: "Bạn đã xây dựng một nền kinh tế cân bằng, trong đó doanh nghiệp nội địa liên kết chặt chẽ với FDI, phúc lợi người lao động được nâng cao và tiêu chuẩn xanh trở thành lợi thế cạnh tranh dài hạn.",
+          strengths: [
+            "Hệ sinh thái nhà cung cấp nội địa bền vững, giảm thiểu nhập siêu linh kiện",
+            "Môi trường làm việc lành mạnh, thu nhập thực tế của người lao động tăng ổn định",
+            "Đáp ứng các tiêu chuẩn chuỗi cung ứng xanh toàn cầu",
+          ],
+          vulnerabilities: [
+            "Từ chối các dự án FDI gây ô nhiễm hoặc thâm dụng lao động giá rẻ",
+            "Chia sẻ lợi nhuận ngắn hạn để đầu tư phát triển nguồn nhân lực và môi trường",
+          ],
+          academic: "Mô hình thể hiện rõ vai trò kiến tạo của Nhà nước trong kinh tế thị trường định hướng XHCN: phát triển lực lượng sản xuất gắn liền với quan hệ sản xuất tiến bộ và an sinh xã hội.",
+        };
+      }
+
+      if (metrics.employmentIncome >= 70 && metrics.domesticValueCapture < 50) {
+        return {
+          id: "GLOBAL_ASSEMBLY_HUB",
+          title: "Đại Công Xưởng Lắp Ráp Toàn Cầu",
+          tagline: "Quy mô xuất khẩu khổng lồ nhưng biên lợi nhuận mỏng",
+          summary: "Việt Nam đã trở thành trung tâm sản xuất và lắp ráp điện tử hàng đầu thế giới với kim ngạch xuất khẩu kỷ lục. Hàng triệu việc làm được tạo ra, nhưng nền kinh tế vẫn chịu sự phụ thuộc lớn vào quyết định của các tập đoàn đa quốc gia.",
+          strengths: [
+            "Sản lượng xuất khẩu và thu hút dòng vốn FDI đạt đỉnh cao",
+            "Tạo việc làm tức thì và ổn định thu nhập cho lực lượng lao động phổ thông",
+          ],
+          vulnerabilities: [
+            "Mắc kẹt ở đáy Đường cong nụ cười — nhập khẩu linh kiện cao, giá trị nội địa mỏng",
+            "Nguy cơ dịch chuyển dòng vốn khi chi phí nhân công tăng hoặc ưu đãi hết hạn",
+          ],
+          academic: "Nền kinh tế mở rộng chủ yếu dựa vào thặng dư tuyệt đối; sức lao động sống (v) tạo ra giá trị lớn nhưng phần thặng dư (m) chủ yếu được chuyển dịch về công ty mẹ ở nước ngoài.",
+        };
+      }
+
+      return {
+        id: "DOMESTIC_CHAMPION",
+        title: "Nhà Vô Địch Hệ Sinh Thái Quốc Gia",
+        tagline: "Doanh nghiệp nội địa vươn tầm làm chủ mắt xích chuỗi cung ứng",
+        summary: "Bạn đã xây dựng thành công mạng lưới doanh nghiệp nội địa vững chắc, từng bước thế chỗ các nhà cung cấp nước ngoài và tạo dựng chuỗi giá trị tự chủ.",
+        strengths: [
+          "Tỷ lệ nội địa hóa (DVA) vượt mốc 50%",
+          "Doanh nghiệp trong nước làm chủ các khâu gia công cơ khí chính xác và linh kiện tinh vi",
+        ],
+        vulnerabilities: [
+          "Cần tiếp tục đột phá về chip và phần mềm bản quyền để không phụ thuộc đầu vào cao cấp",
+        ],
+        academic: "Hiện thực hóa quá trình tích lũy tư bản nội sinh, biến giá trị thặng dư thành nguồn lực tái đầu tư phát triển cơ sở vật chất kỹ thuật của chủ nghĩa xã hội.",
+      };
+    }
+
+    function updateSimulationUI() {
+      const m = calculateMetrics();
+
+      // Update HUD Gauges
+      document.getElementById('hud-dvc-val').innerHTML = `${m.domesticValueCapture} <span class="text-[10px] text-slate-500 font-normal">/100</span>`;
+      document.getElementById('hud-dvc-bar').style.width = `${m.domesticValueCapture}%`;
+
+      document.getElementById('hud-tc-val').innerHTML = `${m.techCapability} <span class="text-[10px] text-slate-500 font-normal">/100</span>`;
+      document.getElementById('hud-tc-bar').style.width = `${m.techCapability}%`;
+
+      document.getElementById('hud-ew-val').innerHTML = `${m.employmentIncome} <span class="text-[10px] text-slate-500 font-normal">/100</span>`;
+      document.getElementById('hud-ew-bar').style.width = `${m.employmentIncome}%`;
+
+      document.getElementById('hud-ar-val').innerHTML = `${m.economicAutonomy} <span class="text-[10px] text-slate-500 font-normal">/100</span>`;
+      document.getElementById('hud-ar-bar').style.width = `${m.economicAutonomy}%`;
+
+      document.getElementById('hud-sus-val').innerHTML = `${m.sustainability} <span class="text-[10px] text-slate-500 font-normal">/100</span>`;
+      document.getElementById('hud-sus-bar').style.width = `${m.sustainability}%`;
+
+      // Update Station 1 Selectors & Dynamic Visual Flow
+      const r1 = selectedChoices[1];
+      const optFdi = document.getElementById('opt-FDI_FIRST');
+      const optDom = document.getElementById('opt-DOMESTIC_LINKAGE');
+      const optTech = document.getElementById('opt-TECH_FIRST');
+
+      const flagFdi = document.getElementById('flag-FDI_FIRST');
+      const flagDom = document.getElementById('flag-DOMESTIC_LINKAGE');
+      const flagTech = document.getElementById('flag-TECH_FIRST');
+
+      [optFdi, optDom, optTech].forEach(btn => btn.className = "w-full p-3.5 rounded-xl border border-rule bg-white hover:border-slate-400 text-left transition-all cursor-pointer");
+      flagFdi.innerText = "";
+      flagDom.innerText = "";
+      flagTech.innerText = "";
+
+      const barForeign = document.getElementById('t1-bar-foreign');
+      const barWages = document.getElementById('t1-bar-wages');
+      const barDomestic = document.getElementById('t1-bar-domestic');
+      const t1Rationale = document.getElementById('t1-rationale');
+      const t1ImpDvc = document.getElementById('t1-impact-dvc');
+      const t1ImpAr = document.getElementById('t1-impact-ar');
+
+      if (r1 === 'FDI_FIRST') {
+        optFdi.className = "w-full p-3.5 rounded-xl border-2 border-slate-900 bg-slate-50 text-left transition-all cursor-pointer";
+        flagFdi.innerText = "Đang chọn";
+        barForeign.style.width = "65%";
+        barForeign.innerText = "65% Chuyển ngoại (m)";
+        barWages.style.width = "25%";
+        barWages.innerText = "25% Tiền công (v)";
+        barDomestic.style.width = "10%";
+        barDomestic.innerText = "10% Nội địa";
+        t1Rationale.innerHTML = "<strong>Đặc trưng mô hình 1A:</strong> Dòng thặng dư (m) chủ yếu chuyển ngược về công ty mẹ ở Thung lũng Silicon hoặc Seoul. Việt Nam chỉ giữ lại tiền công lắp ráp (v) và thuế ưu đãi.";
+        t1ImpDvc.innerText = "+5 DVC";
+        t1ImpAr.innerText = "-15 AR";
+      } else if (r1 === 'DOMESTIC_LINKAGE') {
+        optDom.className = "w-full p-3.5 rounded-xl border-2 border-emerald-600 bg-emerald-50/50 text-left transition-all cursor-pointer";
+        flagDom.innerText = "Đang chọn";
+        barForeign.style.width = "40%";
+        barForeign.innerText = "40% Chuyển ngoại";
+        barWages.style.width = "25%";
+        barWages.innerText = "25% Tiền công (v)";
+        barDomestic.style.width = "35%";
+        barDomestic.innerText = "35% Nội địa giữ lại";
+        t1Rationale.innerHTML = "<strong>Đặc trưng mô hình 1B:</strong> Doanh nghiệp phụ trợ nội địa tham gia chuỗi cung ứng, từng bước giữ lại 35–45% thặng dư để tái đầu tư mở rộng sản xuất.";
+        t1ImpDvc.innerText = "+20 DVC";
+        t1ImpAr.innerText = "+15 AR";
+      } else {
+        optTech.className = "w-full p-3.5 rounded-xl border-2 border-sky-600 bg-sky-50/50 text-left transition-all cursor-pointer";
+        flagTech.innerText = "Đang chọn";
+        barForeign.style.width = "20%";
+        barForeign.innerText = "20% Chuyển ngoại";
+        barWages.style.width = "20%";
+        barWages.innerText = "20% Nhân công";
+        barDomestic.style.width = "60%";
+        barDomestic.innerText = "60% Độc quyền R&D";
+        t1Rationale.innerHTML = "<strong>Đặc trưng mô hình 1C:</strong> Làm chủ thiết kế và bằng sáng chế giúp thu hoạch giá trị thặng dư siêu ngạch từ độc quyền công nghệ, giảm tối đa phần thất thoát ra nước ngoài.";
+        t1ImpDvc.innerText = "+15 DVC";
+        t1ImpAr.innerText = "+20 AR";
+      }
+
+      // Update Station 2 Selectors & Matrix
+      const r2 = selectedChoices[2];
+      const optCost = document.getElementById('opt-COST_ADVANTAGE');
+      const optHum = document.getElementById('opt-HUMAN_CAPITAL');
+      const optAuto = document.getElementById('opt-AUTOMATION_FIRST');
+
+      const flagCost = document.getElementById('flag-COST_ADVANTAGE');
+      const flagHum = document.getElementById('flag-HUMAN_CAPITAL');
+      const flagAuto = document.getElementById('flag-AUTOMATION_FIRST');
+
+      [optCost, optHum, optAuto].forEach(btn => btn.className = "w-full p-3.5 rounded-xl border border-rule bg-white hover:border-slate-400 text-left transition-all cursor-pointer");
+      flagCost.innerText = "";
+      flagHum.innerText = "";
+      flagAuto.innerText = "";
+
+      const barProd = document.getElementById('t2-bar-prod');
+      const barWage = document.getElementById('t2-bar-wage');
+      const valProd = document.getElementById('t2-val-prod');
+      const valWage = document.getElementById('t2-val-wage');
+      const t2Rationale = document.getElementById('t2-rationale');
+      const t2ImpEw = document.getElementById('t2-impact-ew');
+      const t2ImpTc = document.getElementById('t2-impact-tc');
+
+      if (r2 === 'COST_ADVANTAGE') {
+        optCost.className = "w-full p-3.5 rounded-xl border-2 border-red-600 bg-red-50/50 text-left transition-all cursor-pointer";
+        flagCost.innerText = "Đang chọn";
+        barProd.style.width = "35%";
+        valProd.innerText = "Thấp (Thâm dụng giản đơn)";
+        barWage.style.width = "30%";
+        valWage.innerText = "Đình trệ (Lương tối thiểu)";
+        t2Rationale.innerHTML = "<strong>Bẫy thặng dư tuyệt đối:</strong> Kéo dài thời gian làm việc và kiểm soát chi phí nhân công chỉ mang lại lợi thế ngắn hạn, khiến nền kinh tế dễ bị các quốc gia khác thay thế.";
+        t2ImpEw.innerText = "-10 EW";
+        t2ImpTc.innerText = "-10 TC";
+      } else if (r2 === 'HUMAN_CAPITAL') {
+        optHum.className = "w-full p-3.5 rounded-xl border-2 border-emerald-600 bg-emerald-50/50 text-left transition-all cursor-pointer";
+        flagHum.innerText = "Đang chọn";
+        barProd.style.width = "80%";
+        valProd.innerText = "Cao (+20 Năng suất)";
+        barWage.style.width = "85%";
+        valWage.innerText = "Tăng trưởng thực tế (+20)";
+        t2Rationale.innerHTML = "<strong>Chuyển hóa sức lao động:</strong> Đào tạo 50.000 kỹ sư vi mạch biến lao động giản đơn thành lao động phức tạp, tạo ra giá trị gia tăng gấp bội trên mỗi giờ làm việc.";
+        t2ImpEw.innerText = "+20 EW";
+        t2ImpTc.innerText = "+20 TC";
+      } else {
+        optAuto.className = "w-full p-3.5 rounded-xl border-2 border-indigo-600 bg-indigo-50/50 text-left transition-all cursor-pointer";
+        flagAuto.innerText = "Đang chọn";
+        barProd.style.width = "95%";
+        valProd.innerText = "Đột phá (+35 Robot)";
+        barWage.style.width = "40%";
+        valWage.innerText = "Phân hóa (-15 Việc làm)";
+        t2Rationale.innerHTML = "<strong>Tăng cấu tạo tư bản c/v:</strong> Năng suất máy móc tăng vượt bậc nhưng làm giảm tỷ trọng lao động sống, tiềm ẩn nguy cơ dôi dư nhân khẩu nếu không có chính sách chuyển đổi nghề.";
+        t2ImpEw.innerText = "-15 EW";
+        t2ImpTc.innerText = "+20 TC";
+      }
+
+      // Update Station 3 Selectors & Smile Curve SVG Dot
+      const r3 = selectedChoices[3];
+      const optScale = document.getElementById('opt-SCALE_MANUFACTURING');
+      const optOwn = document.getElementById('opt-OWN_TECHNOLOGY');
+      const optBrand = document.getElementById('opt-BUILD_BRANDS');
+
+      const flagScale = document.getElementById('flag-SCALE_MANUFACTURING');
+      const flagOwn = document.getElementById('flag-OWN_TECHNOLOGY');
+      const flagBrand = document.getElementById('flag-BUILD_BRANDS');
+
+      [optScale, optOwn, optBrand].forEach(btn => btn.className = "w-full p-3.5 rounded-xl border border-rule bg-white hover:border-slate-400 text-left transition-all cursor-pointer");
+      flagScale.innerText = "";
+      flagOwn.innerText = "";
+      flagBrand.innerText = "";
+
+      const smileDot = document.getElementById('smile-dot');
+      const smileBadge = document.getElementById('smile-curve-badge');
+      const t3Rationale = document.getElementById('t3-rationale');
+
+      if (r3 === 'SCALE_MANUFACTURING') {
+        optScale.className = "w-full p-3.5 rounded-xl border-2 border-amber-600 bg-amber-50/50 text-left transition-all cursor-pointer";
+        flagScale.innerText = "Đang chọn";
+        smileDot.setAttribute("cx", "300");
+        smileDot.setAttribute("cy", "120");
+        smileDot.setAttribute("fill", "#B45309");
+        smileBadge.innerText = "Vị trí: Đáy nụ cười (Gia công lắp ráp 2-3%)";
+        smileBadge.className = "text-xs font-bold text-amber-700";
+        t3Rationale.innerHTML = "<strong>Đáy đường cong nụ cười:</strong> Sản lượng xuất khẩu khổng lồ nhưng phần thặng dư thu về trên mỗi thiết bị chỉ đạt 20–28 USD trên chiếc điện thoại 1.000 USD.";
+      } else if (r3 === 'OWN_TECHNOLOGY') {
+        optOwn.className = "w-full p-3.5 rounded-xl border-2 border-sky-600 bg-sky-50/50 text-left transition-all cursor-pointer";
+        flagOwn.innerText = "Đang chọn";
+        smileDot.setAttribute("cx", "60");
+        smileDot.setAttribute("cy", "40");
+        smileDot.setAttribute("fill", "#0369A1");
+        smileBadge.innerText = "Vị trí: Đầu nguồn (Fabless, IP & Chip 45%)";
+        smileBadge.className = "text-xs font-bold text-sky-700";
+        t3Rationale.innerHTML = "<strong>Đỉnh đầu nguồn nụ cười:</strong> Chiếm lĩnh quyền sở hữu trí tuệ (IP) và thiết kế vi mạch, thu về trên 45% giá trị máy.";
+      } else {
+        optBrand.className = "w-full p-3.5 rounded-xl border-2 border-emerald-600 bg-emerald-50/50 text-left transition-all cursor-pointer";
+        flagBrand.innerText = "Đang chọn";
+        smileDot.setAttribute("cx", "540");
+        smileDot.setAttribute("cy", "40");
+        smileDot.setAttribute("fill", "#047857");
+        smileBadge.innerText = "Vị trí: Cuối nguồn (Thương hiệu & Phân phối 35%)";
+        smileBadge.className = "text-xs font-bold text-emerald-700";
+        t3Rationale.innerHTML = "<strong>Đỉnh cuối nguồn nụ cười:</strong> Kiểm soát khâu lưu thông, thương hiệu và bán lẻ trực tiếp giúp thu trọn lợi nhuận thương nghiệp.";
+      }
+
+      // Update Result Card & Modal
+      const arch = evaluateArchetype(m);
+      document.getElementById('res-title').innerText = arch.title;
+      document.getElementById('res-tagline').innerText = `"${arch.tagline}"`;
+      document.getElementById('res-summary').innerText = arch.summary;
+      document.getElementById('res-metric-dvc').innerText = `${m.domesticValueCapture} / 100`;
+      document.getElementById('res-metric-ar').innerText = `${m.economicAutonomy} / 100`;
+
+      // Modal elements
+      document.getElementById('modal-title').innerText = arch.title;
+      document.getElementById('modal-tagline').innerText = `"${arch.tagline}"`;
+      document.getElementById('modal-dvc').innerText = `${m.domesticValueCapture} / 100`;
+      document.getElementById('modal-tc').innerText = `${m.techCapability} / 100`;
+      document.getElementById('modal-ew').innerText = `${m.employmentIncome} / 100`;
+      document.getElementById('modal-ar').innerText = `${m.economicAutonomy} / 100`;
+      document.getElementById('modal-sus').innerText = `${m.sustainability} / 100`;
+
+      const ulStr = document.getElementById('modal-strengths');
+      ulStr.innerHTML = arch.strengths.map(s => `<li>${s}</li>`).join('');
+
+      const ulVul = document.getElementById('modal-vulnerabilities');
+      ulVul.innerHTML = arch.vulnerabilities.map(v => `<li>${v}</li>`).join('');
+
+      document.getElementById('modal-academic').innerText = arch.academic;
+    }
+
+    function selectChoice(roundNum, choiceId) {
+      selectedChoices[roundNum] = choiceId;
+      updateSimulationUI();
+      thoughtText.innerText = `Đã cập nhật chiến lược cho Vòng ${roundNum}. Các chỉ số vĩ mô 2040 đã được tái tính toán.`;
+    }
+
+    function resetChoices() {
+      selectedChoices = {
+        1: "DOMESTIC_LINKAGE",
+        2: "HUMAN_CAPITAL",
+        3: "BUILD_BRANDS",
+      };
+      updateSimulationUI();
+      thoughtText.innerText = "Đã đặt lại trạng thái mô phỏng ban đầu.";
+    }
+
+    function openModal() {
+      document.getElementById('verdict-modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('verdict-modal').classList.add('hidden');
+    }
+
+    function updateProximityThought() {
+      if (charX < 600) {
+        thoughtText.innerText = "Chào mừng bạn đến Tầng 06: Bàn cờ chiến lược Vietnam 2040. Hãy bước sang phải để đưa ra quyết định tại từng trạm.";
+        botVisor.style.backgroundColor = "#B45309";
+      } else if (charX >= 600 && charX < 1800) {
+        thoughtText.innerText = "Trạm 01: Lựa chọn mô hình tăng trưởng. Tiếp tục ưu đãi FDI lắp ráp, hay phát triển liên kết nội địa, hay dồn vốn vào R&D tự chủ?";
+        botVisor.style.backgroundColor = "#B45309";
+      } else if (charX >= 1800 && charX < 3100) {
+        thoughtText.innerText = "Trạm 02: Bài toán sức lao động. Duy trì nhân công giá rẻ, đào tạo 50.000 kỹ sư bán dẫn, hay robot hóa toàn bộ?";
+        botVisor.style.backgroundColor = "#0369A1";
+      } else if (charX >= 3100 && charX < 4400) {
+        thoughtText.innerText = "Trạm 03: Đường cong nụ cười. Mở rộng đại công xưởng ở đáy, làm chủ chip IP ở đầu nguồn, hay xây dựng thương hiệu quốc tế?";
+        botVisor.style.backgroundColor = "#047857";
+      } else {
+        thoughtText.innerText = "Đã đến Trạm Phán Quyết! Bạn có thể nhấn 'Xem Toàn Văn Phán Quyết' để đọc báo cáo chính sách hoàn chỉnh.";
+        botVisor.style.backgroundColor = "#B45309";
+      }
+    }
+
+    function renderPosition() {
+      const worldShift = Math.max(0, charX - CAMERA_OFFSET_LEFT);
+      const screenCharX = Math.min(charX, CAMERA_OFFSET_LEFT);
+
+      robotAvatar.style.left = `${screenCharX}px`;
+      worldTrack.style.transform = `translateX(-${worldShift}px)`;
+
+      if (facingLeft) {
+        robotAvatar.style.transform = "scaleX(-1)";
+        thoughtBubble.style.transform = "scaleX(-1)";
+      } else {
+        robotAvatar.style.transform = "scaleX(1)";
+        thoughtBubble.style.transform = "scaleX(1)";
+      }
+
+      const pct = Math.round(((charX - MIN_X) / (MAX_X - MIN_X)) * 100);
+      txtProgress.innerText = `${pct}%`;
+      barProgress.style.width = `${pct}%`;
+      lblCoord.innerText = `${charX}m`;
+
+      updateProximityThought();
+    }
+
+    function moveChar(delta) {
+      charX = Math.max(MIN_X, Math.min(MAX_X, charX + delta));
+      facingLeft = delta < 0;
+
+      robotAvatar.classList.add('walking');
+      clearTimeout(window.walkTimer);
+      window.walkTimer = setTimeout(() => {
+        robotAvatar.classList.remove('walking');
+      }, 200);
+
+      renderPosition();
+    }
+
+    function triggerJump() {
+      if (isJumping) return;
+      isJumping = true;
+      robotAvatar.classList.add('jumping');
+      thoughtText.innerText = "Quan sát toàn cảnh bàn cờ chiến lược.";
+
+      setTimeout(() => {
+        robotAvatar.classList.remove('jumping');
+        isJumping = false;
+        updateProximityThought();
+      }, 420);
+    }
+
+    function toggleAutoWalk() {
+      const btn = document.getElementById('btn-autowalk');
+      const text = document.getElementById('autowalk-text');
+
+      if (autoWalkInterval) {
+        clearInterval(autoWalkInterval);
+        autoWalkInterval = null;
+        text.innerText = "Tự động bước";
+        btn.classList.remove('bg-slate-900', 'text-white');
+        robotAvatar.classList.remove('walking');
+      } else {
+        text.innerText = "Dừng lại";
+        btn.classList.add('bg-slate-900', 'text-white');
+        robotAvatar.classList.add('walking');
+
+        autoWalkInterval = setInterval(() => {
+          if (charX >= MAX_X) {
+            toggleAutoWalk();
+            return;
+          }
+          moveChar(50);
+        }, 110);
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+        moveChar(75);
+      } else if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+        moveChar(-75);
+      } else if (e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault();
+        triggerJump();
+      } else if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      updateSimulationUI();
+      renderPosition();
+    });
+  </script>
+</body>
+</html>

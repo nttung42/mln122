@@ -21,33 +21,36 @@ Core UX principles:
 
 ## 2. UI Direction
 
-**Visual Style: Cinematic Editorial + Interactive Data Visualization.**
+**Visual Style: Clean Editorial Light + Interactive Data Visualization.**
 
 Combine the visual language of:
-- Premium editorial and digital journalism websites.
-- Cinematic documentary storytelling.
-- Modern data visualization platforms.
+- Premium economic journalism & think-tank editorial designs (The Economist, Financial Times, Bloomberg Graphics).
+- Modern interactive data visualization platforms.
 - Interactive strategy and simulation games.
+- Clean paper/slate gallery with clear typographic contrast and daylight readability.
 
-The interface should feel premium, immersive, modern, intelligent and approachable.
+The interface should feel premium, scholarly, modern, intelligent and approachable.
 
 Avoid:
 - Traditional academic website layouts.
 - PowerPoint-like slide interfaces.
 - Generic corporate dashboard aesthetics.
-- Excessive gradients, glassmorphism and decorative animations.
+- Excessive dark-mode neon gradients, glassmorphism and decorative animations.
 - Dense paragraphs and overly technical terminology.
 
 ## 3. Visual Identity
 
-**Color palette:**
-- Midnight Navy: #0B1220
-- Deep Surface: #151F30
-- Electric Blue: #398BCE
-- Warm Gold: #E7B85C
-- Off White: #F2F4F7
-- Muted Gray: #9BA9BA
-- Growth Green: #42B88A
+**Color palette (Clean Editorial Light Mode):**
+- Page Background (Slate Paper / Midnight Navy Token): #F8FAFC
+- Surface / Cards (Pure White / Deep Surface Token): #FFFFFF
+- Elevated Surface (Light Hover / Sub-panel): #F1F5F9
+- Electric Blue (Primary / Technology / Sapphire Sky): #0284C7
+- Warm Gold (Accent / Amber Gold / Surplus & Value): #D97706
+- Growth Green (Emerald / Export & Positive Growth): #16A34A
+- Warning Red (Crimson / Deficit & Vulnerability): #DC2626
+- Off White (Primary Typography / Deep Slate Ink): #0F172A
+- Muted Gray (Secondary Typography / Slate 500): #64748B
+- Subtle Border (Crisp Border): #E2E8F0
 
 **Typography:**
 - Headings: Space Grotesk or Sora.

@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preview Tầng 5: Vị Thế Kinh Tế Việt Nam — The Value Shift</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['"Space Grotesk"', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+            mono: ['"IBM Plex Mono"', 'monospace'],
+          },
+          colors: {
+            paper: '#F8FAFC',
+            surface: '#FFFFFF',
+            elevated: '#F1F5F9',
+            electric: '#0284C7',
+            gold: '#D97706',
+            emerald: '#10B981',
+            crimson: '#DC2626',
+            ink: '#0F172A',
+            slateMuted: '#64748B',
+            subtle: '#E2E8F0',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @keyframes streamFlow {
+      0% { stroke-dashoffset: 240; }
+      100% { stroke-dashoffset: 0; }
+    }
+    .animate-stream-fast {
+      stroke-dasharray: 10 20;
+      animation: streamFlow 1.8s linear infinite;
+    }
+    .animate-stream-slow {
+      stroke-dasharray: 14 28;
+      animation: streamFlow 3.6s linear infinite;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.85; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.08); }
+    }
+    .pulse-aura {
+      animation: pulseGlow 2.5s ease-in-out infinite;
+      transform-origin: center;
+    }
+    @keyframes legL {
+      0%, 100% { transform: rotate(-22deg); }
+      50% { transform: rotate(22deg); }
+    }
+    @keyframes legR {
+      0%, 100% { transform: rotate(22deg); }
+      50% { transform: rotate(-22deg); }
+    }
+    .walking .leg-left {
+      animation: legL 0.22s infinite ease-in-out;
+      transform-origin: top center;
+    }
+    .walking .leg-right {
+      animation: legR 0.22s infinite ease-in-out;
+      transform-origin: top center;
+    }
+    @keyframes bounceJump {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-75px); }
+      100% { transform: translateY(0); }
+    }
+    .jumping {
+      animation: bounceJump 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+</head>
+<body class="bg-paper text-ink font-body h-screen flex flex-col overflow-hidden select-none">
+
+  <!-- ================= TOP HUD & CONTROL BAR ================= -->
+  <header class="h-14 border-b border-subtle bg-white/95 backdrop-blur-md px-6 flex items-center justify-between shrink-0 z-40 shadow-xs">
+    <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-crimson animate-pulse"></span>
+        <span class="font-heading font-black text-sm tracking-tight text-ink">THE VALUE SHIFT</span>
+      </div>
+      <span class="w-px h-4 bg-subtle"></span>
+      <span class="px-2.5 py-0.5 rounded text-xs font-mono font-bold bg-gold/15 text-gold border border-gold/40">
+        TẦNG 05
+      </span>
+      <span class="font-heading font-bold text-sm text-ink hidden md:inline">
+        Vị Thế Kinh Tế Việt Nam: Điểm Nghẽn & Chiến Lược Kiến Tạo 2040
+      </span>
+    </div>
+
+    <!-- Quick Floor Nav Indicator -->
+    <div class="hidden lg:flex items-center gap-1.5 bg-elevated p-1 rounded-lg border border-subtle">
+      <button class="px-2 py-0.5 text-xs font-mono text-slateMuted rounded hover:text-ink cursor-pointer">TẦNG 01</button>
+      <button class="px-2 py-0.5 text-xs font-mono text-slateMuted rounded hover:text-ink cursor-pointer">TẦNG 02</button>
+      <button class="px-2 py-0.5 text-xs font-mono text-slateMuted rounded hover:text-ink cursor-pointer">TẦNG 03</button>
+      <button class="px-2 py-0.5 text-xs font-mono text-slateMuted rounded hover:text-ink cursor-pointer">TẦNG 04</button>
+      <button class="px-2.5 py-0.5 text-xs font-mono font-bold bg-white text-gold border border-gold/40 rounded shadow-2xs">
+        TẦNG 05
+      </button>
+      <button class="px-2 py-0.5 text-xs font-mono text-slateMuted rounded hover:text-ink cursor-pointer">TẦNG 06 (GAME)</button>
+    </div>
+
+    <!-- Controller Guide & Auto Walk -->
+    <div class="flex items-center gap-4 text-xs font-mono text-slateMuted">
+      <span class="hidden sm:inline">
+        PHÍM <kbd class="px-1.5 py-0.5 bg-elevated rounded border border-subtle text-ink font-semibold">←</kbd> <kbd class="px-1.5 py-0.5 bg-elevated rounded border border-subtle text-ink font-semibold">→</kbd> HOẶC <kbd class="px-1.5 py-0.5 bg-elevated rounded border border-subtle text-ink font-semibold">A / D</kbd> ĐỂ ĐI • <kbd class="px-1.5 py-0.5 bg-elevated rounded border border-subtle text-ink font-semibold">SPACE</kbd> NHẢY
+      </span>
+
+      <button id="btn-autowalk" onclick="toggleAutoWalk()" class="px-3 py-1 rounded-md border border-subtle bg-white text-gold hover:border-gold font-mono text-xs font-semibold flex items-center gap-1.5 transition-all shadow-2xs cursor-pointer">
+        <span id="autowalk-icon">▶</span>
+        <span id="autowalk-text">TỰ ĐỘNG BƯỚC</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ================= MAIN THEATER VIEWPORT ================= -->
+  <main id="theater-viewport" class="relative flex-1 overflow-hidden bg-gradient-to-r from-[#F8FAFC] via-[#F1F5F9] to-[#ECFDF5] transition-colors duration-700">
+
+    <!-- PARALLAX WATERMARK IN CHÌM NỀN XA -->
+    <div id="parallax-bg" class="absolute inset-0 pointer-events-none will-change-transform z-0 select-none">
+      <div class="absolute top-12 left-16 w-[4500px] flex items-center gap-36 opacity-[0.035]">
+        <span class="font-heading font-black text-9xl tracking-widest text-slate-900 whitespace-nowrap">
+          VIETNAM GVC POSITION • DUAL ECONOMY • DVA SHIFT
+        </span>
+        <span class="font-heading font-black text-9xl tracking-widest text-slate-900 whitespace-nowrap">
+          CHIP = SET + 1 • DECISION 1018 • VALUE RETENTION
+        </span>
+      </div>
+    </div>
+
+    <!-- MASTER SVG FLOW PIPELINES (ĐỒ HỌA KẾT NỐI KHÍT 100%) -->
+    <svg class="absolute inset-0 w-[4300px] h-full pointer-events-none z-10 overflow-visible" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="shadowF5Precise" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#0F172A" floodOpacity="0.15" />
+        </filter>
+        <linearGradient id="gradTechJumpPrecise" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#DC2626" />
+          <stop offset="45%" stop-color="#D97706" />
+          <stop offset="100%" stop-color="#10B981" />
+        </linearGradient>
+        <linearGradient id="gradCeilingRail" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#94A3B8" />
+          <stop offset="25%" stop-color="#D97706" />
+          <stop offset="55%" stop-color="#DC2626" />
+          <stop offset="85%" stop-color="#10B981" />
+          <stop offset="100%" stop-color="#0284C7" />
+        </linearGradient>
+      </defs>
+
+      <!-- Ray treo trần chạy ngang tại Y = 40px -->
+      <line x1="40" y1="40" x2="3980" y2="40" stroke="#94A3B8" stroke-width="4" filter="url(#shadowF5Precise)" />
+      <line x1="40" y1="40" x2="3980" y2="40" stroke="url(#gradCeilingRail)" stroke-width="2.5" class="animate-stream-fast" />
+
+      <!-- Drop 1: Thả thẳng xuống đỉnh Cảng biển (Tâm X = 305, Y: 40 -> 85) -->
+      <line x1="305" y1="40" x2="305" y2="85" stroke="#D97706" stroke-width="3" />
+      <circle cx="305" cy="85" r="5" fill="#D97706" stroke="#FFFFFF" stroke-width="2" />
+
+      <!-- Drop 2: Thả thẳng xuống đỉnh Khối FDI Trạm 1 (Tâm X = 930, Y: 40 -> 85) -->
+      <line x1="930" y1="40" x2="930" y2="85" stroke="#DC2626" stroke-width="3" />
+      <circle cx="930" cy="85" r="5" fill="#DC2626" stroke="#FFFFFF" stroke-width="2" />
+
+      <!-- Drop 3: Thả thẳng xuống đỉnh Tier Matrix Trạm 2 (Tâm X = 1760, Y: 40 -> 85) -->
+      <line x1="1760" y1="40" x2="1760" y2="85" stroke="#DC2626" stroke-width="3" />
+      <circle cx="1760" cy="85" r="5" fill="#DC2626" stroke="#FFFFFF" stroke-width="2" />
+
+      <!-- Drop 4: Thả thẳng xuống đỉnh Slope Chart Trạm 2 (Tâm X = 2345, Y: 40 -> 85) -->
+      <line x1="2345" y1="40" x2="2345" y2="85" stroke="#D97706" stroke-width="3" />
+      <circle cx="2345" cy="85" r="5" fill="#D97706" stroke="#FFFFFF" stroke-width="2" />
+
+      <!-- Drop 5: Thả thẳng xuống đỉnh Bệ phóng Bán dẫn Trạm 3 (Tâm X = 2960, Y: 40 -> 85) -->
+      <line x1="2960" y1="40" x2="2960" y2="85" stroke="#10B981" stroke-width="3" />
+      <circle cx="2960" cy="85" r="5" fill="#10B981" stroke="#FFFFFF" stroke-width="2" />
+
+      <!-- Drop 6: Thả thẳng xuống đỉnh 3 Nhịp Cầu Trạm 3 (Tâm X = 3550, Y: 40 -> 85) -->
+      <line x1="3550" y1="40" x2="3550" y2="85" stroke="#10B981" stroke-width="3" />
+      <circle cx="3550" cy="85" r="5" fill="#10B981" stroke="#FFFFFF" stroke-width="2" />
+
+      <!-- Drop 7: Thả thẳng xuống đỉnh Cổng Tầng 06 (Tâm X = 3980, Y: 40 -> 85) -->
+      <line x1="3980" y1="40" x2="3980" y2="85" stroke="#0284C7" stroke-width="3" />
+      <circle cx="3980" cy="85" r="5" fill="#0284C7" stroke="#FFFFFF" stroke-width="2" />
+
+      <!-- --- [SECTOR 1]: CẢNG BIỂN -> BỨC TRANH KÉP FDI / NỘI ĐỊA --- -->
+      <line x1="470" y1="210" x2="495" y2="210" stroke="#D97706" stroke-width="5" stroke-linecap="round" />
+      <circle cx="495" cy="210" r="7" fill="#D97706" stroke="#FFFFFF" stroke-width="2.5" />
+      <circle cx="495" cy="210" r="3" fill="#FFFFFF" />
+
+      <!-- Nhánh 1A (FDI LỚN - 71.7%): Từ (495, 210) uốn lên cắm khít cổng vào Khối FDI tại (520, 190) -->
+      <path d="M 495 210 C 505 210, 508 190, 520 190" stroke="#DC2626" stroke-width="6" fill="none" stroke-linecap="round" filter="url(#shadowF5Precise)" />
+      <path d="M 495 210 C 505 210, 508 190, 520 190" stroke="#FCA5A5" stroke-width="3" fill="none" stroke-linecap="round" class="animate-stream-fast" />
+
+      <!-- Nhánh 1B (NỘI ĐỊA NHỎ - 28.3%): Từ (495, 210) uốn xuống cắm khít cổng vào Khối Nội Địa tại (520, 415) -->
+      <path d="M 495 210 C 505 210, 508 415, 520 415" stroke="#10B981" stroke-width="4" fill="none" stroke-linecap="round" filter="url(#shadowF5Precise)" />
+      <path d="M 495 210 C 505 210, 508 415, 520 415" stroke="#6EE7B7" stroke-width="2" fill="none" stroke-linecap="round" class="animate-stream-slow" />
+
+      <!-- --- [SECTOR 1 -> SECTOR 2]: TỪ TRẠM 1 SANG TRẠM 2 --- -->
+      <path d="M 1340 190 C 1375 190, 1385 300, 1410 300" stroke="#DC2626" stroke-width="4" fill="none" stroke-linecap="round" />
+      <path d="M 1340 190 C 1375 190, 1385 300, 1410 300" stroke="#FCA5A5" stroke-width="2" fill="none" class="animate-stream-fast" />
+
+      <path d="M 1340 415 C 1375 415, 1385 300, 1410 300" stroke="#10B981" stroke-width="3.5" fill="none" stroke-linecap="round" />
+
+      <circle cx="1410" cy="300" r="8" fill="#0F172A" stroke="#38BDF8" stroke-width="2.5" class="pulse-aura" />
+      <circle cx="1410" cy="300" r="3.5" fill="#38BDF8" />
+
+      <!-- Từ Node (1410, 300) cắm khít vào Tier 1 (1480, 160) & Tier 2/3 (1480, 375) -->
+      <path d="M 1410 300 C 1435 300, 1445 160, 1480 160" stroke="#D97706" stroke-width="4" fill="none" stroke-linecap="round" />
+      <path d="M 1410 300 C 1435 300, 1445 160, 1480 160" stroke="#FCD34D" stroke-width="2" fill="none" class="animate-stream-fast" />
+
+      <path d="M 1410 300 C 1435 300, 1445 375, 1480 375" stroke="#DC2626" stroke-width="3.5" fill="none" stroke-linecap="round" />
+
+      <!-- --- [SECTOR 2]: DỐC RƠI TIER 1 -> TIER 2/3 & CẮM VÀO SLOPE CHART --- -->
+      <path d="M 2040 160 C 2068 160, 2068 375, 2040 375" stroke="#DC2626" stroke-width="3" stroke-dasharray="5 5" fill="none" />
+
+      <path d="M 2040 160 C 2055 160, 2055 270, 2070 270" stroke="#D97706" stroke-width="3.5" fill="none" stroke-linecap="round" />
+      <path d="M 2040 375 C 2055 375, 2055 270, 2070 270" stroke="#DC2626" stroke-width="3.5" fill="none" stroke-linecap="round" />
+
+      <!-- --- [SECTOR 2 -> SECTOR 3]: CẦU NỐI BỨT PHÁ TỪ SƯỜN DỐC SANG BỆ PHÓNG BÁN DẪN --- -->
+      <path d="M 2620 270 L 2740 270" stroke="url(#gradTechJumpPrecise)" stroke-width="5" fill="none" stroke-linecap="round" filter="url(#shadowF5Precise)" />
+      <path d="M 2620 270 L 2740 270" stroke="#FFFFFF" stroke-width="2.5" fill="none" class="animate-stream-fast" />
+      <circle cx="2680" cy="270" r="6" fill="#D97706" stroke="#FFFFFF" stroke-width="2" class="pulse-aura" />
+
+      <!-- --- [SECTOR 3]: TỪ BỆ PHÓNG SANG 3 NHỊP CẦU --- -->
+      <line x1="3180" y1="270" x2="3210" y2="270" stroke="#10B981" stroke-width="6" stroke-linecap="round" />
+      <line x1="3180" y1="270" x2="3210" y2="270" stroke="#A7F3D0" stroke-width="2.5" class="animate-stream-fast" />
+
+      <!-- --- [SECTOR 3 -> AIRLOCK]: TỪ 3 NHỊP CẦU CẮM KHÍT VÀO KHUNG CỔNG AIRLOCK TẦNG 06 --- -->
+      <line x1="3890" y1="270" x2="3932" y2="270" stroke="#0284C7" stroke-width="6" stroke-linecap="round" />
+      <line x1="3890" y1="270" x2="3932" y2="270" stroke="#BAE6FD" stroke-width="2.5" class="animate-stream-fast" />
+      <circle cx="3932" cy="270" r="7" fill="#0284C7" stroke="#FFFFFF" stroke-width="2.5" class="pulse-aura" />
+    </svg>
+
+    <!-- ================= HORIZONTAL WORLD TRACK ================= -->
+    <div id="world-track" style="width: 4300px; transform: translateX(0px);" class="absolute left-0 top-0 h-full transition-transform duration-75 ease-out will-change-transform">
+
+      <!-- ================= TRẠM 01 ================= -->
+      <div style="left: 140px; top: 35px;" class="absolute flex items-center gap-3 z-20 pointer-events-auto">
+        <span class="px-3 py-1 rounded-full text-xs font-mono font-black bg-amber-500 text-slate-950 flex items-center gap-1.5 shadow-sm">
+          <span>⚡ TRẠM 01</span>
+        </span>
+        <span class="font-heading font-black text-xl text-slate-900 tracking-tight">
+          NGHỊCH LÝ KINH TẾ KÉP
+        </span>
+        <span class="text-slate-300 font-mono">/</span>
+        <span class="text-xs font-mono font-bold text-slate-500">
+          KỶ LỤC NGOẠI THƯƠNG $405.5B & PHÂN HÓA NỘI - NGOẠI
+        </span>
+      </div>
+
+      <!-- CỤM 1.1: SIÊU CẢNG BIỂN LOGISTICS & TICKER KHỔNG LỒ (X: 140px, Y: 85px, Rộng: 330px, Kết thúc tại X: 470px) -->
+      <div style="left: 140px; top: 85px;" class="absolute pointer-events-auto w-[330px] h-[430px] flex flex-col justify-between z-20 group">
+        <!-- CỔNG RA VẬT LÝ TẠI MÉP PHẢI (X: 470px, Y: 210px) -->
+        <div style="top: 125px; right: -8px;" class="absolute w-4 h-4 rounded-full bg-amber-500 border-2 border-white shadow-md z-30 flex items-center justify-center pointer-events-none">
+          <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+        </div>
+
+        <div class="w-full h-[250px] rounded-3xl overflow-hidden relative border-2 border-slate-300 shadow-lg bg-slate-950">
+          <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=800&q=80" alt="Cảng Cái Mép - Hải Phòng đón siêu tàu container" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700" />
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
+          <div class="absolute top-3 left-3">
+            <span class="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold bg-amber-400 text-slate-950 uppercase tracking-wider shadow">CẢNG CONTAINER QUỐC TẾ</span>
+          </div>
+          <div class="absolute bottom-3 left-3 right-3 text-white">
+            <div class="text-[11px] font-mono font-bold text-amber-300">CÁI MÉP & HẢI PHÒNG 2024</div>
+            <p class="text-[11px] leading-snug text-slate-200 mt-0.5">Đón các thế hệ siêu tàu mẹ 24.000 TEU, đưa quy mô ngoại thương tiệm cận 800 tỷ USD.</p>
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <div class="flex items-baseline gap-2">
+            <span id="t1-counter" class="text-5xl font-heading font-black text-slate-950 tracking-tight">$405.5B</span>
+            <span class="text-xs font-mono font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">+$24.8B XUẤT SIÊU</span>
+          </div>
+          <div class="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider mt-1">
+            Tổng kim ngạch xuất khẩu hàng hóa (GSO 2024)
+          </div>
+        </div>
+      </div>
+
+      <!-- CỤM 1.2: BỨC TƯỜNG DUAL-ECONOMY 2 NHÁNH (X: 520px, Y: 85px, Rộng: 820px, Kết thúc tại X: 1340px) -->
+      <div style="left: 520px; top: 85px;" class="absolute pointer-events-auto w-[820px] h-[430px] flex flex-col justify-between z-20">
+        <!-- Khối FDI 71.7% (Y tâm: 190px) -->
+        <div class="h-[210px] rounded-3xl bg-white/95 border-2 border-red-300 shadow-md p-4 flex gap-4 overflow-hidden relative group">
+          <!-- Cổng vào bên trái (X: 520px, Y: 190px) -->
+          <div style="top: 105px; left: -8px;" class="absolute w-4 h-4 rounded-full bg-red-600 border-2 border-white shadow-md z-30 flex items-center justify-center pointer-events-none">
+            <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+          </div>
+          <!-- Cổng ra bên phải (X: 1340px, Y: 190px) -->
+          <div style="top: 105px; right: -8px;" class="absolute w-4 h-4 rounded-full bg-red-600 border-2 border-white shadow-md z-30 flex items-center justify-center pointer-events-none">
+            <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+          </div>
+
+          <div class="w-[280px] h-full rounded-2xl overflow-hidden relative shrink-0 bg-slate-900 border border-slate-200">
+            <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80" alt="Nhà máy điện tử phòng sạch FDI" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
+            <div class="absolute bottom-2.5 left-2.5 right-2.5 text-white">
+              <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-red-600 text-white uppercase">TỔ HỢP FDI BẮC NINH & THÁI NGUYÊN</span>
+              <p class="text-[10px] text-slate-200 mt-1 leading-snug">Samsung, Foxconn, Pegatron sản xuất hàng trăm triệu điện thoại & máy tính.</p>
+            </div>
+          </div>
+
+          <div class="flex-1 flex flex-col justify-between py-1">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-mono font-bold text-red-600 uppercase tracking-wider">KHỐI DOANH NGHIỆP FDI</span>
+                <span class="text-[10px] font-mono font-bold text-slate-400">CHI PHỐI XUẤT KHẨU</span>
+              </div>
+              <div class="flex items-baseline gap-2 mt-1">
+                <span class="text-4xl font-heading font-black text-red-600 leading-none">71.7%</span>
+                <span class="text-xl font-heading font-bold text-slate-800">$290.94 TỶ USD</span>
+              </div>
+            </div>
+
+            <div class="space-y-1.5 font-mono text-[10px] bg-red-50/60 p-2.5 rounded-xl border border-red-200/80">
+              <div class="flex justify-between text-slate-800"><span>&bull; Điện tử & máy tính:</span><strong class="text-red-700">$72.6B</strong></div>
+              <div class="flex justify-between text-slate-800"><span>&bull; Điện thoại di động:</span><strong class="text-red-700">$53.9B</strong></div>
+              <div class="flex justify-between text-slate-800"><span>&bull; Máy móc & thiết bị:</span><strong class="text-red-700">$52.3B</strong></div>
+            </div>
+
+            <div class="text-[10px] font-mono text-slate-500">Hơn 50% sản lượng công nghiệp cả nước nằm trong khu vực có vốn ngoại.</div>
+          </div>
+        </div>
+
+        <!-- Khối Nội Địa 28.3% (Y tâm: 415px) -->
+        <div class="h-[200px] rounded-3xl bg-white/95 border-2 border-emerald-300 shadow-md p-4 flex gap-4 overflow-hidden relative group">
+          <!-- Cổng vào bên trái (X: 520px, Y: 415px) -->
+          <div style="top: 100px; left: -8px;" class="absolute w-4 h-4 rounded-full bg-emerald-600 border-2 border-white shadow-md z-30 flex items-center justify-center pointer-events-none">
+            <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+          </div>
+          <!-- Cổng ra bên phải (X: 1340px, Y: 415px) -->
+          <div style="top: 100px; right: -8px;" class="absolute w-4 h-4 rounded-full bg-emerald-600 border-2 border-white shadow-md z-30 flex items-center justify-center pointer-events-none">
+            <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+          </div>
+
+          <div class="flex-1 flex flex-col justify-between py-1">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-mono font-bold text-emerald-700 uppercase tracking-wider">KHỐI DOANH NGHIỆP NỘI ĐỊA</span>
+                <span class="text-[10px] font-mono font-bold text-slate-400">KHIÊM TỐN</span>
+              </div>
+              <div class="flex items-baseline gap-2 mt-1">
+                <span class="text-4xl font-heading font-black text-emerald-600 leading-none">28.3%</span>
+                <span class="text-xl font-heading font-bold text-slate-800">$114.59 TỶ USD</span>
+              </div>
+            </div>
+
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Doanh nghiệp trong nước chủ yếu xuất khẩu dệt may, da giày, nông thủy sản và gia công phụ trợ cấp thấp.
+            </p>
+
+            <div class="p-2 rounded-xl bg-emerald-50 border border-emerald-200 text-[10px] font-mono text-emerald-900 leading-tight">
+              <strong>Bản chất Mác – Lênin:</strong> Giá trị mới ($v+m$) được tạo ra trên đất Việt Nam, nhưng phần thặng dư tích lũy $m$ và quyền lực chuỗi giá trị thuộc về Lead Firms ngoại.
+            </div>
+          </div>
+
+          <div class="w-[200px] h-full rounded-2xl bg-slate-900 p-3.5 flex flex-col justify-between text-white shrink-0">
+            <span class="text-[10px] font-mono font-bold text-amber-300">TỶ TRỌNG NGOẠI THƯƠNG</span>
+            <div class="w-full h-4 rounded-full overflow-hidden flex bg-slate-800 border border-slate-700">
+              <div style="width: 71.7%;" class="h-full bg-red-500"></div>
+              <div style="width: 28.3%;" class="h-full bg-emerald-500"></div>
+            </div>
+            <div class="flex justify-between text-[9px] font-mono text-slate-300">
+              <span class="text-red-400">FDI: 71.7%</span>
+              <span class="text-emerald-400">VN: 28.3%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= TRẠM 02 ================= -->
+      <div style="left: 1480px; top: 35px;" class="absolute flex items-center gap-3 z-20 pointer-events-auto">
+        <span class="px-3 py-1 rounded-full text-xs font-mono font-black bg-red-600 text-white flex items-center gap-1.5 shadow-sm">
+          <span>📊 TRẠM 02</span>
+        </span>
+        <span class="font-heading font-black text-xl text-slate-900 tracking-tight">
+          HỐ SÂU GIÁ TRỊ & BẪY LIÊN KẾT GVC
+        </span>
+        <span class="text-slate-300 font-mono">/</span>
+        <span class="text-xs font-mono font-bold text-slate-500">
+          DVA ĐIỆN TỬ 20-30% & TỶ LỆ GVC SỤT GIẢM 35% ➔ 18%
+        </span>
+      </div>
+
+      <!-- CỤM 2.1: MA TRẬN PHÂN TẦNG VỊ THẾ CUNG ỨNG (X: 1480px, Y: 85px, Rộng: 560px, Kết thúc tại X: 2040px) -->
+      <div style="left: 1480px; top: 85px;" class="absolute pointer-events-auto w-[560px] h-[430px] flex flex-col justify-between z-20">
+        <!-- Tầng 1 Ngoại (Y tâm: 160px) -->
+        <div class="p-4 rounded-3xl border-2 border-slate-300 hover:border-amber-500 bg-white/95 shadow-md flex gap-4 transition-all relative">
+          <!-- Cổng vào bên trái (X: 1480px, Y: 160px) -->
+          <div style="top: 75px; left: -8px;" class="absolute w-4 h-4 rounded-full bg-amber-500 border-2 border-white shadow-md z-30 flex items-center justify-center pointer-events-none">
+            <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+          </div>
+          <!-- Cổng ra bên phải (X: 2040px, Y: 160px) -->
+          <div style="top: 75px; right: -8px;" class="absolute w-4 h-4 rounded-full bg-amber-500 border-2 border-white shadow-md z-30 flex items-center justify-center pointer-events-none">
+            <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+          </div>
+
+          <div class="w-[170px] h-[120px] rounded-2xl overflow-hidden relative shrink-0 bg-slate-900">
+            <img src="https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=600&q=80" alt="Dây chuyền linh kiện tinh vi của nhà cung cấp ngoại Tier 1" class="w-full h-full object-cover" />
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+            <span class="absolute bottom-1.5 left-2 text-[9px] font-mono font-bold text-amber-300">TIER 1 NGOẠI VỆ TINH</span>
+          </div>
+
+          <div class="flex-1 flex flex-col justify-between py-0.5">
+            <div>
+              <div class="flex justify-between items-center">
+                <span class="text-[10px] font-mono font-bold text-slate-400">TẦNG THƯỢNG LƯU CHUỖI</span>
+                <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-amber-100 text-amber-900">THU ~60% THẶNG DƯ</span>
+              </div>
+              <h4 class="font-heading font-black text-sm text-slate-900 mt-0.5">Linh Kiện Bán Dẫn & Module Tinh Vi</h4>
+              <p class="text-[10px] text-slate-600 mt-1 leading-snug">Doanh nghiệp Hàn Quốc, Nhật Bản, Đài Loan cung cấp bo mạch, chip nhớ, màn hình OLED và camera.</p>
+            </div>
+            <div class="text-[9px] font-mono text-amber-700 font-bold">OECD: 61% mua trong nước thực chất là mua từ các Tier 1 ngoại này!</div>
+          </div>
+        </div>
+
+        <!-- Tầng 2/3 Nội Địa (Y tâm: 375px) -->
+        <div class="p-4 rounded-3xl border-2 border-red-200 hover:border-red-500 bg-white/95 shadow-md flex gap-4 transition-all relative">
+          <!-- Cổng vào bên trái (X: 1480px, Y: 375px) -->
+          <div style="top: 75px; left: -8px;" class="absolute w-4 h-4 rounded-full bg-red-600 border-2 border-white shadow-md z-30 flex items-center justify-center pointer-events-none">
+            <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+          </div>
+          <!-- Cổng ra bên phải (X: 2040px, Y: 375px) -->
+          <div style="top: 75px; right: -8px;" class="absolute w-4 h-4 rounded-full bg-red-600 border-2 border-white shadow-md z-30 flex items-center justify-center pointer-events-none">
+            <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+          </div>
+
+          <div class="w-[170px] h-[120px] rounded-2xl overflow-hidden relative shrink-0 bg-slate-900">
+            <img src="https://images.unsplash.com/photo-1581092162384-8987c1d64718?auto=format&fit=crop&w=600&q=80" alt="Xưởng gia công cơ khí phụ trợ ép nhựa bao bì Việt Nam" class="w-full h-full object-cover" />
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+            <span class="absolute bottom-1.5 left-2 text-[9px] font-mono font-bold text-red-400">TIER 2 / 3 DOANH NGHIỆP VN</span>
+          </div>
+
+          <div class="flex-1 flex flex-col justify-between py-0.5">
+            <div>
+              <div class="flex justify-between items-center">
+                <span class="text-[10px] font-mono font-bold text-red-600">ĐÁY NỤ CƯỜI GIA CÔNG</span>
+                <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-red-100 text-red-900">DVA &lt; 20%</span>
+              </div>
+              <h4 class="font-heading font-black text-sm text-slate-900 mt-0.5">Bao Bì, Ép Nhựa, Đệm Mút & Ốc Vít</h4>
+              <p class="text-[10px] text-slate-600 mt-1 leading-snug">Doanh nghiệp Việt Nam phụ trách các khâu cơ khí đơn giản, in ấn nhãn hộp và bao bì bảo vệ.</p>
+            </div>
+            <div class="text-[9px] font-mono text-red-700 font-bold">Biên lợi nhuận cực mỏng 2 - 3.5%, dễ bị thay thế khi có nước chi phí rẻ hơn.</div>
+          </div>
+        </div>
+
+        <div class="p-2.5 rounded-2xl bg-red-50 border border-red-200 text-[11px] font-mono text-red-950 leading-snug">
+          <strong>Bẫy liên kết chuỗi:</strong> Khối FDI lớn mạnh không tự nhiên chuyển giao công nghệ nếu không có chiến lược ép buộc nội địa hóa và nâng chuẩn doanh nghiệp nội.
+        </div>
+      </div>
+
+      <!-- CỤM 2.2: SƯỜN DỐC SLOPE CHART WORLD BANK (X: 2070px, Y: 85px, Rộng: 550px, Kết thúc tại X: 2620px) -->
+      <div style="left: 2070px; top: 85px;" class="absolute pointer-events-auto w-[550px] h-[430px] rounded-3xl bg-white/95 border-2 border-slate-300 shadow-md p-6 flex flex-col justify-between z-20">
+        <!-- Cổng vào bên trái (X: 2070px, Y: 270px) -->
+        <div style="top: 185px; left: -8px;" class="absolute w-4 h-4 rounded-full bg-red-600 border-2 border-white shadow-md z-30 flex items-center justify-center pointer-events-none">
+          <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+        </div>
+        <!-- Cổng ra bên phải (X: 2620px, Y: 270px) -->
+        <div style="top: 185px; right: -8px;" class="absolute w-4 h-4 rounded-full bg-red-600 border-2 border-white shadow-md z-30 flex items-center justify-center pointer-events-none">
+          <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-red-600 uppercase">BÁO CÁO WORLD BANK 2024</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-red-50 text-red-700 border border-red-200">SỤT GIẢM NỬA QUY MÔ</span>
+          </div>
+          <h3 class="font-heading font-black text-2xl text-slate-900 mt-1">TỶ LỆ DN NỘI THAM GIA CHUỖI TOÀN CẦU</h3>
+          <p class="text-xs text-slate-500 mt-0.5">Tỷ lệ doanh nghiệp Việt Nam có liên kết chuỗi cung ứng quốc tế qua 14 năm</p>
+        </div>
+
+        <div class="h-44 w-full relative">
+          <svg class="w-full h-full overflow-visible" viewBox="0 0 480 140">
+            <line x1="40" y1="120" x2="440" y2="120" stroke="#E2E8F0" stroke-width="1.5" />
+            <line x1="40" y1="20" x2="440" y2="20" stroke="#E2E8F0" stroke-width="1" stroke-dasharray="4 4" />
+            <line x1="40" y1="70" x2="440" y2="70" stroke="#E2E8F0" stroke-width="1" stroke-dasharray="4 4" />
+
+            <path d="M 90 28 L 390 85 L 390 120 L 90 120 Z" fill="rgba(220, 38, 38, 0.08)" />
+            <line x1="90" y1="28" x2="390" y2="85" stroke="#DC2626" stroke-width="5" stroke-linecap="round" />
+
+            <circle cx="90" cy="28" r="8" fill="#D97706" stroke="#FFFFFF" stroke-width="2.5" />
+            <text x="90" y="14" text-anchor="middle" font-family="'Space Grotesk'" font-size="18" font-weight="bold" fill="#D97706">35%</text>
+            <text x="90" y="136" text-anchor="middle" font-family="'IBM Plex Mono'" font-size="11" font-weight="bold" fill="#64748B">NĂM 2009</text>
+
+            <circle cx="390" cy="85" r="9" fill="#DC2626" stroke="#FFFFFF" stroke-width="3" class="pulse-aura" />
+            <text x="390" y="72" text-anchor="middle" font-family="'Space Grotesk'" font-size="22" font-weight="900" fill="#DC2626">18%</text>
+            <text x="390" y="136" text-anchor="middle" font-family="'IBM Plex Mono'" font-size="11" font-weight="bold" fill="#64748B">NĂM 2023</text>
+          </svg>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-700 leading-snug">
+          <strong>Nghịch lý:</strong> Khi các tập đoàn FDI gia tăng kéo theo các nhà cung ứng ngoại vệ tinh (Tier 1 đồng hương) khiến cửa vào chuỗi của doanh nghiệp Việt Nam ngày càng hẹp lại.
+        </div>
+      </div>
+
+      <!-- ================= TRẠM 03 ================= -->
+      <div style="left: 2740px; top: 35px;" class="absolute flex items-center gap-3 z-20 pointer-events-auto">
+        <span class="px-3 py-1 rounded-full text-xs font-mono font-black bg-emerald-600 text-white flex items-center gap-1.5 shadow-sm">
+          <span>💡 TRẠM 03</span>
+        </span>
+        <span class="font-heading font-black text-xl text-slate-900 tracking-tight">
+          CHIẾN LƯỢC BÁN DẪN & BỨT PHÁ 2040
+        </span>
+        <span class="text-slate-300 font-mono">/</span>
+        <span class="text-xs font-mono font-bold text-slate-500">
+          QUYẾT ĐỊNH 1018/QĐ-TTg & 3 CON ĐƯỜNG NÂNG CẤP
+        </span>
+      </div>
+
+      <!-- CỤM 3.1: BỆ PHÓNG VI MẠCH BÁN DẪN & 50.000 KỸ SƯ (X: 2740px, Y: 85px, Rộng: 440px, Kết thúc tại X: 3180px) -->
+      <div style="left: 2740px; top: 85px;" class="absolute pointer-events-auto w-[440px] h-[430px] rounded-3xl bg-white/95 border-2 border-emerald-300 shadow-md p-5 flex flex-col justify-between z-20 group">
+        <!-- Cổng vào bên trái (X: 2740px, Y: 270px) -->
+        <div style="top: 185px; left: -8px;" class="absolute w-4 h-4 rounded-full bg-emerald-600 border-2 border-white shadow-md z-30 flex items-center justify-center pointer-events-none">
+          <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+        </div>
+        <!-- Cổng ra bên phải (X: 3180px, Y: 270px) -->
+        <div style="top: 185px; right: -8px;" class="absolute w-4 h-4 rounded-full bg-emerald-600 border-2 border-white shadow-md z-30 flex items-center justify-center pointer-events-none">
+          <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+        </div>
+
+        <div class="w-full h-[180px] rounded-2xl overflow-hidden relative bg-slate-950 border border-slate-700">
+          <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80" alt="Vi mạch bán dẫn vi xử lý silicon" class="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-700" />
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
+          <div class="absolute top-2.5 left-2.5">
+            <span class="px-2.5 py-1 rounded text-[9px] font-mono font-black bg-emerald-400 text-slate-950 shadow">QUYẾT ĐỊNH 1018/QĐ-TTg</span>
+          </div>
+          <div class="absolute bottom-2.5 left-2.5 right-2.5 text-white">
+            <div class="text-[10px] font-mono font-bold text-emerald-300">CÔNG NGHỆ LÕI QUỐC GIA</div>
+            <div class="text-xs font-bold text-slate-100">Chiến Lược Phát Triển Bán Dẫn 2030 - 2050</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-baseline gap-2">
+            <span class="text-5xl font-heading font-black text-emerald-600 leading-none">50.000</span>
+            <span class="text-sm font-mono font-black text-slate-800 uppercase">KỸ SƯ BÁN DẪN</span>
+          </div>
+          <div class="text-xs font-mono text-slate-500 mt-1">
+            Đào tạo 15.000 kỹ sư thiết kế chip & 35.000 kỹ sư đóng gói, kiểm thử cấp cao.
+          </div>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-slate-900 text-white font-mono text-xs space-y-1">
+          <div class="text-amber-300 font-bold">CÔNG THỨC: C = SET + 1</div>
+          <div class="text-[10px] text-slate-300 leading-snug">
+            <strong>Chip</strong> = <strong>S</strong>pecialized + <strong>E</strong>lectronics + <strong>T</strong>alent + <strong>1</strong> (Việt Nam an toàn).
+          </div>
+        </div>
+      </div>
+
+      <!-- CỤM 3.2: 3 NHỊP CẦU TỰ CHỦ CHIẾN LƯỢC (X: 3210px, Y: 85px, Rộng: 680px, Kết thúc tại X: 3890px) -->
+      <div style="left: 3210px; top: 85px;" class="absolute pointer-events-auto w-[680px] h-[430px] rounded-3xl bg-white/95 border-2 border-emerald-300 shadow-md p-6 flex flex-col justify-between z-20">
+        <!-- Cổng vào bên trái (X: 3210px, Y: 270px) -->
+        <div style="top: 185px; left: -8px;" class="absolute w-4 h-4 rounded-full bg-emerald-600 border-2 border-white shadow-md z-30 flex items-center justify-center pointer-events-none">
+          <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+        </div>
+        <!-- Cổng ra bên phải (X: 3890px, Y: 270px) -->
+        <div style="top: 185px; right: -8px;" class="absolute w-4 h-4 rounded-full bg-sky-600 border-2 border-white shadow-md z-30 flex items-center justify-center pointer-events-none">
+          <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-emerald-700 uppercase">3 CON ĐƯỜNG DỊCH CHUYỂN VỊ THẾ</span>
+            <span class="text-[11px] font-mono text-slate-400">CHỌN ĐỂ TƯƠNG TÁC</span>
+          </div>
+          <h3 class="font-heading font-black text-2xl text-slate-900 mt-1">THOÁT BẪY GIA CÔNG: CHỌN ĐƯỜNG CHO VIỆT NAM</h3>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3 my-2">
+          <!-- Nhịp 1 -->
+          <button id="pw-btn-1" onclick="selectPathway(1)" class="p-3.5 rounded-2xl text-left transition-all border-2 border-emerald-500 bg-emerald-50/80 shadow-md ring-2 ring-emerald-400 cursor-pointer flex flex-col justify-between h-[210px]">
+            <div>
+              <span class="text-[9px] font-mono font-bold text-emerald-700 block mb-1">CON ĐƯỜNG 01</span>
+              <h4 class="font-heading font-black text-sm text-slate-900 leading-snug">Lắp Ráp &rarr; Công Nghệ Lõi</h4>
+              <p class="text-[11px] text-slate-600 mt-1.5 leading-snug">Làm chủ thiết kế chip Fabless AI/IoT và đóng gói kiểm thử tiên tiến (Advanced Packaging).</p>
+            </div>
+            <div class="pt-2 border-t border-emerald-200 text-[10px] font-mono text-emerald-900 font-bold">Thu hoạch thặng dư sở hữu trí tuệ (IP)</div>
+          </button>
+
+          <!-- Nhịp 2 -->
+          <button id="pw-btn-2" onclick="selectPathway(2)" class="p-3.5 rounded-2xl text-left transition-all border-2 border-slate-200 bg-white hover:border-amber-300 cursor-pointer flex flex-col justify-between h-[210px]">
+            <div>
+              <span class="text-[9px] font-mono font-bold text-amber-700 block mb-1">CON ĐƯỜNG 02</span>
+              <h4 class="font-heading font-black text-sm text-slate-900 leading-snug">Gia Công &rarr; Đối Tác Tier 1</h4>
+              <p class="text-[11px] text-slate-600 mt-1.5 leading-snug">Nâng chuẩn doanh nghiệp công nghiệp phụ trợ nội địa đạt chứng chỉ toàn cầu (ISO/ESG).</p>
+            </div>
+            <div class="pt-2 border-t border-amber-200 text-[10px] font-mono text-amber-900 font-bold">Nâng DVA điện tử từ 20% lên &gt; 50%</div>
+          </button>
+
+          <!-- Nhịp 3 -->
+          <button id="pw-btn-3" onclick="selectPathway(3)" class="p-3.5 rounded-2xl text-left transition-all border-2 border-slate-200 bg-white hover:border-sky-300 cursor-pointer flex flex-col justify-between h-[210px]">
+            <div>
+              <span class="text-[9px] font-mono font-bold text-sky-700 block mb-1">CON ĐƯỜNG 03</span>
+              <h4 class="font-heading font-black text-sm text-slate-900 leading-snug">Xuất Khẩu &rarr; Global Brand</h4>
+              <p class="text-[11px] text-slate-600 mt-1.5 leading-snug">Xây dựng thương hiệu công nghệ Make in Vietnam, làm chủ kênh phân phối toàn cầu.</p>
+            </div>
+            <div class="pt-2 border-t border-sky-200 text-[10px] font-mono text-sky-900 font-bold">Kiểm soát giá bán lẻ & thặng dư cuối chuỗi</div>
+          </button>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-slate-900 text-white flex items-center justify-between text-xs font-mono">
+          <span class="text-emerald-400 font-bold">TIẾN TỚI CỔNG LƯỢNG TỬ ĐỂ BẮT ĐẦU ĐIỀU HÀNH 2040 &rarr;</span>
+          <span class="text-slate-400">CHẶNG CUỐI HÀNH TRÌNH</span>
+        </div>
+      </div>
+
+      <!-- ================= CỔNG AIRLOCK LƯỢNG TỬ SANG TẦNG 06 (X: 3980) ================= -->
+      <div id="door-portal-wrap" style="left: 3980px; bottom: 90px;" class="absolute -translate-x-1/2 flex flex-col items-center z-20">
+        <div id="door-frame" class="w-[96px] h-[124px] border-4 border-slate-700 border-b-0 rounded-t-[48px] relative bg-slate-900 overflow-hidden cursor-pointer transition-all duration-300 shadow-2xl flex items-center justify-center group" onclick="enterNextFloor()">
+          <div class="absolute inset-0 flex">
+            <div id="airlock-left" class="w-1/2 h-full bg-gradient-to-r from-slate-800 to-slate-700 border-r border-slate-600 transition-transform duration-500 flex items-center justify-end pr-1">
+              <div class="w-1.5 h-10 rounded-full bg-emerald"></div>
+            </div>
+            <div id="airlock-right" class="w-1/2 h-full bg-gradient-to-l from-slate-800 to-slate-700 border-l border-slate-600 transition-transform duration-500 flex items-center justify-start pl-1">
+              <div class="w-1.5 h-10 rounded-full bg-emerald"></div>
+            </div>
+          </div>
+          <div id="door-energy" class="absolute inset-0 bg-[radial-gradient(circle_at_50%_60%,rgba(16,185,129,0.9)_0%,rgba(2,132,199,0.7)_50%,transparent_100%)] opacity-0 transition-opacity duration-300 flex items-center justify-center pointer-events-none">
+            <div class="w-8 h-8 rounded-full border-2 border-white border-t-transparent animate-spin"></div>
+          </div>
+        </div>
+
+        <button onclick="enterNextFloor()" class="mt-3 font-mono text-xs font-bold px-4 py-1.5 rounded-full border-2 border-emerald bg-white text-emerald hover:bg-emerald hover:text-white transition-all shadow-md cursor-pointer flex items-center gap-1.5">
+          <span>⚡ BƯỚC VÀO TẦNG 06</span>
+        </button>
+        <span class="font-mono text-[10px] text-slateMuted mt-1 uppercase font-bold tracking-wider">
+          BÀN CỜ ĐIỀU HÀNH CHIẾN LƯỢC 2040
+        </span>
+      </div>
+
+      <!-- ================= SÀN BƯỚC ĐI GALLERY ================= -->
+      <div class="absolute bottom-0 left-0 w-[4300px] h-[90px] border-t-2 border-slate-300 bg-gradient-to-b from-white to-[#F1F5F9] z-20 flex items-center px-8 gap-8">
+        <span class="font-mono text-[11px] text-slate-500 border-l-2 border-slate-400 pl-2 font-semibold">
+          KM 0.0 &bull; CỔNG VÀO TẦNG 05
+        </span>
+        <span class="font-mono text-[11px] text-amber-700 border-l-2 border-amber-500 pl-2 font-bold">
+          KM 0.8 &bull; TRẠM 01: NGHỊCH LÝ KINH TẾ KÉP ($405.5B & 71.7% FDI)
+        </span>
+        <span class="font-mono text-[11px] text-red-700 border-l-2 border-red-500 pl-2 font-bold">
+          KM 1.9 &bull; TRẠM 02: HỐ SÂU GIÁ TRỊ & ĐIỂM NGHẼN DVA (35% &rarr; 18%)
+        </span>
+        <span class="font-mono text-[11px] text-emerald-700 border-l-2 border-emerald-500 pl-2 font-bold">
+          KM 3.0 &bull; TRẠM 03: CHIẾN LƯỢC BÁN DẪN & 3 NHỊP CẦU TỰ CHỦ 2040
+        </span>
+        <span class="font-mono text-[11px] text-sky-700 border-l-2 border-sky-500 pl-2 font-bold">
+          KM 3.9 &bull; CỔNG LÊN TẦNG 06: BÀN CỜ ĐIỀU HÀNH CHIẾN LƯỢC
+        </span>
+      </div>
+
+      <!-- ================= CHARACTER BOT ================= -->
+      <div id="robot-avatar" style="left: 150px; bottom: 90px;" class="absolute z-30 transition-transform duration-75 ease-out will-change-transform flex flex-col items-center">
+        <div id="thought-bubble" class="mb-2 max-w-[320px] p-3 rounded-2xl bg-white border-2 border-gold shadow-lg text-xs font-mono transition-all duration-200 relative flex items-start gap-2.5">
+          <span id="thought-icon" class="text-base">🇻🇳</span>
+          <span id="thought-text" class="text-ink font-semibold leading-snug">
+            Chào mừng bạn đến Tầng 05: Khám phá vị thế kinh tế Việt Nam và điểm nghẽn chuỗi giá trị toàn cầu!
+          </span>
+          <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px] border-t-gold"></div>
+        </div>
+
+        <div id="bot-body-container" class="relative w-12 h-16 flex flex-col items-center">
+          <div class="w-8 h-7 rounded-lg bg-slate-800 border-2 border-slate-700 flex items-center justify-center shadow-md relative">
+            <div id="bot-visor" class="w-6 h-2.5 rounded bg-gold shadow-[0_0_8px_#D97706] transition-colors"></div>
+            <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 w-1 h-2.5 bg-slate-600 flex flex-col items-center">
+              <span class="w-1.5 h-1.5 rounded-full bg-crimson"></span>
+            </div>
+          </div>
+          <div class="w-10 h-7 rounded-md bg-slate-700 border border-slate-600 mt-0.5 flex items-center justify-center p-1">
+            <div class="w-5 h-2.5 rounded bg-slate-900 border border-slate-500/60 font-mono text-[7px] text-amber-300 flex items-center justify-center font-bold">
+              VN-05
+            </div>
+          </div>
+          <div class="flex gap-2.5 mt-0.5">
+            <div class="leg-left w-2 h-4 rounded-full bg-slate-800"></div>
+            <div class="leg-right w-2 h-4 rounded-full bg-slate-800"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ================= BOTTOM CONTROL DOCK & PROGRESS HUD ================= -->
+  <footer class="h-16 border-t border-subtle bg-white/95 px-6 flex items-center justify-between shrink-0 z-40 shadow-sm">
+    <div class="flex items-center gap-2">
+      <button onclick="moveChar(-100)" class="px-3.5 py-2 rounded-lg bg-elevated border border-subtle text-ink font-mono text-xs font-semibold flex items-center gap-1.5 hover:bg-slate-200 transition-all active:scale-95 shadow-2xs cursor-pointer">
+        <span>← LÙI LẠI (A)</span>
+      </button>
+
+      <button onclick="triggerJump()" class="px-4 py-2 rounded-lg bg-gold/15 border-2 border-gold text-gold font-mono text-xs font-black flex items-center gap-1.5 hover:bg-gold hover:text-white transition-all active:scale-95 shadow-2xs cursor-pointer">
+        <svg class="w-3.5 h-3.5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+        <span>NHẢY QUAN SÁT (SPACE)</span>
+      </button>
+
+      <button onclick="moveChar(100)" class="px-3.5 py-2 rounded-lg bg-elevated border border-subtle text-ink font-mono text-xs font-semibold flex items-center gap-1.5 hover:bg-slate-200 transition-all active:scale-95 shadow-2xs cursor-pointer">
+        <span>TIẾN BƯỚC (D) →</span>
+      </button>
+    </div>
+
+    <div class="hidden sm:flex flex-1 max-w-md mx-8 flex-col gap-1.5">
+      <div class="flex justify-between font-mono text-[11px] text-slateMuted font-semibold">
+        <span>TIẾN ĐỘ HÀNH TRÌNH TẦNG 05</span>
+        <span id="txt-progress" class="text-gold font-bold">4%</span>
+      </div>
+      <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden border border-slate-300">
+        <div id="bar-progress" class="h-full bg-gradient-to-r from-gold via-crimson to-emerald rounded-full transition-all duration-150" style="width: 4%;"></div>
+      </div>
+    </div>
+
+    <div class="font-mono text-xs text-slateMuted flex items-center gap-3">
+      <span class="hidden md:inline">TỌA ĐỘ: <strong id="lbl-coord" class="text-ink">X: 150m</strong></span>
+      <span class="px-2.5 py-1 rounded-md bg-emerald-50 text-emerald border border-emerald-300 font-bold">
+        VIỆT NAM 2040
+      </span>
+    </div>
+  </footer>
+
+  <!-- ================= JAVASCRIPT SIMULATION LOGIC ================= -->
+  <script>
+    const MIN_X = 60;
+    const MAX_X = 3980;
+    const CAMERA_OFFSET_LEFT = 280;
+
+    let charX = 150;
+    let isWalking = false;
+    let isJumping = false;
+    let facingLeft = false;
+    let autoWalkInterval = null;
+
+    const robotAvatar = document.getElementById('robot-avatar');
+    const thoughtBubble = document.getElementById('thought-bubble');
+    const thoughtText = document.getElementById('thought-text');
+    const thoughtIcon = document.getElementById('thought-icon');
+    const worldTrack = document.getElementById('world-track');
+    const parallaxBg = document.getElementById('parallax-bg');
+    const botVisor = document.getElementById('bot-visor');
+    const txtProgress = document.getElementById('txt-progress');
+    const barProgress = document.getElementById('bar-progress');
+    const lblCoord = document.getElementById('lbl-coord');
+    const airlockLeft = document.getElementById('airlock-left');
+    const airlockRight = document.getElementById('airlock-right');
+    const doorEnergy = document.getElementById('door-energy');
+    const doorFrame = document.getElementById('door-frame');
+
+    function updateProximityThought() {
+      if (charX < 320) {
+        thoughtIcon.innerText = "🇻🇳";
+        thoughtText.innerText = "Chào mừng bạn đến Tầng 05: Khám phá vị thế kinh tế Việt Nam và điểm nghẽn chuỗi giá trị toàn cầu!";
+        thoughtBubble.style.borderColor = "#D97706";
+        botVisor.style.backgroundColor = "#D97706";
+      } else if (charX >= 350 && charX < 1440) {
+        thoughtIcon.innerText = "📊";
+        thoughtText.innerText = "Xuất khẩu 405.5 tỷ USD, nhưng hơn 71.7% kim ngạch thuộc về tập đoàn FDI. Khối nội địa cần làm gì để bắt kịp?";
+        thoughtBubble.style.borderColor = "#D97706";
+        botVisor.style.backgroundColor = "#D97706";
+      } else if (charX >= 1440 && charX < 2650) {
+        thoughtIcon.innerText = "⚠️";
+        thoughtText.innerText = "Điểm nghẽn DVA điện tử chỉ 20-30%! Tỷ lệ tham gia GVC giảm từ 35% xuống 18%. Chúng ta đang ở đáy nụ cười!";
+        thoughtBubble.style.borderColor = "#DC2626";
+        botVisor.style.backgroundColor = "#DC2626";
+      } else if (charX >= 2650 && charX < 3750) {
+        thoughtIcon.innerText = "💡";
+        thoughtText.innerText = "Chiến lược bán dẫn Quyết định 1018: Công thức C = SET + 1 và mục tiêu 50.000 kỹ sư vi mạch để làm chủ thặng dư tương đối!";
+        thoughtBubble.style.borderColor = "#10B981";
+        botVisor.style.backgroundColor = "#10B981";
+      } else {
+        thoughtIcon.innerText = "⚡";
+        thoughtText.innerText = "Đã tới cổng Airlock! Hãy bấm BƯỚC VÀO CỬA để bắt đầu thử thách Bàn Cờ Điều Hành Vietnam 2040!";
+        thoughtBubble.style.borderColor = "#0284C7";
+        botVisor.style.backgroundColor = "#0284C7";
+      }
+
+      const distToDoor = Math.abs(charX - MAX_X);
+      if (distToDoor < 160) {
+        airlockLeft.style.transform = "translateX(-80%)";
+        airlockRight.style.transform = "translateX(80%)";
+        doorEnergy.style.opacity = "1";
+        doorFrame.style.borderColor = "#10B981";
+      } else {
+        airlockLeft.style.transform = "translateX(0)";
+        airlockRight.style.transform = "translateX(0)";
+        doorEnergy.style.opacity = "0";
+        doorFrame.style.borderColor = "#334155";
+      }
+    }
+
+    function renderPosition() {
+      const worldShift = Math.max(0, charX - CAMERA_OFFSET_LEFT);
+      const screenCharX = Math.min(charX, CAMERA_OFFSET_LEFT);
+
+      robotAvatar.style.left = `${screenCharX}px`;
+      worldTrack.style.transform = `translateX(-${worldShift}px)`;
+      parallaxBg.style.transform = `translateX(-${worldShift * 0.22}px)`;
+
+      if (facingLeft) {
+        robotAvatar.style.transform = "scaleX(-1)";
+        thoughtBubble.style.transform = "scaleX(-1)";
+      } else {
+        robotAvatar.style.transform = "scaleX(1)";
+        thoughtBubble.style.transform = "scaleX(1)";
+      }
+
+      const pct = Math.round(((charX - MIN_X) / (MAX_X - MIN_X)) * 100);
+      txtProgress.innerText = `${pct}%`;
+      barProgress.style.width = `${pct}%`;
+      lblCoord.innerText = `X: ${charX}m`;
+
+      updateProximityThought();
+    }
+
+    function moveChar(delta) {
+      charX = Math.max(MIN_X, Math.min(MAX_X, charX + delta));
+      facingLeft = delta < 0;
+
+      robotAvatar.classList.add('walking');
+      clearTimeout(window.walkTimer);
+      window.walkTimer = setTimeout(() => {
+        robotAvatar.classList.remove('walking');
+      }, 200);
+
+      renderPosition();
+    }
+
+    function triggerJump() {
+      if (isJumping) return;
+      isJumping = true;
+      robotAvatar.classList.add('jumping');
+      
+      thoughtText.innerText = "Hup! Nhảy lên quan sát toàn cảnh tầng 05!";
+
+      setTimeout(() => {
+        robotAvatar.classList.remove('jumping');
+        isJumping = false;
+        updateProximityThought();
+      }, 450);
+    }
+
+    function toggleAutoWalk() {
+      const btn = document.getElementById('btn-autowalk');
+      const icon = document.getElementById('autowalk-icon');
+      const text = document.getElementById('autowalk-text');
+
+      if (autoWalkInterval) {
+        clearInterval(autoWalkInterval);
+        autoWalkInterval = null;
+        icon.innerText = "▶";
+        text.innerText = "TỰ ĐỘNG BƯỚC";
+        btn.classList.remove('bg-emerald', 'text-white', 'border-emerald');
+        robotAvatar.classList.remove('walking');
+      } else {
+        icon.innerText = "■";
+        text.innerText = "DỪNG LẠI";
+        btn.classList.add('bg-emerald', 'text-white', 'border-emerald');
+        robotAvatar.classList.add('walking');
+
+        autoWalkInterval = setInterval(() => {
+          if (charX >= MAX_X) {
+            toggleAutoWalk();
+            return;
+          }
+          moveChar(20);
+        }, 80);
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") {
+        moveChar(40);
+      } else if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") {
+        moveChar(-40);
+      } else if (e.key === "ArrowUp" || e.key === "w" || e.key === "W" || e.key === " ") {
+        e.preventDefault();
+        triggerJump();
+      } else if (e.key === "Enter") {
+        if (Math.abs(charX - MAX_X) < 180) {
+          enterNextFloor();
+        }
+      }
+    });
+
+    function selectPathway(num) {
+      const btn1 = document.getElementById('pw-btn-1');
+      const btn2 = document.getElementById('pw-btn-2');
+      const btn3 = document.getElementById('pw-btn-3');
+
+      btn1.className = "p-3.5 rounded-2xl text-left transition-all border-2 border-slate-200 bg-white hover:border-emerald-300 cursor-pointer flex flex-col justify-between h-[210px]";
+      btn2.className = "p-3.5 rounded-2xl text-left transition-all border-2 border-slate-200 bg-white hover:border-amber-300 cursor-pointer flex flex-col justify-between h-[210px]";
+      btn3.className = "p-3.5 rounded-2xl text-left transition-all border-2 border-slate-200 bg-white hover:border-sky-300 cursor-pointer flex flex-col justify-between h-[210px]";
+
+      if (num === 1) {
+        btn1.className = "p-3.5 rounded-2xl text-left transition-all border-2 border-emerald-500 bg-emerald-50/80 shadow-md ring-2 ring-emerald-400 cursor-pointer flex flex-col justify-between h-[210px]";
+        thoughtText.innerText = "Lựa chọn 01: Nhảy vọt từ gia công lắp ráp sang làm chủ R&D và thiết kế chip bán dẫn!";
+      } else if (num === 2) {
+        btn2.className = "p-3.5 rounded-2xl text-left transition-all border-2 border-amber-500 bg-amber-50/80 shadow-md ring-2 ring-amber-400 cursor-pointer flex flex-col justify-between h-[210px]";
+        thoughtText.innerText = "Lựa chọn 02: Nâng chuẩn công nghiệp phụ trợ để trở thành đối tác chiến lược cấp 1 của các tập đoàn mẹ!";
+      } else {
+        btn3.className = "p-3.5 rounded-2xl text-left transition-all border-2 border-sky-500 bg-sky-50/80 shadow-md ring-2 ring-sky-400 cursor-pointer flex flex-col justify-between h-[210px]";
+        thoughtText.innerText = "Lựa chọn 03: Xây dựng thương hiệu Make in Vietnam để kiểm soát phần thặng dư thương mại cuối chuỗi!";
+      }
+    }
+
+    function enterNextFloor() {
+      alert("✨ BƯỚC VÀO TẦNG 06: BÀN CỜ CHIẾN LƯỢC VIETNAM 2040\n\nBạn sẽ nhập vai Người chèo lái kinh tế Việt Nam để đưa ra 3 quyết định vĩ mô then chốt!");
+    }
+
+    renderPosition();
+  </script>
+</body>
+</html>
